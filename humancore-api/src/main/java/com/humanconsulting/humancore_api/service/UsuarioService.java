@@ -33,4 +33,18 @@ public class UsuarioService {
     public void deletar(Integer id) {
         repository.deleteWhere(id);
     }
+
+    public Usuario atualizarPorId(Integer id, Usuario usuario) {
+        Usuario usuarioAtualizado = repository.selectWhereId(id);
+
+        if((usuarioAtualizado != null) && (usuarioAtualizado.getIdUsuario() == id)) {
+            usuarioAtualizado.setIdUsuario(id);
+
+            repository.insert(usuario);
+
+            return usuario;
+        }
+
+        throw new EntidadeSemRetornoException("Usuário não encontrado");
+    }
 }

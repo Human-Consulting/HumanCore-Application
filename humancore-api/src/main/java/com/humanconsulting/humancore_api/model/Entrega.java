@@ -25,6 +25,9 @@ public class Entrega {
     private Double progresso;
 
     @NotNull
+    private Boolean finalizada;
+
+    @NotNull
     private Boolean comImpedimento;
 
     @NotNull
@@ -32,6 +35,25 @@ public class Entrega {
 
     @NotNull
     private Integer fkResponsavel;
+
+    public Entrega(String descricao, LocalDate dtInicio, LocalDate dtFim, Integer fkResponsavel) {
+        this.descricao = descricao;
+        this.dtInicio = dtInicio;
+        this.dtFim = dtFim;
+        this.fkResponsavel = fkResponsavel;
+    }
+
+    public Entrega() {
+
+    }
+
+    public @NotNull Boolean getFinalizada() {
+        return finalizada;
+    }
+
+    public void setFinalizada(@NotNull Boolean finalizada) {
+        this.finalizada = finalizada;
+    }
 
     public Integer getIdSprint() {
         return idSprint;

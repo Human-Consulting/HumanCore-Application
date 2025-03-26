@@ -16,6 +16,9 @@ public class Sprint {
     private String descricao;
 
     @NotNull
+    private Integer totalEntregas;
+
+    @NotNull
     private LocalDate dtInicio;
 
     @NotNull
@@ -25,10 +28,39 @@ public class Sprint {
     private Double progresso;
 
     @NotNull
+    private Boolean finalizada;
+
+    @NotNull
     private Boolean comImpedimento;
 
     @NotNull
     private Integer fkProjeto;
+
+    public Sprint(String descricao, LocalDate dtInicio, LocalDate dtFim) {
+        this.descricao = descricao;
+        this.dtInicio = dtInicio;
+        this.dtFim = dtFim;
+    }
+
+    public Sprint() {
+
+    }
+
+    public @NotNull Boolean getFinalizada() {
+        return finalizada;
+    }
+
+    public void setFinalizada(@NotNull Boolean finalizada) {
+        this.finalizada = finalizada;
+    }
+
+    public @NotNull Integer getTotalEntregas() {
+        return totalEntregas;
+    }
+
+    public void setTotalEntregas(@NotNull Integer totalEntregas) {
+        this.totalEntregas = totalEntregas;
+    }
 
     public Integer getIdSprint() {
         return idSprint;

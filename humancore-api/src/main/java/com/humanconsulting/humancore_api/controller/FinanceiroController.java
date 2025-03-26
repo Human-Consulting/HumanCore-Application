@@ -39,4 +39,15 @@ public class FinanceiroController {
         service.deletar(id);
         return ResponseEntity.status(204).build();
     }
+
+    @PutMapping("/{idFinanceiro}")
+    public ResponseEntity<Financeiro> atualizar(
+            @PathVariable Integer idFinanceiro,
+
+            @Valid
+            @RequestBody Financeiro financeiro) {
+        Financeiro financeiroAtualizado = service.atualizar(idFinanceiro, financeiro);
+
+        return ResponseEntity.status(200).body(financeiroAtualizado);
+    }
 }

@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Financeiro;
 import com.humanconsulting.humancore_api.repository.FinanceiroRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +32,19 @@ public class FinanceiroService {
 
     public void deletar(Integer id) {
         repository.deleteWhere(id);
+    }
+
+    public Financeiro atualizar(Integer idFinanceiro, @Valid Financeiro financeiro) {
+        Financeiro financeiroAtualizado = repository.selectWhereId(idFinanceiro);
+
+        if((financeiroAtualizado != null) && (financeiroAtualizado.getIdFinanceiro() == idFinanceiro)) {
+            financeiroAtualizado.setIdFinanceiro(idFinanceiro);
+
+            repository.insert(financeiro);
+
+            return financeiro;
+        }
+
+        throw new EntidadeSemRetornoException("Financeiro não encontrado");
     }
 }

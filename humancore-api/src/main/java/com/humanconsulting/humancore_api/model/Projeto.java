@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -12,6 +13,9 @@ public class Projeto {
 
     @NotNull
     private String descricao;
+
+    @NotBlank
+    private String nome;
 
     @NotNull
     private Double progresso;
@@ -27,6 +31,25 @@ public class Projeto {
 
     @NotNull
     private Integer fkResponsavel;
+
+    public Projeto(String descricao, String nome, Double orcamento, Integer fkResponsavel) {
+        this.descricao = descricao;
+        this.nome = nome;
+        this.orcamento = orcamento;
+        this.fkResponsavel = fkResponsavel;
+    }
+
+    public Projeto() {
+
+    }
+
+    public @NotBlank String getNome() {
+        return nome;
+    }
+
+    public void setNome(@NotBlank String nome) {
+        this.nome = nome;
+    }
 
     public Integer getIdProjeto() {
         return idProjeto;

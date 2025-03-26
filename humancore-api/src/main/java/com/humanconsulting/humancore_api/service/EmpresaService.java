@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,19 @@ public class EmpresaService {
 
     public void deletar(Integer id) {
         repository.deleteWhere(id);
+    }
+
+    public Empresa atualizar(Integer idEmpresa, @Valid Empresa empresa) {
+        Empresa empresaAtualizada = repository.selectWhereId(idEmpresa);
+
+        if((empresaAtualizada != null) && (empresaAtualizada.getIdEmpresa() == idEmpresa)) {
+            empresaAtualizada.setIdEmpresa(idEmpresa);
+
+            repository.insert(empresa);
+
+            return empresa;
+        }
+
+        throw new EntidadeSemRetornoException("Empresa não encontrada");
     }
 }

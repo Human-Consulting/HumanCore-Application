@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.service;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Sprint;
@@ -33,5 +34,77 @@ public class SprintService {
 
     public void deletar(Integer id) {
         repository.deleteWhere(id);
+    }
+
+    public Sprint atualizar(Integer idSprint, SprintAtualizarRequestDto sprint) {
+        Sprint sprintAtualizada = repository.selectWhereId(idSprint);
+
+        if((sprintAtualizada != null) && (sprintAtualizada.getIdSprint() == idSprint)) {
+            sprintAtualizada.setIdSprint(idSprint);
+
+            Sprint s = new Sprint(sprint.getDescricao(), sprint.getDtInicio(), sprint.getDtFim());
+
+            repository.insert(s);
+
+            return s;
+        }
+
+        throw new EntidadeSemRetornoException("Sprint não encontrada");
+    }
+
+    public Sprint atualizarProgresso(Integer id, Double progresso) {
+        Sprint sprintAtualizada = repository.selectWhereId(id);
+
+        if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
+            sprintAtualizada.setProgresso(progresso);
+
+            repository.insert(sprintAtualizada);
+
+            return sprintAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Sprint não encontrada");
+    }
+
+    public Sprint atualizarImpedimento(Integer id, Boolean impedimento) {
+        Sprint sprintAtualizada = repository.selectWhereId(id);
+
+        if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
+            sprintAtualizada.setComImpedimento(impedimento);
+
+            repository.insert(sprintAtualizada);
+
+            return sprintAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Sprint não encontrada");
+    }
+
+    public Sprint atualizarTotalEntregas(Integer id, Integer novoTotal) {
+        Sprint sprintAtualizada = repository.selectWhereId(id);
+
+        if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
+            sprintAtualizada.setTotalEntregas(novoTotal);
+
+            repository.insert(sprintAtualizada);
+
+            return sprintAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Sprint não encontrada");
+    }
+
+    public Sprint atualizarFinalizada(Integer id, Boolean novoFinalizada) {
+        Sprint sprintAtualizada = repository.selectWhereId(id);
+
+        if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
+            sprintAtualizada.setFinalizada(novoFinalizada);
+
+            repository.insert(sprintAtualizada);
+
+            return sprintAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Sprint não encontrada");
     }
 }

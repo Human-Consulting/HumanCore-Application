@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.controller;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.SprintService;
 import jakarta.validation.Valid;
@@ -38,5 +39,56 @@ public class SprintController {
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PutMapping("/{idSprint}")
+    public ResponseEntity<Sprint> atualizar(
+            @PathVariable Integer idSprint,
+
+            @Valid
+            @RequestBody SprintAtualizarRequestDto sprint) {
+        Sprint sprintAtualizada = service.atualizar(idSprint, sprint);
+
+        return ResponseEntity.status(200).body(sprintAtualizada);
+    }
+
+    @PatchMapping("/progresso/{id}")
+    public ResponseEntity<Sprint> atualizarProgresso(
+            @PathVariable Integer id,
+            @RequestBody Double progresso
+    ) {
+        Sprint sprintAtualizada = service.atualizarProgresso(id, progresso);
+
+        return ResponseEntity.status(200).body(sprintAtualizada);
+    }
+
+    @PatchMapping("/impedimento/{id}")
+    public ResponseEntity<Sprint> atualizarImpedimento(
+            @PathVariable Integer id,
+            @RequestBody Boolean impedimento
+    ) {
+        Sprint sprintAtualizada = service.atualizarImpedimento(id, impedimento);
+
+        return ResponseEntity.status(200).body(sprintAtualizada);
+    }
+
+    @PatchMapping("/id/{id}/total-entregas/{novoTotal}")
+    public ResponseEntity<Sprint> atualizarTotalEntregas(
+            @PathVariable Integer id,
+            @PathVariable Integer novoTotal
+    ) {
+        Sprint sprintAtualizada = service.atualizarTotalEntregas(id, novoTotal);
+
+        return ResponseEntity.status(200).body(sprintAtualizada);
+    }
+
+    @PatchMapping("/finalizada/{id}")
+    public ResponseEntity<Sprint> atualizarFinalizada(
+            @PathVariable Integer id,
+            @RequestBody Boolean novoFinalizada
+    ) {
+        Sprint sprintAtualizada = service.atualizarFinalizada(id, novoFinalizada);
+
+        return ResponseEntity.status(200).body(sprintAtualizada);
     }
 }

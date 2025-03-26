@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.service;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.EntregaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Entrega;
@@ -33,5 +34,63 @@ public class EntregaService {
 
     public void deletar(Integer id) {
         repository.deleteWhere(id);
+    }
+
+    public Entrega atualizar(Integer idEntrega, EntregaAtualizarRequestDto entrega) {
+        Entrega entregaAtualizada = repository.selectWhereId(idEntrega);
+
+        if((entregaAtualizada != null) && (entregaAtualizada.getIdSprint() == idEntrega)) {
+            entregaAtualizada.setIdSprint(idEntrega);
+
+            Entrega e = new Entrega(entrega.getDescricao(), entrega.getDtInicio(), entrega.getDtFim(), entrega.getFkResponsavel());
+
+            repository.insert(e);
+
+            return e;
+        }
+
+        throw new EntidadeSemRetornoException("Entrega não encontrada");
+    }
+
+    public Entrega atualizarFinalizada(Integer id, Boolean novoFinalizada) {
+        Entrega entregaAtualizada = repository.selectWhereId(id);
+
+        if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
+            entregaAtualizada.setFinalizada(novoFinalizada);
+
+            repository.insert(entregaAtualizada);
+
+            return entregaAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Entrega não encontrada");
+    }
+
+    public Entrega atualizarImpedimento(Integer id, Boolean impedimento) {
+        Entrega entregaAtualizada = repository.selectWhereId(id);
+
+        if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
+            entregaAtualizada.setComImpedimento(impedimento);
+
+            repository.insert(entregaAtualizada);
+
+            return entregaAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Entrega não encontrada");
+    }
+
+    public Entrega atualizarProgresso(Integer id, Double progresso) {
+        Entrega entregaAtualizada = repository.selectWhereId(id);
+
+        if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
+            entregaAtualizada.setProgresso(progresso);
+
+            repository.insert(entregaAtualizada);
+
+            return entregaAtualizada;
+        }
+
+        throw new EntidadeSemRetornoException("Entrega não encontrada");
     }
 }

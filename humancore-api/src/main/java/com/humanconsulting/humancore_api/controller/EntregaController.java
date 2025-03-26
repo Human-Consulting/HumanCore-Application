@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.controller;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.EntregaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.model.Entrega;
 import com.humanconsulting.humancore_api.service.EntregaService;
 import jakarta.validation.Valid;
@@ -38,5 +39,46 @@ public class EntregaController {
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PutMapping("/{idEntrega}")
+    public ResponseEntity<Entrega> atualizar(
+            @PathVariable Integer idEntrega,
+
+            @Valid
+            @RequestBody EntregaAtualizarRequestDto entrega) {
+        Entrega entregaAtualizada = service.atualizar(idEntrega, entrega);
+
+        return ResponseEntity.status(200).body(entregaAtualizada);
+    }
+
+    @PatchMapping("/finalizada/{id}")
+    public ResponseEntity<Entrega> atualizarFinalizada(
+            @PathVariable Integer id,
+            @RequestBody Boolean novoFinalizada
+    ) {
+        Entrega entregaAtualizada = service.atualizarFinalizada(id, novoFinalizada);
+
+        return ResponseEntity.status(200).body(entregaAtualizada);
+    }
+
+    @PatchMapping("/impedimento/{id}")
+    public ResponseEntity<Entrega> atualizarImpedimento(
+            @PathVariable Integer id,
+            @RequestBody Boolean impedimento
+    ) {
+        Entrega entregaAtualizada = service.atualizarImpedimento(id, impedimento);
+
+        return ResponseEntity.status(200).body(entregaAtualizada);
+    }
+
+    @PatchMapping("/progresso/{id}")
+    public ResponseEntity<Entrega> atualizarProgresso(
+            @PathVariable Integer id,
+            @RequestBody Double progresso
+    ) {
+        Entrega entregaAtualizada = service.atualizarProgresso(id, progresso);
+
+        return ResponseEntity.status(200).body(entregaAtualizada);
     }
 }
