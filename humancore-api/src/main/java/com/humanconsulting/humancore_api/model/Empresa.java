@@ -16,6 +16,15 @@ public class Empresa {
     @NotBlank
     private String nome;
 
+    public Empresa() {
+    }
+
+    public Empresa(Integer idEmpresa, String cnpj, String nome) {
+        this.idEmpresa = idEmpresa;
+        this.cnpj = cnpj;
+        this.nome = nome;
+    }
+
     public Integer getIdEmpresa() {
         return idEmpresa;
     }

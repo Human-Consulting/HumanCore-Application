@@ -1,6 +1,9 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.EntregaAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarFinalizadaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarImpedimentoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarProgressoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.EntregaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.model.Entrega;
 import com.humanconsulting.humancore_api.service.EntregaService;
 import jakarta.validation.Valid;
@@ -43,10 +46,11 @@ public class EntregaController {
 
     @PutMapping("/{idEntrega}")
     public ResponseEntity<Entrega> atualizar(
-            @PathVariable Integer idEntrega,
-
+            @PathVariable
+            Integer idEntrega,
             @Valid
-            @RequestBody EntregaAtualizarRequestDto entrega) {
+            @RequestBody
+            EntregaAtualizarRequestDto entrega) {
         Entrega entregaAtualizada = service.atualizar(idEntrega, entrega);
 
         return ResponseEntity.status(200).body(entregaAtualizada);
@@ -55,9 +59,9 @@ public class EntregaController {
     @PatchMapping("/finalizada/{id}")
     public ResponseEntity<Entrega> atualizarFinalizada(
             @PathVariable Integer id,
-            @RequestBody Boolean novoFinalizada
+            @RequestBody AtualizarFinalizadaRequestDto request
     ) {
-        Entrega entregaAtualizada = service.atualizarFinalizada(id, novoFinalizada);
+        Entrega entregaAtualizada = service.atualizarFinalizada(id, request);
 
         return ResponseEntity.status(200).body(entregaAtualizada);
     }
@@ -65,9 +69,9 @@ public class EntregaController {
     @PatchMapping("/impedimento/{id}")
     public ResponseEntity<Entrega> atualizarImpedimento(
             @PathVariable Integer id,
-            @RequestBody Boolean impedimento
+            @RequestBody AtualizarImpedimentoRequestDto request
     ) {
-        Entrega entregaAtualizada = service.atualizarImpedimento(id, impedimento);
+        Entrega entregaAtualizada = service.atualizarImpedimento(id, request);
 
         return ResponseEntity.status(200).body(entregaAtualizada);
     }
@@ -75,9 +79,9 @@ public class EntregaController {
     @PatchMapping("/progresso/{id}")
     public ResponseEntity<Entrega> atualizarProgresso(
             @PathVariable Integer id,
-            @RequestBody Double progresso
+            @RequestBody AtualizarProgressoRequestDto request
     ) {
-        Entrega entregaAtualizada = service.atualizarProgresso(id, progresso);
+        Entrega entregaAtualizada = service.atualizarProgresso(id, request);
 
         return ResponseEntity.status(200).body(entregaAtualizada);
     }

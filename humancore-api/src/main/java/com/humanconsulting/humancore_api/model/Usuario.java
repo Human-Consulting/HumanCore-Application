@@ -29,8 +29,19 @@ public class Usuario {
     @NotBlank
     private String area;
 
+    @NotBlank
+    private String permissao;
+
     @NotNull
     private Integer fkEmpresa;
+
+    public @NotBlank String getPermissao() {
+        return permissao;
+    }
+
+    public void setPermissao(@NotBlank String permissao) {
+        this.permissao = permissao;
+    }
 
     public Integer getIdUsuario() {
         return idUsuario;

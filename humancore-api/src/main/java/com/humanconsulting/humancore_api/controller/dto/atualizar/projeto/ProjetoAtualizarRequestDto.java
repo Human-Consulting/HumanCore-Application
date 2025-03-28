@@ -1,6 +1,7 @@
-package com.humanconsulting.humancore_api.controller.dto.atualizar;
+package com.humanconsulting.humancore_api.controller.dto.atualizar.projeto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProjetoAtualizarRequestDto {
     @NotBlank
@@ -15,15 +16,28 @@ public class ProjetoAtualizarRequestDto {
     @NotBlank
     private Double orcamento;
 
-    public ProjetoAtualizarRequestDto() {
+    @NotNull
+    private Integer idEditor;
+
+    @NotNull
+    private String permissaoEditor;
+
+    public @NotNull Integer getIdEditor() {
+        return idEditor;
     }
 
-    public ProjetoAtualizarRequestDto(String descricao, String nome, Integer fkResponsavel, Double orcamento) {
-        this.descricao = descricao;
-        this.nome = nome;
-        this.fkResponsavel = fkResponsavel;
-        this.orcamento = orcamento;
+    public void setIdEditor(@NotNull Integer idEditor) {
+        this.idEditor = idEditor;
     }
+
+    public @NotNull String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
+    }
+
     public String getDescricao() {
         return descricao;
     }

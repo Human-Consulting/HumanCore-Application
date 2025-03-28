@@ -3,6 +3,9 @@ package com.humanconsulting.humancore_api.repository;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Financeiro;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.service.UsuarioService;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +15,11 @@ import java.util.List;
 public class FinanceiroRepository {
 
     private final JdbcClient jdbcClient;
+    private final UsuarioService usuarioService;
 
-    public FinanceiroRepository(JdbcClient jdbcClient) {
+    public FinanceiroRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
         this.jdbcClient = jdbcClient;
+        this.usuarioService = usuarioService;
     }
 
     public Financeiro insert(Financeiro financeiro) {
@@ -64,5 +69,11 @@ public class FinanceiroRepository {
                 .sql("DELETE FROM financeiro WHERE idFinanceiro = ?")
                 .param(id)
                 .update() > 0;
+    }
+
+    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
+        Usuario usuario = usuarioService.buscarPorId(idEditor);
+
+        return usuario.getPermissao().equals(permissaoEditor);
     }
 }

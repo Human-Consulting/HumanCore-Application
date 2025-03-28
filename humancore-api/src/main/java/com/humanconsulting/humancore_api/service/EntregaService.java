@@ -1,7 +1,11 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.EntregaAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarFinalizadaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarImpedimentoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarProgressoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.EntregaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Entrega;
 import com.humanconsulting.humancore_api.repository.EntregaRepository;
@@ -37,6 +41,10 @@ public class EntregaService {
     }
 
     public Entrega atualizar(Integer idEntrega, EntregaAtualizarRequestDto entrega) {
+        Boolean temPermissao = repository.validarPermissao(entrega.getIdEditor(), entrega.getPermissaoEditor());
+
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Entrega entregaAtualizada = repository.selectWhereId(idEntrega);
 
         if((entregaAtualizada != null) && (entregaAtualizada.getIdSprint() == idEntrega)) {
@@ -52,11 +60,13 @@ public class EntregaService {
         throw new EntidadeSemRetornoException("Entrega não encontrada");
     }
 
-    public Entrega atualizarFinalizada(Integer id, Boolean novoFinalizada) {
-        Entrega entregaAtualizada = repository.selectWhereId(id);
+    public Entrega atualizarFinalizada(Integer id, AtualizarFinalizadaRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
 
+        Entrega entregaAtualizada = repository.selectWhereId(id);
         if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
-            entregaAtualizada.setFinalizada(novoFinalizada);
+            entregaAtualizada.setFinalizada(request.getNovoFinalizada());
 
             repository.insert(entregaAtualizada);
 
@@ -66,11 +76,14 @@ public class EntregaService {
         throw new EntidadeSemRetornoException("Entrega não encontrada");
     }
 
-    public Entrega atualizarImpedimento(Integer id, Boolean impedimento) {
+    public Entrega atualizarImpedimento(Integer id, AtualizarImpedimentoRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Entrega entregaAtualizada = repository.selectWhereId(id);
 
         if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
-            entregaAtualizada.setComImpedimento(impedimento);
+            entregaAtualizada.setComImpedimento(request.getNovoImpedimento());
 
             repository.insert(entregaAtualizada);
 
@@ -80,11 +93,14 @@ public class EntregaService {
         throw new EntidadeSemRetornoException("Entrega não encontrada");
     }
 
-    public Entrega atualizarProgresso(Integer id, Double progresso) {
+    public Entrega atualizarProgresso(Integer id, AtualizarProgressoRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Entrega entregaAtualizada = repository.selectWhereId(id);
 
         if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
-            entregaAtualizada.setProgresso(progresso);
+            entregaAtualizada.setProgresso(request.getNovoProgresso());
 
             repository.insert(entregaAtualizada);
 

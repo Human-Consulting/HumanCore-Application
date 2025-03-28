@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto;
+package com.humanconsulting.humancore_api.controller.dto.response;
 
 import com.humanconsulting.humancore_api.model.Empresa;
 

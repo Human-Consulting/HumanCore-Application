@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.EmpresaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.service.EmpresaService;
 import jakarta.validation.Valid;
@@ -48,10 +49,11 @@ public class EmpresaController {
 
     @PutMapping("/{idEmpresa}")
     public ResponseEntity<EmpresaResponseDto> atualizar(
-            @PathVariable Integer idEmpresa,
-
+            @PathVariable
+            Integer idEmpresa,
             @Valid
-            @RequestBody Empresa empresa) {
+            @RequestBody
+            EmpresaAtualizarRequestDto empresa) {
         Empresa empresaAtualizada = service.atualizar(idEmpresa, empresa);
 
         return ResponseEntity.status(200).body(EmpresaResponseDto.toResponse(empresaAtualizada));

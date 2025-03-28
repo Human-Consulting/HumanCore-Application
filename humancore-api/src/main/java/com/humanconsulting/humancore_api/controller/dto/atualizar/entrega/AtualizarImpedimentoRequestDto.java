@@ -1,0 +1,38 @@
+package com.humanconsulting.humancore_api.controller.dto.atualizar.entrega;
+
+import jakarta.validation.constraints.NotNull;
+
+public class AtualizarImpedimentoRequestDto {
+    @NotNull
+    private Boolean novoImpedimento;
+
+    @NotNull
+    private Integer idEditor;
+
+    @NotNull
+    private String permissaoEditor;
+
+    public @NotNull Boolean getNovoImpedimento() {
+        return novoImpedimento;
+    }
+
+    public void setNovoImpedimento(@NotNull Boolean novoImpedimento) {
+        this.novoImpedimento = novoImpedimento;
+    }
+
+    public @NotNull Integer getIdEditor() {
+        return idEditor;
+    }
+
+    public void setIdEditor(@NotNull Integer idEditor) {
+        this.idEditor = idEditor;
+    }
+
+    public @NotNull String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
+    }
+}

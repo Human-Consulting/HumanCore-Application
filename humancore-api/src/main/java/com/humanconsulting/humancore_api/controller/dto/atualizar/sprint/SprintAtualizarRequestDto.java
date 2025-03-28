@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto.atualizar;
+package com.humanconsulting.humancore_api.controller.dto.atualizar.sprint;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -14,13 +14,26 @@ public class SprintAtualizarRequestDto {
     @NotNull
     private LocalDate dtFim;
 
-    public SprintAtualizarRequestDto() {
+    @NotNull
+    private Integer idEditor;
+
+    @NotNull
+    private String permissaoEditor;
+
+    public @NotNull Integer getIdEditor() {
+        return idEditor;
     }
 
-    public SprintAtualizarRequestDto(String descricao, LocalDate dtInicio, LocalDate dtFim) {
-        this.descricao = descricao;
-        this.dtInicio = dtInicio;
-        this.dtFim = dtFim;
+    public void setIdEditor(@NotNull Integer idEditor) {
+        this.idEditor = idEditor;
+    }
+
+    public @NotNull String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
     }
 
     public @NotNull LocalDate getDtFim() {

@@ -3,6 +3,9 @@ package com.humanconsulting.humancore_api.repository;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Entrega;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.service.UsuarioService;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +15,11 @@ import java.util.List;
 public class EntregaRepository {
 
     private final JdbcClient jdbcClient;
+    private final UsuarioService usuarioService;
 
-    public EntregaRepository(JdbcClient jdbcClient) {
+    public EntregaRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
         this.jdbcClient = jdbcClient;
+        this.usuarioService = usuarioService;
     }
 
     public Entrega insert(Entrega entrega) {
@@ -68,5 +73,11 @@ public class EntregaRepository {
                 .sql("DELETE FROM entrega WHERE idEntrega = ?")
                 .param(id)
                 .update() > 0;
+    }
+
+    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
+        Usuario usuario = usuarioService.buscarPorId(idEditor);
+
+        return usuario.getPermissao().equals(permissaoEditor);
     }
 }

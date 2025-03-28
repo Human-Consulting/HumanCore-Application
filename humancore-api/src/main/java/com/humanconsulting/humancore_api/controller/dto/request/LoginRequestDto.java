@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto;
+package com.humanconsulting.humancore_api.controller.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

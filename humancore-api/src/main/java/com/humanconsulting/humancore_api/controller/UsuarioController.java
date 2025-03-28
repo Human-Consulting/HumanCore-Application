@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.Valid;

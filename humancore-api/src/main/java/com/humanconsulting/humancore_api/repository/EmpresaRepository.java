@@ -4,6 +4,9 @@ import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Empresa;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.service.UsuarioService;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +17,11 @@ public class EmpresaRepository {
 
     private final JdbcClient jdbcClient;
 
-    public EmpresaRepository(JdbcClient jdbcClient) {
+    private UsuarioService usuarioService;
+
+    public EmpresaRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
         this.jdbcClient = jdbcClient;
+        this.usuarioService = usuarioService;
     }
 
     public Empresa insert(Empresa empresa) {
@@ -73,5 +79,11 @@ public class EmpresaRepository {
                 .sql("DELETE FROM empresa WHERE idEmpresa = ?")
                 .param(id)
                 .update() > 0;
+    }
+
+    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
+        Usuario usuario = usuarioService.buscarPorId(idEditor);
+
+        return usuario.getPermissao().equals(permissaoEditor);
     }
 }

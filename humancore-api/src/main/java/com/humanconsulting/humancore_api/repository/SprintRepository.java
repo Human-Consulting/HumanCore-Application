@@ -1,9 +1,11 @@
 package com.humanconsulting.humancore_api.repository;
 
-import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Sprint;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.service.UsuarioService;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -13,9 +15,11 @@ import java.util.List;
 public class SprintRepository {
 
     private final JdbcClient jdbcClient;
+    private final UsuarioService usuarioService;
 
-    public SprintRepository(JdbcClient jdbcClient) {
+    public SprintRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
         this.jdbcClient = jdbcClient;
+        this.usuarioService = usuarioService;
     }
 
     public Sprint insert(Sprint sprint) {
@@ -28,7 +32,7 @@ public class SprintRepository {
                 .param(sprint.getFkProjeto())
                 .update();
 
-        if (result > 0) {;
+        if (result > 0) {
             sprint.setIdSprint(jdbcClient.sql("SELECT LAST_INSERT_ID()")
                     .query(Integer.class).single());
             return sprint;
@@ -68,5 +72,11 @@ public class SprintRepository {
                 .sql("DELETE FROM sprint WHERE idSprint = ?")
                 .param(id)
                 .update() > 0;
+    }
+
+    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
+        Usuario usuario = usuarioService.buscarPorId(idEditor);
+
+        return usuario.getPermissao().equals(permissaoEditor);
     }
 }

@@ -1,16 +1,10 @@
-package com.humanconsulting.humancore_api.model;
+package com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
-public class Financeiro {
-    @Id
-    private Integer idFinanceiro;
-
+public class AtualizarFinanceiroRequestDto {
     @NotNull
     private Double valor;
 
@@ -20,23 +14,11 @@ public class Financeiro {
     @NotNull
     private Integer fkProjeto;
 
-    public Financeiro(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
-        this.valor = valor;
-        this.dtInvestimento = dtInvestimento;
-        this.fkProjeto = fkProjeto;
-    }
+    @NotNull
+    private Integer idEditor;
 
-    public Financeiro() {
-
-    }
-
-    public Integer getIdFinanceiro() {
-        return idFinanceiro;
-    }
-
-    public void setIdFinanceiro(Integer idFinanceiro) {
-        this.idFinanceiro = idFinanceiro;
-    }
+    @NotNull
+    private String permissaoEditor;
 
     public @NotNull Double getValor() {
         return valor;
@@ -60,5 +42,21 @@ public class Financeiro {
 
     public void setFkProjeto(@NotNull Integer fkProjeto) {
         this.fkProjeto = fkProjeto;
+    }
+
+    public @NotNull Integer getIdEditor() {
+        return idEditor;
+    }
+
+    public void setIdEditor(@NotNull Integer idEditor) {
+        this.idEditor = idEditor;
+    }
+
+    public @NotNull String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
     }
 }

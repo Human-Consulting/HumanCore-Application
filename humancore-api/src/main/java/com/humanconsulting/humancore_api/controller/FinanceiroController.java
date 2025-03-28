@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.controller;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro.AtualizarFinanceiroRequestDto;
 import com.humanconsulting.humancore_api.model.Financeiro;
 import com.humanconsulting.humancore_api.service.FinanceiroService;
 import jakarta.validation.Valid;
@@ -42,11 +43,12 @@ public class FinanceiroController {
 
     @PutMapping("/{idFinanceiro}")
     public ResponseEntity<Financeiro> atualizar(
-            @PathVariable Integer idFinanceiro,
-
+            @PathVariable
+            Integer idFinanceiro,
             @Valid
-            @RequestBody Financeiro financeiro) {
-        Financeiro financeiroAtualizado = service.atualizar(idFinanceiro, financeiro);
+            @RequestBody
+            AtualizarFinanceiroRequestDto request) {
+        Financeiro financeiroAtualizado = service.atualizar(idFinanceiro, request);
 
         return ResponseEntity.status(200).body(financeiroAtualizado);
     }

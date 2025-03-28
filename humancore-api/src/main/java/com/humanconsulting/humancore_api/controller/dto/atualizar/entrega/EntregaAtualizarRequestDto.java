@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto.atualizar;
+package com.humanconsulting.humancore_api.controller.dto.atualizar.entrega;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -17,14 +17,26 @@ public class EntregaAtualizarRequestDto {
     @NotNull
     private Integer fkResponsavel;
 
-    public EntregaAtualizarRequestDto() {
+    @NotNull
+    private Integer idEditor;
+
+    @NotNull
+    private String permissaoEditor;
+
+    public @NotNull Integer getIdEditor() {
+        return idEditor;
     }
 
-    public EntregaAtualizarRequestDto(String descricao, LocalDate dtInicio, LocalDate dtFim, Integer fkResponsavel) {
-        this.descricao = descricao;
-        this.dtInicio = dtInicio;
-        this.dtFim = dtFim;
-        this.fkResponsavel = fkResponsavel;
+    public void setIdEditor(@NotNull Integer idEditor) {
+        this.idEditor = idEditor;
+    }
+
+    public @NotNull String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
     }
 
     public @NotNull String getDescricao() {

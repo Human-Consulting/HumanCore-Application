@@ -1,7 +1,8 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.SprintAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
@@ -36,13 +37,16 @@ public class SprintService {
         repository.deleteWhere(id);
     }
 
-    public Sprint atualizar(Integer idSprint, SprintAtualizarRequestDto sprint) {
+    public Sprint atualizar(Integer idSprint, SprintAtualizarRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Sprint sprintAtualizada = repository.selectWhereId(idSprint);
 
         if((sprintAtualizada != null) && (sprintAtualizada.getIdSprint() == idSprint)) {
             sprintAtualizada.setIdSprint(idSprint);
 
-            Sprint s = new Sprint(sprint.getDescricao(), sprint.getDtInicio(), sprint.getDtFim());
+            Sprint s = new Sprint(request.getDescricao(), request.getDtInicio(), request.getDtFim());
 
             repository.insert(s);
 
@@ -52,11 +56,14 @@ public class SprintService {
         throw new EntidadeSemRetornoException("Sprint não encontrada");
     }
 
-    public Sprint atualizarProgresso(Integer id, Double progresso) {
+    public Sprint atualizarProgresso(Integer id, AtualizarProgressoRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Sprint sprintAtualizada = repository.selectWhereId(id);
 
         if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
-            sprintAtualizada.setProgresso(progresso);
+            sprintAtualizada.setProgresso(request.getNovoProgresso());
 
             repository.insert(sprintAtualizada);
 
@@ -66,11 +73,14 @@ public class SprintService {
         throw new EntidadeSemRetornoException("Sprint não encontrada");
     }
 
-    public Sprint atualizarImpedimento(Integer id, Boolean impedimento) {
+    public Sprint atualizarImpedimento(Integer id, AtualizarImpedimentoRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Sprint sprintAtualizada = repository.selectWhereId(id);
 
         if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
-            sprintAtualizada.setComImpedimento(impedimento);
+            sprintAtualizada.setComImpedimento(request.getNovoImpedimento());
 
             repository.insert(sprintAtualizada);
 
@@ -80,11 +90,14 @@ public class SprintService {
         throw new EntidadeSemRetornoException("Sprint não encontrada");
     }
 
-    public Sprint atualizarTotalEntregas(Integer id, Integer novoTotal) {
+    public Sprint atualizarTotalEntregas(Integer id, AtualizarTotalEntregasRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Sprint sprintAtualizada = repository.selectWhereId(id);
 
         if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
-            sprintAtualizada.setTotalEntregas(novoTotal);
+            sprintAtualizada.setTotalEntregas(request.getNovoTotalEntregas());
 
             repository.insert(sprintAtualizada);
 
@@ -94,11 +107,14 @@ public class SprintService {
         throw new EntidadeSemRetornoException("Sprint não encontrada");
     }
 
-    public Sprint atualizarFinalizada(Integer id, Boolean novoFinalizada) {
+    public Sprint atualizarFinalizada(Integer id, AtualizarFinalizadaRequestDto request) {
+        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
+
         Sprint sprintAtualizada = repository.selectWhereId(id);
 
         if(sprintAtualizada != null && (sprintAtualizada.getIdSprint() == id)) {
-            sprintAtualizada.setFinalizada(novoFinalizada);
+            sprintAtualizada.setFinalizada(request.getNovoFinalizada());
 
             repository.insert(sprintAtualizada);
 

@@ -1,6 +1,8 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.ProjetoAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.AtualizarFinalizadaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.AtualizarProgressoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.service.ProjetoService;
 import jakarta.validation.Valid;
@@ -46,8 +48,8 @@ public class ProjetoController {
             @PathVariable Integer idProjeto,
 
             @Valid
-            @RequestBody ProjetoAtualizarRequestDto projeto) {
-        Projeto projetoAtualizado = service.atualizar(idProjeto, projeto);
+            @RequestBody ProjetoAtualizarRequestDto request) {
+        Projeto projetoAtualizado = service.atualizar(idProjeto, request);
 
         return ResponseEntity.status(200).body(projetoAtualizado);
     }
@@ -55,9 +57,9 @@ public class ProjetoController {
     @PatchMapping("/progresso/{id}")
     public ResponseEntity<Projeto> atualizarProgresso(
             @PathVariable Integer id,
-            @RequestBody Double progresso
+            @RequestBody AtualizarProgressoRequestDto request
     ) {
-        Projeto projetoAtualizado = service.atualizarProgresso(id, progresso);
+        Projeto projetoAtualizado = service.atualizarProgresso(id, request);
 
         return ResponseEntity.status(200).body(projetoAtualizado);
     }
@@ -65,9 +67,9 @@ public class ProjetoController {
     @PatchMapping("/impedimento/{id}")
     public ResponseEntity<Projeto> atualizarImpedimento(
             @PathVariable Integer id,
-            @RequestBody Boolean impedimento
+            @RequestBody AtualizarFinalizadaRequestDto request
     ) {
-        Projeto projetoAtualizado = service.atualizarImpedimento(id, impedimento);
+        Projeto projetoAtualizado = service.atualizarImpedimento(id, request);
 
         return ResponseEntity.status(200).body(projetoAtualizado);
     }
