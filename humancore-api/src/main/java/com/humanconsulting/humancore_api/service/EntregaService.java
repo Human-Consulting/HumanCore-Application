@@ -8,10 +8,14 @@ import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Entrega;
+import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.observer.Observer;
 import com.humanconsulting.humancore_api.repository.EntregaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +23,11 @@ public class EntregaService {
 
     @Autowired
     private EntregaRepository repository;
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    private List<Observer> observers = new ArrayList<>();
 
     public Entrega cadastrar(Entrega entrega) {
         if (entrega.getDtInicio().isAfter(entrega.getDtFim()) || entrega.getDtInicio().isEqual(entrega.getDtFim())) throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
@@ -85,12 +94,22 @@ public class EntregaService {
         if(entregaAtualizada != null && (entregaAtualizada.getIdSprint() == id)) {
             entregaAtualizada.setComImpedimento(request.getNovoImpedimento());
 
+            EmailNotifier emailNotifier = new EmailNotifier(emailSender);
+            this.observers.add(emailNotifier);
+            notifyObservers(entregaAtualizada);
+
             repository.insert(entregaAtualizada);
 
             return entregaAtualizada;
         }
 
         throw new EntidadeSemRetornoException("Entrega não encontrada");
+    }
+
+    private void notifyObservers(Entrega entrega) {
+        for (Observer observer : observers) {
+            observer.update(entrega);
+        }
     }
 
     public Entrega atualizarProgresso(Integer id, AtualizarProgressoRequestDto request) {

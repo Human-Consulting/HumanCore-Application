@@ -1,14 +1,18 @@
 package com.humanconsulting.humancore_api.model;
 
+import com.humanconsulting.humancore_api.observer.Observer;
+import com.humanconsulting.humancore_api.observer.Subject;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-public class Entrega {
+public class Entrega{
     @Id
     private Integer idSprint;
 
@@ -45,6 +49,12 @@ public class Entrega {
 
     public Entrega() {
 
+    }
+
+    public void setComImpedimento(Boolean comImpedimento) {
+        if (!this.comImpedimento.equals(comImpedimento)) {
+            this.comImpedimento = comImpedimento;
+        }
     }
 
     public @NotNull Boolean getFinalizada() {
@@ -97,10 +107,6 @@ public class Entrega {
 
     public @NotNull Boolean getComImpedimento() {
         return comImpedimento;
-    }
-
-    public void setComImpedimento(@NotNull Boolean comImpedimento) {
-        this.comImpedimento = comImpedimento;
     }
 
     public @NotNull Integer getFkSprint() {
