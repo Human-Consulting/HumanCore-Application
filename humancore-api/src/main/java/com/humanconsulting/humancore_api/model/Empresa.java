@@ -10,14 +10,9 @@ public class Empresa {
     @Id
     private Integer idEmpresa;
 
-    @NotNull
     private String cnpj;
 
-    @NotBlank
     private String nome;
-
-    public Empresa() {
-    }
 
     public Empresa(Integer idEmpresa, String cnpj, String nome) {
         this.idEmpresa = idEmpresa;
@@ -33,19 +28,19 @@ public class Empresa {
         this.idEmpresa = idEmpresa;
     }
 
-    public @NotNull String getCnpj() {
+    public String getCnpj() {
         return cnpj;
     }
 
-    public void setCnpj(@NotNull String cnpj) {
+    public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
-    public @NotBlank String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(@NotBlank String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 }

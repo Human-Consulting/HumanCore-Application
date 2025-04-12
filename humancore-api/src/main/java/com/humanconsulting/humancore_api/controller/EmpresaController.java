@@ -1,7 +1,9 @@
 package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.EmpresaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.EmpresaResponseDto;
+import com.humanconsulting.humancore_api.mapper.EmpresaMapper;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.service.EmpresaService;
 import jakarta.validation.Valid;
@@ -13,32 +15,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("empresas")
+@CrossOrigin("*")
 public class EmpresaController {
 
     @Autowired
     private EmpresaService service;
 
     @PostMapping
-    public ResponseEntity<EmpresaResponseDto> cadastrarEmpresa(@Valid @RequestBody Empresa empresa) {
-        Empresa empresaCadastrada = service.cadastrar(empresa);
-        return ResponseEntity.status(201).body(EmpresaResponseDto.toResponse(empresaCadastrada));
+    public ResponseEntity<EmpresaResponseDto> cadastrarEmpresa(@Valid @RequestBody EmpresaRequestDto empresaRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(empresaRequestDto));
     }
 
     @GetMapping
     public ResponseEntity<List<EmpresaResponseDto>> listar() {
-        List<Empresa> all = service.listar();
-
-        List<EmpresaResponseDto> empresasResponse = all.stream()
-                .map(u -> EmpresaResponseDto.toResponse(u))
-                .toList();
-
-        return ResponseEntity.status(200).body(empresasResponse);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EmpresaResponseDto> buscarPorId(@PathVariable Integer id) {
-        Empresa empresa = service.buscarPorId(id);
-        return ResponseEntity.status(200).body(EmpresaResponseDto.toResponse(empresa));
+        return ResponseEntity.status(200).body(service.listar());
     }
 
     @DeleteMapping("/{id}")
@@ -48,14 +38,7 @@ public class EmpresaController {
     }
 
     @PutMapping("/{idEmpresa}")
-    public ResponseEntity<EmpresaResponseDto> atualizar(
-            @PathVariable
-            Integer idEmpresa,
-            @Valid
-            @RequestBody
-            EmpresaAtualizarRequestDto empresa) {
-        Empresa empresaAtualizada = service.atualizar(idEmpresa, empresa);
-
-        return ResponseEntity.status(200).body(EmpresaResponseDto.toResponse(empresaAtualizada));
+    public ResponseEntity<EmpresaResponseDto> atualizar(@PathVariable Integer idEmpresa, @Valid @RequestBody EmpresaAtualizarRequestDto empresa) {
+        return ResponseEntity.status(200).body(service.atualizar(idEmpresa, empresa));
     }
 }

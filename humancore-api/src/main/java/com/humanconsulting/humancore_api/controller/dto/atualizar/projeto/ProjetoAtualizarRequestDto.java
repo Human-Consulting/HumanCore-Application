@@ -7,66 +7,63 @@ public class ProjetoAtualizarRequestDto {
     @NotBlank
     private String descricao;
 
-    @NotBlank
-    private String nome;
-
-    @NotBlank
+    @NotNull
     private Integer fkResponsavel;
 
-    @NotBlank
+    @NotNull
     private Double orcamento;
 
-    @NotNull
+    public String urlImagem;
+
     private Integer idEditor;
 
-    @NotNull
     private String permissaoEditor;
 
-    public @NotNull Integer getIdEditor() {
-        return idEditor;
-    }
-
-    public void setIdEditor(@NotNull Integer idEditor) {
-        this.idEditor = idEditor;
-    }
-
-    public @NotNull String getPermissaoEditor() {
-        return permissaoEditor;
-    }
-
-    public void setPermissaoEditor(@NotNull String permissaoEditor) {
-        this.permissaoEditor = permissaoEditor;
-    }
-
-    public String getDescricao() {
+    public @NotBlank String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
+    public void setDescricao(@NotBlank String descricao) {
         this.descricao = descricao;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Integer getFkResponsavel() {
+    public @NotNull Integer getFkResponsavel() {
         return fkResponsavel;
     }
 
-    public void setFkResponsavel(Integer fkResponsavel) {
+    public void setFkResponsavel(@NotNull Integer fkResponsavel) {
         this.fkResponsavel = fkResponsavel;
     }
 
-    public Double getOrcamento() {
+    public @NotNull Double getOrcamento() {
         return orcamento;
     }
 
-    public void setOrcamento(Double orcamento) {
+    public void setOrcamento(@NotNull Double orcamento) {
         this.orcamento = orcamento;
+    }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
+    }
+
+    public Integer getIdEditor() {
+        return idEditor;
+    }
+
+    public void setIdEditor(Integer idEditor) {
+        this.idEditor = idEditor;
+    }
+
+    public String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
     }
 }

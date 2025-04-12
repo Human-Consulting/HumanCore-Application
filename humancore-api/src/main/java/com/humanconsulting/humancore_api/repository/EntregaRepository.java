@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.repository;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Entrega;
@@ -23,7 +24,7 @@ public class EntregaRepository {
     }
 
     public Entrega insert(Entrega entrega) {
-        int result = jdbcClient.sql("INSERT INTO entrega (descricao, dtInicio, dtFim, progresso, comImpedimento, fkSprint, fkResponsavel) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        int result = jdbcClient.sql("INSERT INTO entrega (descricao, dtInicio, dtFim, progresso, projetoComImpedimento, fkSprint, fkResponsavel) VALUES (?, ?, ?, ?, ?, ?, ?)")
                 .param(entrega.getDescricao())
                 .param(entrega.getDtInicio())
                 .param(entrega.getDtFim())
@@ -34,7 +35,7 @@ public class EntregaRepository {
                 .update();
 
         if (result > 0) {;
-            entrega.setIdSprint(jdbcClient.sql("SELECT LAST_INSERT_ID()")
+            entrega.setIdEntrega(jdbcClient.sql("SELECT LAST_INSERT_ID()")
                     .query(Integer.class).single());
             return entrega;
         } throw new EntidadeRequisicaoFalhaException("Falha na inserção de entrega");
@@ -48,22 +49,21 @@ public class EntregaRepository {
     }
 
     public void existsById(Integer id) {
-        if (!this.jdbcClient
+        if (this.jdbcClient
                 .sql("SELECT 1 FROM entrega WHERE idEntrega = ?")
                 .param(id)
                 .query(Integer.class)
                 .optional()
-                .isPresent()) throw new EntidadeNaoEncontradaException("Entrega com o ID " + id + " não encontrada.");
+                .isEmpty()) throw new EntidadeNaoEncontradaException("Entrega com o ID " + id + " não encontrada.");
     }
 
     public Entrega selectWhereId(Integer id) {
         existsById(id);
-        Entrega entrega = this.jdbcClient
+        return this.jdbcClient
                 .sql("SELECT * FROM entrega WHERE idEntrega = ?")
                 .param(id)
                 .query(Entrega.class)
                 .single();
-        return entrega;
     }
 
     public boolean deleteWhere(Integer id) {
@@ -75,9 +75,86 @@ public class EntregaRepository {
                 .update() > 0;
     }
 
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-        Usuario usuario = usuarioService.buscarPorId(idEditor);
+    public Entrega update(Integer idEntrega, AtualizarGeralRequestDto dto) {
+        this.jdbcClient.sql(
+                        "UPDATE entrega SET descricao = ?, " +
+                                "dtInicio = ?, " +
+                                "dtFim = ?, " +
+                                "progresso = ?, " +
+                                "fkResponsavel = ? " +
+                                "WHERE idEntrega = ?"
+                )
+                .params(dto.getDescricao(), dto.getDtInicio(), dto.getDtFim(), dto.getProgresso(), dto.getFkResponsavel(), idEntrega)
+                .update();
 
-        return usuario.getPermissao().equals(permissaoEditor);
+        return this.selectWhereId(idEntrega);
+    }
+
+    public Entrega updateFinalizar(Integer idEntrega) {
+        this.jdbcClient.sql(
+                        "UPDATE entrega SET progresso = 100 WHERE idEntrega = ?"
+                )
+                .param(idEntrega)
+                .update();
+
+        return this.selectWhereId(idEntrega);
+    }
+
+    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
+
+        return true;
+    }
+
+    public double mediaProgressoSprint(Integer idProjeto) {
+        return Math.round(this.jdbcClient
+                .sql(
+                        "SELECT idSprint, ROUND(AVG(progresso), 2) AS progressoSprint " +
+                        "FROM entrega " +
+                        "JOIN sprint ON fkSprint = idSprint " +
+                        "WHERE idSprint = ? " +
+                        "GROUP BY idSprint;")
+                .param(idProjeto)
+                .query(Double.class)
+                .single());
+    }
+
+    public double mediaProgressoProjeto(Integer idProjeto) {
+        return Math.round(this.jdbcClient
+                .sql(
+                        "SELECT ROUND(AVG(progressoSprint), 2) " +
+                        "FROM (" +
+                            "SELECT idSprint, ROUND(AVG(progresso), 2) AS progressoSprint " +
+                            "FROM entrega " +
+                            "JOIN sprint ON fkSprint = idSprint " +
+                            "WHERE fkProjeto = ? " +
+                            "GROUP BY idSprint" +
+                        ") AS progressoPorSprint")
+                .param(idProjeto)
+                .query(Double.class)
+                .optional()
+                .orElse(0.0));
+    }
+
+    public boolean projetoComImpedimento(Integer idProjeto) {
+        return this.jdbcClient.sql(
+                "SELECT EXISTS (" +
+                        "SELECT 1 FROM entrega " +
+                        "JOIN sprint ON fkSprint = idSprint " +
+                        "WHERE comImpedimento = 1 " +
+                        "AND fkProjeto = ? " +
+                        ") AS projetoComImpedimento"
+                ).param(idProjeto)
+                .query(Boolean.class)
+                .single();
+    }
+
+    public Entrega updateImpedimento(Integer idEntrega) {
+        this.jdbcClient.sql(
+                        "UPDATE entrega SET comImpedimento = NOT comImpedimento WHERE idEntrega = ?"
+                )
+                .param(idEntrega)
+                .update();
+
+        return this.selectWhereId(idEntrega);
     }
 }

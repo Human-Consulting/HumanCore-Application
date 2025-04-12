@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.repository;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Sprint;
@@ -23,12 +24,10 @@ public class SprintRepository {
     }
 
     public Sprint insert(Sprint sprint) {
-        int result = jdbcClient.sql("INSERT INTO sprint (descricao, dtInicio, dtFim, progresso, comImpedimento, fkProjeto) VALUES (?, ?, ?, ?, ?, ?)")
+        int result = jdbcClient.sql("INSERT INTO sprint (descricao, dtInicio, dtFim, fkProjeto) VALUES (?, ?, ?, ?)")
                 .param(sprint.getDescricao())
                 .param(sprint.getDtInicio())
                 .param(sprint.getDtFim())
-                .param(sprint.getProgresso())
-                .param(sprint.getComImpedimento())
                 .param(sprint.getFkProjeto())
                 .update();
 
@@ -75,8 +74,28 @@ public class SprintRepository {
     }
 
     public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-        Usuario usuario = usuarioService.buscarPorId(idEditor);
 
-        return usuario.getPermissao().equals(permissaoEditor);
+        return true;
+    }
+
+    public List<Sprint> selectWhereIdProjeto(Integer idProjeto) {
+        return this.jdbcClient
+                .sql("SELECT * FROM sprint WHERE fkProjeto = ?")
+                .param(idProjeto)
+                .query(Sprint.class)
+                .list();
+    }
+
+    public Sprint update(Integer idSprint, SprintAtualizarRequestDto dto) {
+        this.jdbcClient.sql(
+                        "UPDATE sprint SET descricao = ?, " +
+                                "dtInicio = ?, " +
+                                "dtFim = ?, " +
+                                "WHERE idSprint = ?"
+                )
+                .params(dto.getDescricao(), dto.getDtInicio(), dto.getDtFim(), idSprint)
+                .update();
+
+        return this.selectWhereId(idSprint);
     }
 }

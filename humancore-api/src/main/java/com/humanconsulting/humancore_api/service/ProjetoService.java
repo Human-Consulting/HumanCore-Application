@@ -1,102 +1,80 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.AtualizarFinalizadaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.AtualizarProgressoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
+import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.Projeto;
+import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.ProjetoRepository;
+import com.humanconsulting.humancore_api.repository.EntregaRepository;
+import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProjetoService {
 
-    @Autowired
-    private ProjetoRepository repository;
+    @Autowired private ProjetoRepository projetoRepository;
 
-    public Projeto cadastrar(Projeto projeto) {
-        List<Projeto> projetos = listar();
+    @Autowired private UsuarioRepository usuarioRepository;
 
-        for (Projeto projetoAtual : projetos) {
-            if(projetoAtual.getNome().equals(projeto.getNome())) {
-                throw new EntidadeConflitanteException("Já existe um projeto com esse nome!");
-            }
-        }
+    @Autowired private EntregaRepository entregaRepository;
 
-        projeto.setIdProjeto(null);
+    public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
+        if (projetoRepository.existsByNome(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
 
-        return repository.insert(projeto);
+        Projeto projeto = projetoRepository.insert(ProjetoMapper.toEntity(projetoRequestDto));
+        return passarParaResponse(projeto, projeto.getFkResponsavel(), projeto.getIdProjeto());
     }
 
     public Projeto buscarPorId(Integer id) {
-        return repository.selectWhereId(id);
+        return projetoRepository.selectWhereId(id);
     }
 
-    public List<Projeto> listar() {
-        List<Projeto> all = repository.selectAll();
+    public List<ProjetoResponseDto> listar() {
+        List<Projeto> all = projetoRepository.selectAll();
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma projeto registrada");
-        return all;
+
+        List<ProjetoResponseDto> allResponse = new ArrayList<>();
+        for (Projeto projeto : all) {
+            allResponse.add(passarParaResponse(projeto, projeto.getFkResponsavel(), projeto.getIdProjeto()));
+        }
+        return allResponse;
     }
 
     public void deletar(Integer id) {
-        repository.deleteWhere(id);
+        projetoRepository.deleteWhere(id);
     }
 
-    public Projeto atualizar(Integer idProjeto, ProjetoAtualizarRequestDto request) {
-        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
+    public ProjetoResponseDto atualizar(Integer idProjeto, ProjetoAtualizarRequestDto projetoAtualizarRequestDto) {
+        Boolean temPermissao = projetoRepository.validarPermissao(projetoAtualizarRequestDto.getIdEditor(), projetoAtualizarRequestDto.getPermissaoEditor());
         if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
 
-        Projeto projetoAtualizado = repository.selectWhereId(idProjeto);
-
-        if((projetoAtualizado != null) && (projetoAtualizado.getIdProjeto() == idProjeto)) {
-            projetoAtualizado.setIdProjeto(idProjeto);
-
-            Projeto p = new Projeto(request.getDescricao(), request.getNome(), request.getOrcamento(), request.getFkResponsavel());
-
-            repository.insert(p);
-
-            return p;
-        }
-
-        throw new EntidadeSemRetornoException("Projeto não encontrado");
+        Projeto projeto = projetoRepository.update(idProjeto, projetoAtualizarRequestDto);
+        return passarParaResponse(projeto, projeto.getFkResponsavel(), projeto.getIdProjeto());
     }
 
-    public Projeto atualizarProgresso(Integer id, AtualizarProgressoRequestDto request) {
-        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
-        Projeto projetoAtualizado = repository.selectWhereId(id);
-
-        if(projetoAtualizado != null && (projetoAtualizado.getIdProjeto() == id)) {
-            projetoAtualizado.setProgresso(request.getNovoProgresso());
-
-            repository.insert(projetoAtualizado);
-
-            return projetoAtualizado;
+    public List<ProjetoResponseDto> buscarPorIdEmpresa(Integer idEmpresa) {
+     List<Projeto> all = projetoRepository.selectWhereIdEmpresa(idEmpresa);
+     if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto encontrado");
+     List<ProjetoResponseDto> allResponse = new ArrayList<>();
+        for (Projeto projeto : all) {
+            allResponse.add(passarParaResponse(projeto, projeto.getFkResponsavel(), projeto.getIdProjeto()));
         }
-
-        throw new EntidadeSemRetornoException("Projeto não encontrado");
+        return allResponse;
     }
 
-    public Projeto atualizarImpedimento(Integer id, AtualizarFinalizadaRequestDto request) {
-        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
-        Projeto projetoAtualizado = repository.selectWhereId(id);
-
-        if(projetoAtualizado != null && (projetoAtualizado.getIdProjeto() == id)) {
-            projetoAtualizado.setCom_impedimento(request.getNovoFinalizada());
-
-            repository.insert(projetoAtualizado);
-
-            return projetoAtualizado;
-        }
-
-        throw new EntidadeSemRetornoException("Projeto não encontrado");
+    public ProjetoResponseDto passarParaResponse(Projeto projeto, Integer fkResponsavel, Integer idProjeto) {
+        Usuario usuario = usuarioRepository.selectWhereId(fkResponsavel);
+        double progresso = entregaRepository.mediaProgressoProjeto(idProjeto);
+        boolean comImpedimento = entregaRepository.projetoComImpedimento(idProjeto);
+        return ProjetoMapper.toDto(projeto, usuario.getIdUsuario(), usuario.getNome(), progresso, comImpedimento);
     }
 }

@@ -1,5 +1,8 @@
 package com.humanconsulting.humancore_api.controller;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
+import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
@@ -12,32 +15,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin("*")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService service;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> cadastrarUsuario(@Valid @RequestBody Usuario usuario) {
-        Usuario usuarioCadastrado = service.cadastrar(usuario);
-        return ResponseEntity.status(201).body(UsuarioResponseDto.toResponse(usuarioCadastrado));
+    public ResponseEntity<UsuarioResponseDto> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(usuarioRequestDto));
     }
 
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDto>> listar() {
-        List<Usuario> all = service.listar();
-
-        List<UsuarioResponseDto> usuariosResponse = all.stream()
-                .map(u -> UsuarioResponseDto.toResponse(u))
-                .toList();
-
-        return ResponseEntity.status(200).body(usuariosResponse);
+        return ResponseEntity.status(200).body(service.listar());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Integer id) {
-        Usuario usuario = service.buscarPorId(id);
-        return ResponseEntity.status(200).body(UsuarioResponseDto.toResponse(usuario));
+        return ResponseEntity.status(200).body(service.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
@@ -47,13 +43,12 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDto> atualizar(
-            @PathVariable Integer id,
+    public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarDto usuarioAtualizar) {
+        return ResponseEntity.status(200).body(service.atualizarPorId(idUsuario, usuarioAtualizar));
+    }
 
-            @Valid
-            @RequestBody Usuario usuario) {
-        Usuario usuarioAtualizado = service.atualizarPorId(id, usuario);
-
-        return ResponseEntity.status(200).body(UsuarioResponseDto.toResponse(usuarioAtualizado));
+    @PostMapping("/autenticar")
+    public ResponseEntity<UsuarioResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
+        return ResponseEntity.status(200).body(service.antenticar(usuarioAutenticar));
     }
 }

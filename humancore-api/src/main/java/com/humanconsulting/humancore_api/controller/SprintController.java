@@ -1,6 +1,8 @@
 package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
+import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.SprintService;
 import jakarta.validation.Valid;
@@ -12,15 +14,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("sprints")
+@CrossOrigin("*")
 public class SprintController {
 
     @Autowired
     private SprintService service;
 
     @PostMapping
-    public ResponseEntity<Sprint> cadastrarSprint(@Valid @RequestBody Sprint sprint) {
-        Sprint sprintCadastrada = service.cadastrar(sprint);
-        return ResponseEntity.status(201).body(sprintCadastrada);
+    public ResponseEntity<SprintResponseDto> cadastrarSprint(@Valid @RequestBody SprintRequestDto sprintRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(sprintRequestDto));
     }
 
     @GetMapping
@@ -35,6 +37,11 @@ public class SprintController {
         return ResponseEntity.status(200).body(sprint);
     }
 
+    @GetMapping("/buscarPorProjeto/{id}")
+    public ResponseEntity<List<SprintResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idProjeto) {
+        return ResponseEntity.status(200).body(service.buscarPorIdProjeto(idProjeto));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
@@ -42,53 +49,7 @@ public class SprintController {
     }
 
     @PutMapping("/{idSprint}")
-    public ResponseEntity<Sprint> atualizar(
-            @PathVariable Integer idSprint,
-
-            @Valid
-            @RequestBody SprintAtualizarRequestDto request) {
-        Sprint sprintAtualizada = service.atualizar(idSprint, request);
-
-        return ResponseEntity.status(200).body(sprintAtualizada);
-    }
-
-    @PatchMapping("/progresso/{id}")
-    public ResponseEntity<Sprint> atualizarProgresso(
-            @PathVariable Integer id,
-            @RequestBody AtualizarProgressoRequestDto request
-    ) {
-        Sprint sprintAtualizada = service.atualizarProgresso(id, request);
-
-        return ResponseEntity.status(200).body(sprintAtualizada);
-    }
-
-    @PatchMapping("/impedimento/{id}")
-    public ResponseEntity<Sprint> atualizarImpedimento(
-            @PathVariable Integer id,
-            @RequestBody AtualizarImpedimentoRequestDto request
-    ) {
-        Sprint sprintAtualizada = service.atualizarImpedimento(id, request);
-
-        return ResponseEntity.status(200).body(sprintAtualizada);
-    }
-
-    @PatchMapping("/id/{id}/total-entregas/{novoTotal}")
-    public ResponseEntity<Sprint> atualizarTotalEntregas(
-            @PathVariable Integer id,
-            @PathVariable AtualizarTotalEntregasRequestDto request
-    ) {
-        Sprint sprintAtualizada = service.atualizarTotalEntregas(id, request);
-
-        return ResponseEntity.status(200).body(sprintAtualizada);
-    }
-
-    @PatchMapping("/finalizada/{id}")
-    public ResponseEntity<Sprint> atualizarFinalizada(
-            @PathVariable Integer id,
-            @RequestBody AtualizarFinalizadaRequestDto request
-    ) {
-        Sprint sprintAtualizada = service.atualizarFinalizada(id, request);
-
-        return ResponseEntity.status(200).body(sprintAtualizada);
+    public ResponseEntity<SprintResponseDto> atualizar(@PathVariable Integer idSprint, @Valid @RequestBody SprintAtualizarRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizar(idSprint, request));
     }
 }

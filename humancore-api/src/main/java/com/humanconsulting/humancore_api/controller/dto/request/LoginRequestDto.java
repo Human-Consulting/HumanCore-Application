@@ -6,25 +6,17 @@ import jakarta.validation.constraints.NotBlank;
 public class LoginRequestDto {
     @Email
     @NotBlank
-    private String usuario;
+    private String email;
 
     @NotBlank
     private String senha;
 
-    public LoginRequestDto() {
+    public @Email @NotBlank String getEmail() {
+        return email;
     }
 
-    public LoginRequestDto(String usuario, String senha) {
-        this.usuario = usuario;
-        this.senha = senha;
-    }
-
-    public @Email @NotBlank String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(@Email @NotBlank String usuario) {
-        this.usuario = usuario;
+    public void setEmail(@Email @NotBlank String email) {
+        this.email = email;
     }
 
     public @NotBlank String getSenha() {

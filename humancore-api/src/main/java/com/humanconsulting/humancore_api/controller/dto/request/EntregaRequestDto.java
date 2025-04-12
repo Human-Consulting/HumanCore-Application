@@ -1,10 +1,11 @@
-package com.humanconsulting.humancore_api.controller.dto.atualizar.entrega;
+package com.humanconsulting.humancore_api.controller.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public class EntregaAtualizarRequestDto {
+public class EntregaRequestDto {
+
     @NotNull
     private String descricao;
 
@@ -15,29 +16,10 @@ public class EntregaAtualizarRequestDto {
     private LocalDate dtFim;
 
     @NotNull
+    private Integer fkSprint;
+
+    @NotNull
     private Integer fkResponsavel;
-
-    @NotNull
-    private Integer idEditor;
-
-    @NotNull
-    private String permissaoEditor;
-
-    public @NotNull Integer getIdEditor() {
-        return idEditor;
-    }
-
-    public void setIdEditor(@NotNull Integer idEditor) {
-        this.idEditor = idEditor;
-    }
-
-    public @NotNull String getPermissaoEditor() {
-        return permissaoEditor;
-    }
-
-    public void setPermissaoEditor(@NotNull String permissaoEditor) {
-        this.permissaoEditor = permissaoEditor;
-    }
 
     public @NotNull String getDescricao() {
         return descricao;
@@ -61,6 +43,14 @@ public class EntregaAtualizarRequestDto {
 
     public void setDtFim(@NotNull LocalDate dtFim) {
         this.dtFim = dtFim;
+    }
+
+    public @NotNull Integer getFkSprint() {
+        return fkSprint;
+    }
+
+    public void setFkSprint(@NotNull Integer fkSprint) {
+        this.fkSprint = fkSprint;
     }
 
     public @NotNull Integer getFkResponsavel() {
