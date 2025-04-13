@@ -4,7 +4,6 @@ import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Empresa;
-import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -19,9 +18,15 @@ public class EmpresaRepository {
 
     private UsuarioService usuarioService;
 
-    public EmpresaRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
+    private UsuarioRepository usuarioRepository;
+
+    private ProjetoRepository projetoRepository;
+
+    public EmpresaRepository(JdbcClient jdbcClient, UsuarioService usuarioService, UsuarioRepository usuarioRepository, ProjetoRepository projetoRepository) {
         this.jdbcClient = jdbcClient;
         this.usuarioService = usuarioService;
+        this.usuarioRepository = usuarioRepository;
+        this.projetoRepository = projetoRepository;
     }
 
     public Empresa insert(Empresa empresa) {
@@ -72,12 +77,12 @@ public class EmpresaRepository {
         return empresa;
     }
 
-    public boolean deleteWhere(Integer id) {
-        existsById(id);
+    public boolean deleteWhere(Integer idEmpresa) {
+        existsById(idEmpresa);
 
         return this.jdbcClient
                 .sql("DELETE FROM empresa WHERE idEmpresa = ?")
-                .param(id)
+                .param(idEmpresa)
                 .update() > 0;
     }
 
