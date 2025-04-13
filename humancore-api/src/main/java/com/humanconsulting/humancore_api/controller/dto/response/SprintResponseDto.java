@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.controller.dto.response;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class SprintResponseDto {
 
@@ -18,7 +19,9 @@ public class SprintResponseDto {
 
     private Integer fkProjeto;
 
-    public SprintResponseDto(Integer idSprint, String descricao, LocalDate dtInicio, LocalDate dtFim, Double progresso, Boolean comImpedimento, Integer fkProjeto) {
+    private List<EntregaResponseDto> entregas;
+
+    public SprintResponseDto(Integer idSprint, String descricao, LocalDate dtInicio, LocalDate dtFim, Double progresso, Boolean comImpedimento, Integer fkProjeto, List<EntregaResponseDto> entregas) {
         this.idSprint = idSprint;
         this.descricao = descricao;
         this.dtInicio = dtInicio;
@@ -26,6 +29,15 @@ public class SprintResponseDto {
         this.progresso = progresso;
         this.comImpedimento = comImpedimento;
         this.fkProjeto = fkProjeto;
+        this.entregas = entregas;
+    }
+
+    public Integer getIdSprint() {
+        return idSprint;
+    }
+
+    public void setIdSprint(Integer idSprint) {
+        this.idSprint = idSprint;
     }
 
     public String getDescricao() {
@@ -74,5 +86,13 @@ public class SprintResponseDto {
 
     public void setFkProjeto(Integer fkProjeto) {
         this.fkProjeto = fkProjeto;
+    }
+
+    public List<EntregaResponseDto> getEntregas() {
+        return entregas;
+    }
+
+    public void setEntregas(List<EntregaResponseDto> entregas) {
+        this.entregas = entregas;
     }
 }

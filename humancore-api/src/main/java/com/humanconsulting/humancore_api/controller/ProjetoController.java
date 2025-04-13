@@ -1,7 +1,5 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.AtualizarFinalizadaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.AtualizarProgressoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.ProjetoResponseDto;
@@ -38,14 +36,14 @@ public class ProjetoController {
         return ResponseEntity.status(200).body(projeto);
     }
 
-    @GetMapping("/buscarPorEmpresa/{id}")
+    @GetMapping("/buscarPorEmpresa/{idEmpresa}")
     public ResponseEntity<List<ProjetoResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idEmpresa) {
         return ResponseEntity.status(200).body(service.buscarPorIdEmpresa(idEmpresa));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    @DeleteMapping("/{idProjeto}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idProjeto) {
+        service.deletar(idProjeto);
         return ResponseEntity.status(204).build();
     }
 

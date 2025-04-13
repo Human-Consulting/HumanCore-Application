@@ -37,7 +37,7 @@ public class SprintController {
         return ResponseEntity.status(200).body(sprint);
     }
 
-    @GetMapping("/buscarPorProjeto/{id}")
+    @GetMapping("/buscarPorProjeto/{idProjeto}")
     public ResponseEntity<List<SprintResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idProjeto) {
         return ResponseEntity.status(200).body(service.buscarPorIdProjeto(idProjeto));
     }

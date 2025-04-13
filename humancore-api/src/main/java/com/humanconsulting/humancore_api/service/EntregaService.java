@@ -4,11 +4,13 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.Atuali
 import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.EntregaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.EntregaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.EntregaMapper;
 import com.humanconsulting.humancore_api.model.Entrega;
+import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.EntregaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;

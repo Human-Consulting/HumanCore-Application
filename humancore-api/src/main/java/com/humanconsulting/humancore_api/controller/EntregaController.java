@@ -30,14 +30,14 @@ public class EntregaController {
         return ResponseEntity.status(200).body(service.listar());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idEntrega}")
     public ResponseEntity<EntregaResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    @DeleteMapping("/{idEntrega}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idEntrega) {
+        service.deletar(idEntrega);
         return ResponseEntity.status(204).build();
     }
 
@@ -46,12 +46,12 @@ public class EntregaController {
         return ResponseEntity.status(200).body(service.atualizar(idEntrega, entrega));
     }
 
-    @PatchMapping("/finalizada/{id}")
+    @PatchMapping("/finalizada/{idEntrega}")
     public ResponseEntity<EntregaResponseDto> atualizarFinalizada(@PathVariable Integer id, @RequestBody AtualizarStatusRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizarFinalizada(id, request));
     }
 
-    @PatchMapping("/impedimento/{id}")
+    @PatchMapping("/impedimento/{idEntrega}")
     public ResponseEntity<EntregaResponseDto> atualizarImpedimento(@PathVariable Integer id, @RequestBody AtualizarStatusRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizarImpedimento(id, request));
     }

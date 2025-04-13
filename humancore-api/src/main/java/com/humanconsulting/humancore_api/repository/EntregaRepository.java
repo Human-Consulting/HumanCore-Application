@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.Atuali
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Entrega;
+import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,7 @@ public class EntregaRepository {
     }
 
     public Entrega insert(Entrega entrega) {
-        int result = jdbcClient.sql("INSERT INTO entrega (descricao, dtInicio, dtFim, progresso, projetoComImpedimento, fkSprint, fkResponsavel) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        int result = jdbcClient.sql("INSERT INTO entrega (descricao, dtInicio, dtFim, progresso, comImpedimento, fkSprint, fkResponsavel) VALUES (?, ?, ?, ?, ?, ?, ?)")
                 .param(entrega.getDescricao())
                 .param(entrega.getDtInicio())
                 .param(entrega.getDtFim())
@@ -44,6 +45,17 @@ public class EntregaRepository {
     public List<Entrega> selectAll() {
         return this.jdbcClient
                 .sql("SELECT * FROM entrega")
+                .query(Entrega.class)
+                .list();
+    }
+
+    public List<Entrega> selectWhereIdProjeto(Integer idProjeto, Integer idSprint) {
+        return this.jdbcClient
+                .sql("SELECT entrega.* FROM entrega " +
+                     "JOIN sprint ON fkSprint = idSprint " +
+                     "WHERE fkProjeto = ? " +
+                     "AND idSprint = ?")
+                .params(idProjeto, idSprint)
                 .query(Entrega.class)
                 .list();
     }
@@ -106,20 +118,21 @@ public class EntregaRepository {
     }
 
     public double mediaProgressoSprint(Integer idProjeto) {
-        return Math.round(this.jdbcClient
+        return this.jdbcClient
                 .sql(
-                        "SELECT idSprint, ROUND(AVG(progresso), 2) AS progressoSprint " +
+                        "SELECT ROUND(AVG(progresso), 2) AS progressoSprint " +
                         "FROM entrega " +
                         "JOIN sprint ON fkSprint = idSprint " +
                         "WHERE idSprint = ? " +
                         "GROUP BY idSprint;")
                 .param(idProjeto)
                 .query(Double.class)
-                .single());
+                .optional()
+                .orElse(0.0);
     }
 
     public double mediaProgressoProjeto(Integer idProjeto) {
-        return Math.round(this.jdbcClient
+        return this.jdbcClient
                 .sql(
                         "SELECT ROUND(AVG(progressoSprint), 2) " +
                         "FROM (" +
@@ -132,7 +145,7 @@ public class EntregaRepository {
                 .param(idProjeto)
                 .query(Double.class)
                 .optional()
-                .orElse(0.0));
+                .orElse(0.0);
     }
 
     public boolean projetoComImpedimento(Integer idProjeto) {
