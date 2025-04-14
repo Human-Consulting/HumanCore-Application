@@ -46,6 +46,16 @@ public class EntregaService {
         return allResponse;
     }
 
+    public List<EntregaResponseDto> listarPorSprint(Integer idSprint) {
+        List<Entrega> all = entregaRepository.selectWhereIdSprint(idSprint);
+        if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma entrega registrada");
+        List<EntregaResponseDto> allResponse = new ArrayList<>();
+        for (Entrega entrega : all) {
+            allResponse.add(passarParaResponse(entrega, entrega.getFkResponsavel()));
+        }
+        return allResponse;
+    }
+
     public void deletar(Integer id) {
         entregaRepository.deleteWhere(id);
     }

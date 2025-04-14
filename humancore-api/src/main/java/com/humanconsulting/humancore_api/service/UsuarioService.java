@@ -93,4 +93,14 @@ public class UsuarioService {
         String nomeEmpresa = empresaRepository.selectWhereId(usuario.getFkEmpresa()).getNome();
         return UsuarioMapper.toLoginDto(usuario, nomeEmpresa);
     }
+
+    public List<UsuarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
+        List<Usuario> all = usuarioRepository.selectWhereIdEmpresa(idEmpresa);
+        if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
+        List<UsuarioResponseDto> allResponse = new ArrayList<>();
+        for (Usuario usuario : all) {
+            allResponse.add(UsuarioMapper.toUsuarioDto(usuario));
+        }
+        return allResponse;
+    }
 }

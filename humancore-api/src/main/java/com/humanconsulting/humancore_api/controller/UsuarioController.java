@@ -31,6 +31,11 @@ public class UsuarioController {
         return ResponseEntity.status(200).body(service.listar());
     }
 
+    @GetMapping("/buscarPorEmpresa/{idEmpresa}")
+    public ResponseEntity<List<UsuarioResponseDto>> listar(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.status(200).body(service.listarPorEmpresa(idEmpresa));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));

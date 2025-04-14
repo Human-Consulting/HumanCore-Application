@@ -30,6 +30,11 @@ public class EntregaController {
         return ResponseEntity.status(200).body(service.listar());
     }
 
+    @GetMapping("/buscarPorSprint/{idSprint}")
+    public ResponseEntity<List<EntregaResponseDto>> listarPorIdSprint(@PathVariable Integer idSprint) {
+        return ResponseEntity.status(200).body(service.listarPorSprint(idSprint));
+    }
+
     @GetMapping("/{idEntrega}")
     public ResponseEntity<EntregaResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));

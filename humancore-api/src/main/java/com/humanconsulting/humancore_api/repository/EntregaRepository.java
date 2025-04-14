@@ -60,6 +60,14 @@ public class EntregaRepository {
                 .list();
     }
 
+    public List<Entrega> selectWhereIdSprint(Integer idSprint) {
+        return this.jdbcClient
+                .sql("SELECT * FROM entrega WHERE fkSprint = ?")
+                .params(idSprint)
+                .query(Entrega.class)
+                .list();
+    }
+
     public void existsById(Integer id) {
         if (this.jdbcClient
                 .sql("SELECT 1 FROM entrega WHERE idEntrega = ?")

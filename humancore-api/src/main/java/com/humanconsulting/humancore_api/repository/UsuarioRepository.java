@@ -75,6 +75,14 @@ public class UsuarioRepository {
                 .single();
     }
 
+    public List<Usuario> selectWhereIdEmpresa(Integer idEmpresa) {
+        return this.jdbcClient
+                .sql("SELECT * FROM usuario WHERE fkEmpresa = ?")
+                .param(idEmpresa)
+                .query(Usuario.class)
+                .list();
+    }
+
     public boolean deleteWhere(Integer id) {
         existsById(id);
 

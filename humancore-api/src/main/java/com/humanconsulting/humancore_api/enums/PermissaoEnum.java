@@ -7,6 +7,7 @@ public enum PermissaoEnum {
     DIRETOR(
             Arrays.asList(
                     "MODIFICAR_PROPRIO",
+                    "MODIFICAR_GESTOR",
                     "MODIFICAR_FUNC",
                     "EDITAR_USUARIOS_EMPRESA",
                     "EXCLUIR_USUARIOS_EMPRESA",
