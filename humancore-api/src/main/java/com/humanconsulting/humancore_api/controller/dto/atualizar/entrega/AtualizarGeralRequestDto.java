@@ -23,23 +23,12 @@ public class AtualizarGeralRequestDto {
     @NotNull
     private Integer idEditor;
 
-    @NotNull
-    private String permissaoEditor;
-
     public @NotNull Integer getIdEditor() {
         return idEditor;
     }
 
     public void setIdEditor(@NotNull Integer idEditor) {
         this.idEditor = idEditor;
-    }
-
-    public @NotNull String getPermissaoEditor() {
-        return permissaoEditor;
-    }
-
-    public void setPermissaoEditor(@NotNull String permissaoEditor) {
-        this.permissaoEditor = permissaoEditor;
     }
 
     public @NotNull String getDescricao() {

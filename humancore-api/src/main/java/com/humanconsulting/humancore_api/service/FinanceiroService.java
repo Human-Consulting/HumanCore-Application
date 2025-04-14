@@ -1,7 +1,6 @@
 package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro.AtualizarFinanceiroRequestDto;
-import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.model.Financeiro;
 import com.humanconsulting.humancore_api.repository.FinanceiroRepository;
@@ -37,9 +36,6 @@ public class FinanceiroService {
     }
 
     public Financeiro atualizar(Integer idFinanceiro, @Valid AtualizarFinanceiroRequestDto request) {
-        Boolean temPermissao = repository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
         Financeiro financeiroAtualizado = repository.selectWhereId(idFinanceiro);
 
         if((financeiroAtualizado != null) && (financeiroAtualizado.getIdFinanceiro() == idFinanceiro)) {

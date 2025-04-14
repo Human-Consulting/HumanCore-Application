@@ -85,12 +85,6 @@ public class ProjetoRepository {
                 .update() > 0;
     }
 
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-
-
-        return true;
-    }
-
     public List<Projeto> selectWhereIdEmpresa(Integer idEmpresa) {
         return this.jdbcClient
                 .sql("SELECT * FROM projeto WHERE fkEmpresa = ?")

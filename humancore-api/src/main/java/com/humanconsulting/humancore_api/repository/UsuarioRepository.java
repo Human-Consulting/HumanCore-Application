@@ -23,12 +23,13 @@ public class UsuarioRepository {
     }
 
     public Usuario insert(Usuario usuario) {
-        int result = jdbcClient.sql("INSERT INTO usuario (nome, email, senha, cargo, area, fkEmpresa) VALUES (?, ?, ?, ?, ?, ?)")
+        int result = jdbcClient.sql("INSERT INTO usuario (nome, email, senha, cargo, area, permissao, fkEmpresa) VALUES (?, ?, ?, ?, ?, ?, ?)")
                 .param(usuario.getNome())
                 .param(usuario.getEmail())
                 .param(usuario.getSenha())
                 .param(usuario.getCargo())
                 .param(usuario.getArea())
+                .param(usuario.getPermissao())
                 .param(usuario.getFkEmpresa())
                 .update();
 
@@ -89,7 +90,7 @@ public class UsuarioRepository {
                                 "email = ?, " +
                                 "senha = ?, " +
                                 "cargo = ?, " +
-                                "area = ? " +
+                                "area = ?, " +
                                 "permissao = ? " +
                                 "WHERE idUsuario = ?"
                 )

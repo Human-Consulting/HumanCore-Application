@@ -3,8 +3,8 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.LoginResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.UsuarioResponseDto;
-import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,19 +36,19 @@ public class UsuarioController {
         return ResponseEntity.status(200).body(service.buscarPorId(id));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    @DeleteMapping("/{idUsuario}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idUsuario) {
+        service.deletar(idUsuario);
         return ResponseEntity.status(204).build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarDto usuarioAtualizar) {
         return ResponseEntity.status(200).body(service.atualizarPorId(idUsuario, usuarioAtualizar));
     }
 
     @PostMapping("/autenticar")
-    public ResponseEntity<UsuarioResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
+    public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
         return ResponseEntity.status(200).body(service.antenticar(usuarioAutenticar));
     }
 }

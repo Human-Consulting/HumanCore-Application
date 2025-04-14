@@ -5,7 +5,6 @@ import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto
 import com.humanconsulting.humancore_api.controller.dto.response.EntregaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
-import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.SprintMapper;
 import com.humanconsulting.humancore_api.model.Entrega;
@@ -48,9 +47,6 @@ public class SprintService {
     }
 
     public SprintResponseDto atualizar(Integer idSprint, SprintAtualizarRequestDto request) {
-        Boolean temPermissao = sprintRepository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
         sprintRepository.existsById(idSprint);
 
         Sprint sprint = sprintRepository.update(idSprint, request);

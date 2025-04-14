@@ -46,13 +46,13 @@ public class EntregaController {
         return ResponseEntity.status(200).body(service.atualizar(idEntrega, entrega));
     }
 
-    @PatchMapping("/finalizada/{idEntrega}")
-    public ResponseEntity<EntregaResponseDto> atualizarFinalizada(@PathVariable Integer id, @RequestBody AtualizarStatusRequestDto request) {
-        return ResponseEntity.status(200).body(service.atualizarFinalizada(id, request));
+    @PutMapping("/finalizada/{idEntrega}")
+    public ResponseEntity<EntregaResponseDto> atualizarFinalizada(@PathVariable Integer idEntrega, @RequestBody AtualizarStatusRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizarFinalizada(idEntrega, request));
     }
 
-    @PatchMapping("/impedimento/{idEntrega}")
-    public ResponseEntity<EntregaResponseDto> atualizarImpedimento(@PathVariable Integer id, @RequestBody AtualizarStatusRequestDto request) {
-        return ResponseEntity.status(200).body(service.atualizarImpedimento(id, request));
+    @PutMapping("/impedimento/{idEntrega}")
+    public ResponseEntity<EntregaResponseDto> atualizarImpedimento(@PathVariable Integer idEntrega, @RequestBody AtualizarStatusRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizarImpedimento(idEntrega, request));
     }
 }

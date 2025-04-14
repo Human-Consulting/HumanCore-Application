@@ -4,13 +4,11 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.Atuali
 import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.EntregaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.EntregaResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
+import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
-import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.EntregaMapper;
 import com.humanconsulting.humancore_api.model.Entrega;
-import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.EntregaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
@@ -53,30 +51,23 @@ public class EntregaService {
     }
 
     public EntregaResponseDto atualizar(Integer idEntrega, AtualizarGeralRequestDto requestUpdate) {
-        Boolean temPermissao = entregaRepository.validarPermissao(requestUpdate.getIdEditor(), requestUpdate.getPermissaoEditor());
-
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
        Entrega entrega = entregaRepository.update(idEntrega, requestUpdate);
        return passarParaResponse(entrega, entrega.getFkResponsavel());
     }
 
     public EntregaResponseDto atualizarFinalizada(Integer idEntrega, AtualizarStatusRequestDto request) {
-        Boolean temPermissao = entregaRepository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
         entregaRepository.existsById(idEntrega);
         Entrega entrega = entregaRepository.updateFinalizar(idEntrega);
         return passarParaResponse(entrega, request.getIdEditor());
     }
 
     public EntregaResponseDto atualizarImpedimento(Integer idEntrega, AtualizarStatusRequestDto request) {
-        Boolean temPermissao = entregaRepository.validarPermissao(request.getIdEditor(), request.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
-        entregaRepository.existsById(idEntrega);
-        Entrega entrega = entregaRepository.updateImpedimento(idEntrega);
-        return passarParaResponse(entrega, request.getIdEditor());
+        Integer fkResponsavel = entregaRepository.selectWhereId(idEntrega).getFkResponsavel();
+        if (request.getIdEditor() == fkResponsavel) {
+            Entrega entrega = entregaRepository.updateImpedimento(idEntrega);
+            return passarParaResponse(entrega, request.getIdEditor());
+        }
+        throw new AcessoNegadoException("Usuário não é responsável pela entrega");
     }
 
     public EntregaResponseDto passarParaResponse(Entrega entrega, Integer fkResponsavel) {

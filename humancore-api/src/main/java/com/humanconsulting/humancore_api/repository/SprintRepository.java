@@ -73,11 +73,6 @@ public class SprintRepository {
                 .update() > 0;
     }
 
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-
-        return true;
-    }
-
     public List<Sprint> selectWhereIdProjeto(Integer idProjeto) {
         return this.jdbcClient
                 .sql("SELECT * FROM sprint WHERE fkProjeto = ?")

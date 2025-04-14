@@ -70,9 +70,4 @@ public class FinanceiroRepository {
                 .param(id)
                 .update() > 0;
     }
-
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-
-        return true;
-    }
 }

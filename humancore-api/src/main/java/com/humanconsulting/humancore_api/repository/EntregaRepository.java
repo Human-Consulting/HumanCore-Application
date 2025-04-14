@@ -112,11 +112,6 @@ public class EntregaRepository {
         return this.selectWhereId(idEntrega);
     }
 
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-
-        return true;
-    }
-
     public double mediaProgressoSprint(Integer idProjeto) {
         return this.jdbcClient
                 .sql(

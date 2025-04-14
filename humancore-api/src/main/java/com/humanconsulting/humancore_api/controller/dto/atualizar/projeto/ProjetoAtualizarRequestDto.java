@@ -15,8 +15,10 @@ public class ProjetoAtualizarRequestDto {
 
     public String urlImagem;
 
+    @NotNull
     private Integer idEditor;
 
+    @NotNull
     private String permissaoEditor;
 
     public @NotBlank String getDescricao() {
@@ -51,19 +53,19 @@ public class ProjetoAtualizarRequestDto {
         this.urlImagem = urlImagem;
     }
 
-    public Integer getIdEditor() {
+    public @NotNull Integer getIdEditor() {
         return idEditor;
     }
 
-    public void setIdEditor(Integer idEditor) {
+    public void setIdEditor(@NotNull Integer idEditor) {
         this.idEditor = idEditor;
     }
 
-    public String getPermissaoEditor() {
+    public @NotNull String getPermissaoEditor() {
         return permissaoEditor;
     }
 
-    public void setPermissaoEditor(String permissaoEditor) {
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
         this.permissaoEditor = permissaoEditor;
     }
 }

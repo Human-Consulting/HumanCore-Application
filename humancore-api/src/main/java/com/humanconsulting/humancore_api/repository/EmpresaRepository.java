@@ -16,17 +16,8 @@ public class EmpresaRepository {
 
     private final JdbcClient jdbcClient;
 
-    private UsuarioService usuarioService;
-
-    private UsuarioRepository usuarioRepository;
-
-    private ProjetoRepository projetoRepository;
-
-    public EmpresaRepository(JdbcClient jdbcClient, UsuarioService usuarioService, UsuarioRepository usuarioRepository, ProjetoRepository projetoRepository) {
+    public EmpresaRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
-        this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
-        this.projetoRepository = projetoRepository;
     }
 
     public Empresa insert(Empresa empresa) {
@@ -84,11 +75,5 @@ public class EmpresaRepository {
                 .sql("DELETE FROM empresa WHERE idEmpresa = ?")
                 .param(idEmpresa)
                 .update() > 0;
-    }
-
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-//        Usuario usuario = usuarioService.buscarPorId(idEditor);
-
-        return true;
     }
 }

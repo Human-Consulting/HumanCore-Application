@@ -27,6 +27,12 @@ public class UsuarioAtualizarDto {
     @NotBlank
     private String permissao;
 
+    @NotNull
+    private Integer idEditor;
+
+    @NotNull
+    private String permissaoEditor;
+
     public @NotBlank String getNome() {
         return nome;
     }
@@ -73,5 +79,21 @@ public class UsuarioAtualizarDto {
 
     public void setPermissao(@NotBlank String permissao) {
         this.permissao = permissao;
+    }
+
+    public @NotNull Integer getIdEditor() {
+        return idEditor;
+    }
+
+    public void setIdEditor(@NotNull Integer idEditor) {
+        this.idEditor = idEditor;
+    }
+
+    public @NotNull String getPermissaoEditor() {
+        return permissaoEditor;
+    }
+
+    public void setPermissaoEditor(@NotNull String permissaoEditor) {
+        this.permissaoEditor = permissaoEditor;
     }
 }

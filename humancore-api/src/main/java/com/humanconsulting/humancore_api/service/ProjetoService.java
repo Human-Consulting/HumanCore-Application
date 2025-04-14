@@ -4,7 +4,6 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.Projet
 import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
-import com.humanconsulting.humancore_api.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.Projeto;
@@ -54,11 +53,10 @@ public class ProjetoService {
     }
 
     public ProjetoResponseDto atualizar(Integer idProjeto, ProjetoAtualizarRequestDto projetoAtualizarRequestDto) {
-        Boolean temPermissao = projetoRepository.validarPermissao(projetoAtualizarRequestDto.getIdEditor(), projetoAtualizarRequestDto.getPermissaoEditor());
-        if (!temPermissao) throw new EntidadeSemPermissaoException("Você não tem permissão para fazer essa edição");
-
-        Projeto projeto = projetoRepository.update(idProjeto, projetoAtualizarRequestDto);
-        return passarParaResponse(projeto, projeto.getFkResponsavel(), projeto.getIdProjeto());
+        String urlImagemOriginal = buscarPorId(idProjeto).getUrlImagem();
+        if (projetoAtualizarRequestDto.getUrlImagem().isEmpty()) projetoAtualizarRequestDto.setUrlImagem(urlImagemOriginal);
+        Projeto projetoAtualizado = projetoRepository.update(idProjeto, projetoAtualizarRequestDto);
+        return passarParaResponse(projetoAtualizado, projetoAtualizado.getFkResponsavel(), projetoAtualizado.getIdProjeto());
     }
 
     public List<ProjetoResponseDto> buscarPorIdEmpresa(Integer idEmpresa) {
