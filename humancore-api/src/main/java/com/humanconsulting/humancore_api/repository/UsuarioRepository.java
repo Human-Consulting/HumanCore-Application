@@ -8,6 +8,7 @@ import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaExceptio
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Entrega;
 import com.humanconsulting.humancore_api.model.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -16,19 +17,23 @@ import java.util.List;
 @Repository
 public class UsuarioRepository {
 
-    private final JdbcClient jdbcClient;
+    @Autowired private JdbcClient jdbcClient;
 
     public UsuarioRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
+    public UsuarioRepository() {
+    }
+
     public Usuario insert(Usuario usuario) {
-        int result = jdbcClient.sql("INSERT INTO usuario (nome, email, senha, cargo, area, fkEmpresa) VALUES (?, ?, ?, ?, ?, ?)")
+        int result = jdbcClient.sql("INSERT INTO usuario (nome, email, senha, cargo, area, permissao, fkEmpresa) VALUES (?, ?, ?, ?, ?, ?, ?)")
                 .param(usuario.getNome())
                 .param(usuario.getEmail())
                 .param(usuario.getSenha())
                 .param(usuario.getCargo())
                 .param(usuario.getArea())
+                .param(usuario.getPermissao())
                 .param(usuario.getFkEmpresa())
                 .update();
 

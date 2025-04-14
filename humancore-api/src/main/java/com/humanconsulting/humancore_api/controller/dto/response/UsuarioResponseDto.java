@@ -3,12 +3,14 @@ package com.humanconsulting.humancore_api.controller.dto.response;
 public class UsuarioResponseDto {
     private Integer idUsuario;
     private String nome;
+    private String email;
     private String permissao;
     private Integer fkEmpresa;
 
-    public UsuarioResponseDto(Integer idUsuario, String nome, String permissao, Integer fkEmpresa) {
+    public UsuarioResponseDto(Integer idUsuario, String nome, String email, String permissao, Integer fkEmpresa) {
         this.idUsuario = idUsuario;
         this.nome = nome;
+        this.email = email;
         this.permissao = permissao;
         this.fkEmpresa = fkEmpresa;
     }
@@ -28,6 +30,10 @@ public class UsuarioResponseDto {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public String getEmail() {return email; }
+
+    public void setEmail(String email) {this.email = email; }
 
     public String getPermissao() {
         return permissao;

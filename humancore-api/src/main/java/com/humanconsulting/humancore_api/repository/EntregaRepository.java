@@ -7,6 +7,7 @@ import com.humanconsulting.humancore_api.model.Entrega;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +16,8 @@ import java.util.List;
 @Repository
 public class EntregaRepository {
 
-    private final JdbcClient jdbcClient;
-    private final UsuarioService usuarioService;
+    @Autowired private final JdbcClient jdbcClient;
+    @Autowired private final UsuarioService usuarioService;
 
     public EntregaRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
         this.jdbcClient = jdbcClient;
@@ -98,11 +99,6 @@ public class EntregaRepository {
                 .update();
 
         return this.selectWhereId(idEntrega);
-    }
-
-    public Boolean validarPermissao(Integer idEditor, @NotBlank String permissaoEditor) {
-
-        return true;
     }
 
     public double mediaProgressoSprint(Integer idProjeto) {
