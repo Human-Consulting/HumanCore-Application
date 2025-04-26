@@ -75,6 +75,15 @@ public class UsuarioRepository {
                 .single();
     }
 
+    public Usuario selectWhereEmail(String email) {
+        existsByEmail(email);
+        return this.jdbcClient
+                .sql("SELECT * FROM usuario WHERE email = ?")
+                .param(email)
+                .query(Usuario.class)
+                .single();
+    }
+
     public List<Usuario> selectWhereIdEmpresa(Integer idEmpresa) {
         return this.jdbcClient
                 .sql("SELECT * FROM usuario WHERE fkEmpresa = ?")
