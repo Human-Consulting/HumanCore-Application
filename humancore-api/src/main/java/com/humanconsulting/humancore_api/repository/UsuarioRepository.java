@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UsuarioRepository {
@@ -72,13 +73,13 @@ public class UsuarioRepository {
                 .single();
     }
 
-    public Usuario selectWhereEmail(String email) {
+    public Optional<Usuario> selectWhereEmail(String email) {
         existsByEmail(email);
-        return this.jdbcClient
+        return Optional.of(this.jdbcClient
                 .sql("SELECT * FROM usuario WHERE email = ?")
                 .param(email)
                 .query(Usuario.class)
-                .single();
+                .single());
     }
 
     public List<Usuario> selectWhereIdEmpresa(Integer idEmpresa) {

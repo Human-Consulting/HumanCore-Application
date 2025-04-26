@@ -32,6 +32,9 @@ public class UsuarioResponseDto {
         this.comImpedimento = comImpedimento;
     }
 
+    public UsuarioResponseDto() {
+    }
+
     public Integer getIdUsuario() {
         return idUsuario;
     }

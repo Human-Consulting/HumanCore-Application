@@ -37,6 +37,9 @@ public class Usuario {
         this.fkEmpresa = fkEmpresa;
     }
 
+    public Usuario() {
+    }
+
     public Integer getIdUsuario() {
         return idUsuario;
     }
