@@ -70,4 +70,12 @@ public class FinanceiroRepository {
                 .param(id)
                 .update() > 0;
     }
+
+    public List<Financeiro> selectAllWhereIdProjeto(Integer idProjeto) {
+        return this.jdbcClient
+                .sql("SELECT * FROM financeiro WHERE fkProjeto = ?")
+                .param(idProjeto)
+                .query(Financeiro.class)
+                .list();
+    }
 }

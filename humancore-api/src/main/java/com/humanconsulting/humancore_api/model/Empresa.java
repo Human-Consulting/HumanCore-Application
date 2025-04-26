@@ -10,14 +10,17 @@ public class Empresa {
     @Id
     private Integer idEmpresa;
 
-    private String cnpj;
-
     private String nome;
 
-    public Empresa(Integer idEmpresa, String cnpj, String nome) {
-        this.idEmpresa = idEmpresa;
+    private String cnpj;
+
+    private String urlImagem;
+
+    public Empresa(String cnpj, String nome, String urlImagem) {
+        this.idEmpresa = null;
         this.cnpj = cnpj;
         this.nome = nome;
+        this.urlImagem = urlImagem;
     }
 
     public Integer getIdEmpresa() {
@@ -28,6 +31,14 @@ public class Empresa {
         this.idEmpresa = idEmpresa;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getCnpj() {
         return cnpj;
     }
@@ -36,11 +47,11 @@ public class Empresa {
         this.cnpj = cnpj;
     }
 
-    public String getNome() {
-        return nome;
+    public String getUrlImagem() {
+        return urlImagem;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 }

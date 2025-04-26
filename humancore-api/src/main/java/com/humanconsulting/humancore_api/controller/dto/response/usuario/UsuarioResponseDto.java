@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto.response;
+package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 
 public class UsuarioResponseDto {
 
@@ -16,7 +16,11 @@ public class UsuarioResponseDto {
 
     private String permissao;
 
-    public UsuarioResponseDto(Integer idUsuario, String nome, String email, String senha, String cargo, String area, String permissao) {
+    private Integer qtdTarefas;
+
+    private Boolean comImpedimento;
+
+    public UsuarioResponseDto(Integer idUsuario, String nome, String email, String senha, String cargo, String area, String permissao, Integer qtdTarefas, Boolean comImpedimento) {
         this.idUsuario = idUsuario;
         this.nome = nome;
         this.email = email;
@@ -24,6 +28,8 @@ public class UsuarioResponseDto {
         this.cargo = cargo;
         this.area = area;
         this.permissao = permissao;
+        this.qtdTarefas = qtdTarefas;
+        this.comImpedimento = comImpedimento;
     }
 
     public Integer getIdUsuario() {
@@ -80,5 +86,21 @@ public class UsuarioResponseDto {
 
     public void setPermissao(String permissao) {
         this.permissao = permissao;
+    }
+
+    public Integer getQtdTarefas() {
+        return qtdTarefas;
+    }
+
+    public void setQtdTarefas(Integer qtdTarefas) {
+        this.qtdTarefas = qtdTarefas;
+    }
+
+    public Boolean getComImpedimento() {
+        return comImpedimento;
+    }
+
+    public void setComImpedimento(Boolean comImpedimento) {
+        this.comImpedimento = comImpedimento;
     }
 }

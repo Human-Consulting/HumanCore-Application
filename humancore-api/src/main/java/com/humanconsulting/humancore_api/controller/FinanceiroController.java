@@ -1,6 +1,8 @@
 package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro.AtualizarFinanceiroRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.financeiro.FinanceiroRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
 import com.humanconsulting.humancore_api.model.Financeiro;
 import com.humanconsulting.humancore_api.service.FinanceiroService;
 import jakarta.validation.Valid;
@@ -18,21 +20,23 @@ public class FinanceiroController {
     private FinanceiroService service;
 
     @PostMapping
-    public ResponseEntity<Financeiro> cadastrarFinanceiro(@Valid @RequestBody Financeiro financeiro) {
-        Financeiro financeiroCadastrada = service.cadastrar(financeiro);
-        return ResponseEntity.status(201).body(financeiroCadastrada);
+    public ResponseEntity<FinanceiroResponseDto> cadastrarFinanceiro(@Valid @RequestBody FinanceiroRequestDto financeiroRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(financeiroRequestDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Financeiro>> listar() {
-        List<Financeiro> all = service.listar();
-        return ResponseEntity.status(200).body(all);
+    public ResponseEntity<List<FinanceiroResponseDto>> listar() {
+        return ResponseEntity.status(200).body(service.listar());
+    }
+
+    @GetMapping("/buscarPorProjeto/{idProjeto}")
+    public ResponseEntity<List<FinanceiroResponseDto>> listarPorId(@PathVariable Integer idProjeto) {
+        return ResponseEntity.status(200).body(service.listarPorProjeto(idProjeto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Financeiro> buscarPorId(@PathVariable Integer id) {
-        Financeiro financeiro = service.buscarPorId(id);
-        return ResponseEntity.status(200).body(financeiro);
+    public ResponseEntity<FinanceiroResponseDto> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.status(200).body(service.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")

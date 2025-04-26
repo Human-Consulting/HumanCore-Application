@@ -1,13 +1,10 @@
-package com.humanconsulting.humancore_api.model;
+package com.humanconsulting.humancore_api.controller.dto.response.financeiro;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
-public class Financeiro {
+public class FinanceiroResponseDto {
     @Id
     private Integer idFinanceiro;
 
@@ -17,7 +14,8 @@ public class Financeiro {
 
     private Integer fkProjeto;
 
-    public Financeiro(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+    public FinanceiroResponseDto(Integer idFinanceiro, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+        this.idFinanceiro = idFinanceiro;
         this.valor = valor;
         this.dtInvestimento = dtInvestimento;
         this.fkProjeto = fkProjeto;

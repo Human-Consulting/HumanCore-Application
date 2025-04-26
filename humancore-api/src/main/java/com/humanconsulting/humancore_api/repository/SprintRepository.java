@@ -85,7 +85,7 @@ public class SprintRepository {
         this.jdbcClient.sql(
                         "UPDATE sprint SET descricao = ?, " +
                                 "dtInicio = ?, " +
-                                "dtFim = ?, " +
+                                "dtFim = ? " +
                                 "WHERE idSprint = ?"
                 )
                 .params(dto.getDescricao(), dto.getDtInicio(), dto.getDtFim(), idSprint)

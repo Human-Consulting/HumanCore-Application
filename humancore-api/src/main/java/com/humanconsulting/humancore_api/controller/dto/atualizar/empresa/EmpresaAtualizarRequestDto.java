@@ -16,6 +16,8 @@ public class EmpresaAtualizarRequestDto {
     @NotBlank
     private String permissaoEditor;
 
+    private String urlImagem;
+
     public @NotNull Integer getIdEditor() {
         return idEditor;
     }
@@ -46,5 +48,13 @@ public class EmpresaAtualizarRequestDto {
 
     public void setPermissaoEditor(@NotBlank String permissaoEditor) {
         this.permissaoEditor = permissaoEditor;
+    }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 }

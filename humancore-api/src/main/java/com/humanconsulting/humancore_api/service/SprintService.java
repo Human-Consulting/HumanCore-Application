@@ -2,14 +2,14 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.EntregaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.SprintMapper;
-import com.humanconsulting.humancore_api.model.Entrega;
+import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Sprint;
-import com.humanconsulting.humancore_api.repository.EntregaRepository;
+import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +22,9 @@ public class SprintService {
 
     @Autowired private SprintRepository sprintRepository;
 
-    @Autowired private EntregaRepository entregaRepository;
+    @Autowired private TarefaRepository tarefaRepository;
 
-    @Autowired private EntregaService entregaService;
+    @Autowired private TarefaService tarefaService;
 
     public SprintResponseDto cadastrar(SprintRequestDto sprintRequestDto) {
         if (sprintRequestDto.getDtInicio().isAfter(sprintRequestDto.getDtFim()) || sprintRequestDto.getDtInicio().isEqual(sprintRequestDto.getDtFim())) throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
@@ -64,13 +64,13 @@ public class SprintService {
     }
 
     public SprintResponseDto passarParaResponse(Sprint sprint, Integer idSprint) {
-        double progresso = entregaRepository.mediaProgressoSprint(idSprint);
-        boolean comImpedimento = entregaRepository.projetoComImpedimento(idSprint);
-        List<Entrega> entregas = entregaRepository.selectWhereIdProjeto(sprint.getFkProjeto(), sprint.getIdSprint());
-        List<EntregaResponseDto> entregasResponse = new ArrayList<>();
-        for (Entrega entrega : entregas) {
-            entregasResponse.add(entregaService.passarParaResponse(entrega, entrega.getFkResponsavel()));
+        double progresso = tarefaRepository.mediaProgressoSprint(idSprint);
+        boolean comImpedimento = tarefaRepository.sprintComImpedimento(idSprint);
+        List<Tarefa> tarefas = tarefaRepository.selectWhereIdProjeto(sprint.getFkProjeto(), sprint.getIdSprint());
+        List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
+        for (Tarefa tarefa : tarefas) {
+            tarefasResponse.add(tarefaService.passarParaResponse(tarefa, tarefa.getFkResponsavel()));
         }
-        return SprintMapper.toDto(sprint, progresso, comImpedimento, entregasResponse);
+        return SprintMapper.toDto(sprint, progresso, comImpedimento, tarefasResponse);
     }
 }
