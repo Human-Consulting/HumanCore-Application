@@ -25,11 +25,7 @@ public class ProjetoRepository {
 
     public Projeto insert(Projeto projeto) {
         int result = jdbcClient.sql("INSERT INTO projeto (descricao, orcamento, urlImagem, fkEmpresa, fkResponsavel) VALUES (?, ?, ?, ?, ?)")
-                .param(projeto.getDescricao())
-                .param(projeto.getOrcamento())
-                .param(projeto.getUrlImagem())
-                .param(projeto.getFkEmpresa())
-                .param(projeto.getFkResponsavel())
+                .params(projeto.getDescricao(), projeto.getOrcamento(), projeto.getUrlImagem(), projeto.getFkEmpresa(), projeto.getFkResponsavel())
                 .update();
 
         if (result > 0) {

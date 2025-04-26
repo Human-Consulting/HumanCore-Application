@@ -3,12 +3,11 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.LoginResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
-import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
 import com.humanconsulting.humancore_api.model.Usuario;
@@ -30,11 +29,11 @@ public class UsuarioService {
     public UsuarioResponseDto cadastrar(UsuarioRequestDto usuarioRequestDto) {
         if (usuarioRepository.existsByEmail(usuarioRequestDto.getEmail())) throw new EntidadeConflitanteException(usuarioRequestDto.getEmail() + " já registrado.");
         Usuario usuario = UsuarioMapper.toEntity(usuarioRequestDto);
-        return UsuarioMapper.toUsuarioDto(usuarioRepository.insert(usuario));
+        return passarParaResponse(usuarioRepository.insert(usuario));
     }
 
-    public UsuarioResponseDto buscarPorId(Integer id) {
-        return UsuarioMapper.toUsuarioDto(usuarioRepository.selectWhereId(id));
+    public LoginResponseDto buscarPorId(Integer id) {
+        return passarParaLoginResponse(usuarioRepository.selectWhereId(id));
     }
 
     public List<UsuarioResponseDto> listar() {
@@ -42,7 +41,7 @@ public class UsuarioService {
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : all) {
-            allResponse.add(UsuarioMapper.toUsuarioDto(usuario));
+            allResponse.add(passarParaResponse(usuario));
         }
         return allResponse;
     }
@@ -84,14 +83,13 @@ public class UsuarioService {
         }
 
         Usuario usuarioAtualizado = usuarioRepository.update(idUsuario, usuarioAtualizar);
-        return UsuarioMapper.toUsuarioDto(usuarioAtualizado);
+        return passarParaResponse(usuarioAtualizado);
     }
 
     public LoginResponseDto antenticar(LoginRequestDto usuarioAutenticar) {
         Usuario usuario = usuarioRepository.antenticar(usuarioAutenticar);
         if (usuario == null) throw new EntidadeSemRetornoException("Usuário não autenticado");
-        String nomeEmpresa = empresaRepository.selectWhereId(usuario.getFkEmpresa()).getNome();
-        return UsuarioMapper.toLoginDto(usuario, nomeEmpresa);
+        return passarParaLoginResponse(usuario);
     }
 
     public List<UsuarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
@@ -99,8 +97,22 @@ public class UsuarioService {
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : all) {
-            allResponse.add(UsuarioMapper.toUsuarioDto(usuario));
+            allResponse.add(passarParaResponse(usuario));
         }
         return allResponse;
+    }
+
+    public UsuarioResponseDto passarParaResponse(Usuario usuario) {
+        Integer qtdTarefas = usuarioRepository.getTotalTarefas(usuario.getIdUsuario());
+        Boolean comImpedimento = usuarioRepository.isComImpedimento(usuario.getIdUsuario());
+        return UsuarioMapper.toUsuarioDto(usuario, qtdTarefas, comImpedimento);
+    }
+
+    public LoginResponseDto passarParaLoginResponse(Usuario usuario) {
+        String nomeEmpresa = empresaRepository.selectWhereId(usuario.getFkEmpresa()).getNome();
+        Integer qtdTarefas = usuarioRepository.getTotalTarefas(usuario.getIdUsuario());
+        Boolean comImpedimento = usuarioRepository.isComImpedimento(usuario.getIdUsuario());
+        List<Integer> projetosVinculados = usuarioRepository.getProjetosVinculados(usuario.getIdUsuario());
+        return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados);
     }
 }

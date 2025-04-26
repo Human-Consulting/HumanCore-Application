@@ -2,9 +2,8 @@ package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.EmpresaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.EmpresaResponseDto;
-import com.humanconsulting.humancore_api.mapper.EmpresaMapper;
-import com.humanconsulting.humancore_api.model.Empresa;
+import com.humanconsulting.humancore_api.controller.dto.response.empresa.DashboardEmpresaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.service.EmpresaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,11 @@ public class EmpresaController {
         return ResponseEntity.status(200).body(service.listar());
     }
 
+    @GetMapping("/{idEmpresa}")
+    public ResponseEntity<DashboardEmpresaResponseDto> buscarPorId(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.status(200).body(service.criarDashboardResponse(service.buscarPorId(idEmpresa)));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
@@ -38,7 +42,7 @@ public class EmpresaController {
     }
 
     @PutMapping("/{idEmpresa}")
-    public ResponseEntity<EmpresaResponseDto> atualizar(@PathVariable Integer idEmpresa, @Valid @RequestBody EmpresaAtualizarRequestDto empresa) {
-        return ResponseEntity.status(200).body(service.atualizar(idEmpresa, empresa));
+    public ResponseEntity<EmpresaResponseDto> atualizar(@PathVariable Integer idEmpresa, @Valid @RequestBody EmpresaAtualizarRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizar(idEmpresa, request));
     }
 }

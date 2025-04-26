@@ -10,6 +10,8 @@ public class EmpresaRequestDto {
     @NotBlank
     private String nome;
 
+    private String urlImagem;
+
     public @NotNull String getCnpj() {
         return cnpj;
     }
@@ -24,5 +26,13 @@ public class EmpresaRequestDto {
 
     public void setNome(@NotBlank String nome) {
         this.nome = nome;
+    }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 }

@@ -3,8 +3,8 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.LoginResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class UsuarioController {
         return ResponseEntity.status(200).body(service.listarPorEmpresa(idEmpresa));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(service.buscarPorId(id));
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.status(200).body(service.buscarPorId(idUsuario));
     }
 
     @DeleteMapping("/{idUsuario}")

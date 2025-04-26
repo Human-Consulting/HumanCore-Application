@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto.atualizar.entrega;
+package com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa;
 
 import jakarta.validation.constraints.NotNull;
 

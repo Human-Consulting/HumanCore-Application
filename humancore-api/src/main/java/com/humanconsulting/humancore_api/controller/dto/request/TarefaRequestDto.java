@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public class EntregaRequestDto {
+public class TarefaRequestDto {
 
     @NotNull
     private String descricao;

@@ -1,4 +1,4 @@
-package com.humanconsulting.humancore_api.controller.dto.response;
+package com.humanconsulting.humancore_api.controller.dto.response.projeto;
 
 public class ProjetoResponseDto {
 
@@ -10,6 +10,8 @@ public class ProjetoResponseDto {
 
     private String urlImagem;
 
+    private String urlImagemEmpresa;
+
     private Integer idResponsavel;
 
     private String nomeResponsavel;
@@ -18,15 +20,19 @@ public class ProjetoResponseDto {
 
     private boolean comImpedimento;
 
-    public ProjetoResponseDto(Integer idProjeto, String descricao, Double orcamento, String urlImagem, Integer idResponsavel, String nomeResponsavel, double progresso, boolean comImpedimento) {
+    private Integer fkEmpresa;
+
+    public ProjetoResponseDto(Integer idProjeto, String descricao, Double orcamento, String urlImagem, String urlImagemEmpresa, Integer idResponsavel, String nomeResponsavel, double progresso, boolean comImpedimento, Integer fkEmpresa) {
         this.idProjeto = idProjeto;
         this.descricao = descricao;
         this.orcamento = orcamento;
         this.urlImagem = urlImagem;
+        this.urlImagemEmpresa = urlImagemEmpresa;
         this.idResponsavel = idResponsavel;
         this.nomeResponsavel = nomeResponsavel;
         this.progresso = progresso;
         this.comImpedimento = comImpedimento;
+        this.fkEmpresa = fkEmpresa;
     }
 
     public Integer getIdProjeto() {
@@ -61,6 +67,14 @@ public class ProjetoResponseDto {
         this.urlImagem = urlImagem;
     }
 
+    public String getUrlImagemEmpresa() {
+        return urlImagemEmpresa;
+    }
+
+    public void setUrlImagemEmpresa(String urlImagemEmpresa) {
+        this.urlImagemEmpresa = urlImagemEmpresa;
+    }
+
     public Integer getIdResponsavel() {
         return idResponsavel;
     }
@@ -91,5 +105,13 @@ public class ProjetoResponseDto {
 
     public void setComImpedimento(boolean comImpedimento) {
         this.comImpedimento = comImpedimento;
+    }
+
+    public Integer getFkEmpresa() {
+        return fkEmpresa;
+    }
+
+    public void setFkEmpresa(Integer fkEmpresa) {
+        this.fkEmpresa = fkEmpresa;
     }
 }

@@ -1,11 +1,10 @@
 package com.humanconsulting.humancore_api.repository;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Empresa;
-import com.humanconsulting.humancore_api.service.UsuarioService;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -21,9 +20,8 @@ public class EmpresaRepository {
     }
 
     public Empresa insert(Empresa empresa) {
-        int result = jdbcClient.sql("INSERT INTO empresa (cnpj, nome) VALUES (?, ?)")
-                .param(empresa.getCnpj())
-                .param(empresa.getNome())
+        int result = jdbcClient.sql("INSERT INTO empresa (cnpj, nome, urlImagem) VALUES (?, ?, ?)")
+                .params(empresa.getCnpj(), empresa.getNome(), empresa.getUrlImagem())
                 .update();
 
         if (result > 0) {;
@@ -35,7 +33,7 @@ public class EmpresaRepository {
 
     public List<Empresa> selectAll() {
         return this.jdbcClient
-                .sql("SELECT * FROM empresa")
+                .sql("SELECT * FROM empresa WHERE idEmpresa")
                 .query(Empresa.class)
                 .list();
     }
@@ -75,5 +73,23 @@ public class EmpresaRepository {
                 .sql("DELETE FROM empresa WHERE idEmpresa = ?")
                 .param(idEmpresa)
                 .update() > 0;
+    }
+
+    public String getUrlImagemEmpresaByIdEmpresa(Integer idEmpresa) {
+        existsById(idEmpresa);
+
+        return this.jdbcClient
+                .sql("SELECT urlImagem FROM empresa WHERE idEmpresa = ?")
+                .param(idEmpresa)
+                .query(String.class)
+                .single();
+    }
+
+    public Empresa update(Integer idEmpresa, EmpresaAtualizarRequestDto request) {
+        this.jdbcClient
+                .sql("UPDATE empresa SET nome = ?, cnpj = ? WHERE idEmpresa = ?")
+                .params(request.getNome(), request.getCnpj(), idEmpresa)
+                .update();
+        return selectWhereId(idEmpresa);
     }
 }

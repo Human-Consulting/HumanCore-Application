@@ -1,12 +1,9 @@
 package com.humanconsulting.humancore_api.repository;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
-import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
-import com.humanconsulting.humancore_api.model.Entrega;
 import com.humanconsulting.humancore_api.model.Usuario;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -115,5 +112,44 @@ public class UsuarioRepository {
                 .query(Usuario.class)
                 .optional()
                 .orElse(null);
+    }
+
+    public String getDiretor(Integer idEmpresa) {
+        return this.jdbcClient
+                .sql("SELECT nome FROM usuario " +
+                     "WHERE fkEmpresa = ? " +
+                     "AND permissao = 'DIRETOR'")
+                .param(idEmpresa)
+                .query(String.class)
+                .optional().orElse("Diretor não registrado.");
+    }
+
+    public Integer getTotalTarefas(Integer idUsuario) {
+        return this.jdbcClient
+                .sql("SELECT COUNT(idTarefa) FROM tarefa WHERE fkResponsavel = ?")
+                .param(idUsuario)
+                .query(Integer.class)
+                .single();
+    }
+
+    public Boolean isComImpedimento(Integer idUsuario) {
+        Integer qtdComImpedimento = this.jdbcClient
+                .sql("SELECT COUNT(idTarefa) FROM tarefa WHERE fkResponsavel = ? AND comImpedimento = true")
+                .param(idUsuario)
+                .query(Integer.class)
+                .single();
+
+        return qtdComImpedimento > 0;
+    }
+
+    public List<Integer> getProjetosVinculados(Integer idUsuario) {
+        return this.jdbcClient
+                .sql("""
+                        SELECT DISTINCT(fkProjeto) FROM tarefa 
+                        JOIN sprint ON idSprint = fkSprint 
+                        WHERE fkResponsavel = ?""")
+                .param(idUsuario)
+                .query(Integer.class)
+                .list();
     }
 }

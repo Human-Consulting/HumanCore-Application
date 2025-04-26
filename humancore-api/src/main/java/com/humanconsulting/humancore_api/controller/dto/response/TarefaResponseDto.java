@@ -1,14 +1,10 @@
-package com.humanconsulting.humancore_api.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+package com.humanconsulting.humancore_api.controller.dto.response;
 
 import java.time.LocalDate;
 
-@Entity
-public class Entrega {
-    @Id
-    private Integer idEntrega;
+public class TarefaResponseDto {
+
+    private Integer idTarefa;
 
     private String descricao;
 
@@ -24,23 +20,29 @@ public class Entrega {
 
     private Integer fkResponsavel;
 
-    public Entrega (String descricao, LocalDate dtInicio, LocalDate dtFim, Integer fkSprint, Integer fkResponsavel) {
-        this.idEntrega = null;
+    private String nomeResponsavel;
+
+    private String areaResponsavel;
+
+    public TarefaResponseDto(Integer idEntrega, String descricao, LocalDate dtInicio, LocalDate dtFim, Double progresso, Boolean comImpedimento, Integer fkSprint, Integer fkResponsavel, String nomeResponsavel, String areaResponsavel) {
+        this.idTarefa = idEntrega;
         this.descricao = descricao;
         this.dtInicio = dtInicio;
         this.dtFim = dtFim;
-        this.progresso = 0.0;
-        this.comImpedimento = false;
+        this.progresso = progresso;
+        this.comImpedimento = comImpedimento;
         this.fkSprint = fkSprint;
         this.fkResponsavel = fkResponsavel;
+        this.nomeResponsavel = nomeResponsavel;
+        this.areaResponsavel = areaResponsavel;
     }
 
-    public Integer getIdEntrega() {
-        return idEntrega;
+    public Integer getIdTarefa() {
+        return idTarefa;
     }
 
-    public void setIdEntrega(Integer idEntrega) {
-        this.idEntrega = idEntrega;
+    public void setIdTarefa(Integer idTarefa) {
+        this.idTarefa = idTarefa;
     }
 
     public String getDescricao() {
@@ -97,5 +99,21 @@ public class Entrega {
 
     public void setFkResponsavel(Integer fkResponsavel) {
         this.fkResponsavel = fkResponsavel;
+    }
+
+    public String getNomeResponsavel() {
+        return nomeResponsavel;
+    }
+
+    public void setNomeResponsavel(String nomeResponsavel) {
+        this.nomeResponsavel = nomeResponsavel;
+    }
+
+    public String getAreaResponsavel() {
+        return areaResponsavel;
+    }
+
+    public void setAreaResponsavel(String areaResponsavel) {
+        this.areaResponsavel = areaResponsavel;
     }
 }

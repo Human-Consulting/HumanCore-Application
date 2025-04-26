@@ -1,23 +1,25 @@
-package com.humanconsulting.humancore_api.model;
+package com.humanconsulting.humancore_api.controller.dto.response.financeiro;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
-public class Financeiro {
+public class FinanceiroDashResponseDto {
     @Id
     private Integer idFinanceiro;
 
+    @NotNull
     private Double valor;
 
+    @NotNull
     private LocalDate dtInvestimento;
 
+    @NotNull
     private Integer fkProjeto;
 
-    public Financeiro(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+    public FinanceiroDashResponseDto(Integer idFinanceiro, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+        this.idFinanceiro = idFinanceiro;
         this.valor = valor;
         this.dtInvestimento = dtInvestimento;
         this.fkProjeto = fkProjeto;
@@ -31,27 +33,27 @@ public class Financeiro {
         this.idFinanceiro = idFinanceiro;
     }
 
-    public Double getValor() {
+    public @NotNull Double getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(@NotNull Double valor) {
         this.valor = valor;
     }
 
-    public LocalDate getDtInvestimento() {
+    public @NotNull LocalDate getDtInvestimento() {
         return dtInvestimento;
     }
 
-    public void setDtInvestimento(LocalDate dtInvestimento) {
+    public void setDtInvestimento(@NotNull LocalDate dtInvestimento) {
         this.dtInvestimento = dtInvestimento;
     }
 
-    public Integer getFkProjeto() {
+    public @NotNull Integer getFkProjeto() {
         return fkProjeto;
     }
 
-    public void setFkProjeto(Integer fkProjeto) {
+    public void setFkProjeto(@NotNull Integer fkProjeto) {
         this.fkProjeto = fkProjeto;
     }
 }

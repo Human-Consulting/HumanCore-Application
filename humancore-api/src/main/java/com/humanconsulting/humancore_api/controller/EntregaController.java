@@ -1,10 +1,10 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarGeralRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.atualizar.entrega.AtualizarStatusRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.request.EntregaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.EntregaResponseDto;
-import com.humanconsulting.humancore_api.service.EntregaService;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.service.TarefaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,51 +13,51 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("entregas")
+@RequestMapping("tarefas")
 @CrossOrigin("*")
 public class EntregaController {
 
     @Autowired
-    private EntregaService service;
+    private TarefaService service;
 
     @PostMapping
-    public ResponseEntity<EntregaResponseDto> cadastrarEntrega(@Valid @RequestBody EntregaRequestDto entregaRequestDto) {
+    public ResponseEntity<TarefaResponseDto> cadastrarEntrega(@Valid @RequestBody TarefaRequestDto entregaRequestDto) {
         return ResponseEntity.status(201).body(service.cadastrar(entregaRequestDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<EntregaResponseDto>> listar() {
+    public ResponseEntity<List<TarefaResponseDto>> listar() {
         return ResponseEntity.status(200).body(service.listar());
     }
 
     @GetMapping("/buscarPorSprint/{idSprint}")
-    public ResponseEntity<List<EntregaResponseDto>> listarPorIdSprint(@PathVariable Integer idSprint) {
+    public ResponseEntity<List<TarefaResponseDto>> listarPorIdSprint(@PathVariable Integer idSprint) {
         return ResponseEntity.status(200).body(service.listarPorSprint(idSprint));
     }
 
-    @GetMapping("/{idEntrega}")
-    public ResponseEntity<EntregaResponseDto> buscarPorId(@PathVariable Integer id) {
+    @GetMapping("/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));
     }
 
-    @DeleteMapping("/{idEntrega}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idEntrega) {
-        service.deletar(idEntrega);
+    @DeleteMapping("/{idTarefa}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idTarefa) {
+        service.deletar(idTarefa);
         return ResponseEntity.status(204).build();
     }
 
-    @PutMapping("/{idEntrega}")
-    public ResponseEntity<EntregaResponseDto> atualizar(@PathVariable Integer idEntrega, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
-        return ResponseEntity.status(200).body(service.atualizar(idEntrega, entrega));
+    @PutMapping("/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizar(@PathVariable Integer idTarefa, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
+        return ResponseEntity.status(200).body(service.atualizar(idTarefa, entrega));
     }
 
-    @PutMapping("/finalizada/{idEntrega}")
-    public ResponseEntity<EntregaResponseDto> atualizarFinalizada(@PathVariable Integer idEntrega, @RequestBody AtualizarStatusRequestDto request) {
-        return ResponseEntity.status(200).body(service.atualizarFinalizada(idEntrega, request));
+    @PutMapping("/finalizada/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizarFinalizada(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizarFinalizada(idTarefa, request));
     }
 
-    @PutMapping("/impedimento/{idEntrega}")
-    public ResponseEntity<EntregaResponseDto> atualizarImpedimento(@PathVariable Integer idEntrega, @RequestBody AtualizarStatusRequestDto request) {
-        return ResponseEntity.status(200).body(service.atualizarImpedimento(idEntrega, request));
+    @PutMapping("/impedimento/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizarImpedimento(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizarImpedimento(idTarefa, request));
     }
 }

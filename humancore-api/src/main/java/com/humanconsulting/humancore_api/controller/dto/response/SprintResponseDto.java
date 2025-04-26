@@ -19,9 +19,9 @@ public class SprintResponseDto {
 
     private Integer fkProjeto;
 
-    private List<EntregaResponseDto> entregas;
+    private List<TarefaResponseDto> tarefas;
 
-    public SprintResponseDto(Integer idSprint, String descricao, LocalDate dtInicio, LocalDate dtFim, Double progresso, Boolean comImpedimento, Integer fkProjeto, List<EntregaResponseDto> entregas) {
+    public SprintResponseDto(Integer idSprint, String descricao, LocalDate dtInicio, LocalDate dtFim, Double progresso, Boolean comImpedimento, Integer fkProjeto, List<TarefaResponseDto> tarefas) {
         this.idSprint = idSprint;
         this.descricao = descricao;
         this.dtInicio = dtInicio;
@@ -29,7 +29,7 @@ public class SprintResponseDto {
         this.progresso = progresso;
         this.comImpedimento = comImpedimento;
         this.fkProjeto = fkProjeto;
-        this.entregas = entregas;
+        this.tarefas = tarefas;
     }
 
     public Integer getIdSprint() {
@@ -88,11 +88,11 @@ public class SprintResponseDto {
         this.fkProjeto = fkProjeto;
     }
 
-    public List<EntregaResponseDto> getEntregas() {
-        return entregas;
+    public List<TarefaResponseDto> getTarefas() {
+        return tarefas;
     }
 
-    public void setEntregas(List<EntregaResponseDto> entregas) {
-        this.entregas = entregas;
+    public void setTarefas(List<TarefaResponseDto> tarefas) {
+        this.tarefas = tarefas;
     }
 }
