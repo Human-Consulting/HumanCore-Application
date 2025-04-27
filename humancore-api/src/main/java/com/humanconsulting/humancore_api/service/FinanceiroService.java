@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.controller.dto.response.financeiro.Fina
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.FinanceiroMapper;
 import com.humanconsulting.humancore_api.model.Financeiro;
+import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.repository.FinanceiroRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,19 +54,8 @@ public class FinanceiroService {
         repository.deleteWhere(id);
     }
 
-    public Financeiro atualizar(Integer idFinanceiro, @Valid AtualizarFinanceiroRequestDto request) {
-        Financeiro financeiroAtualizado = repository.selectWhereId(idFinanceiro);
-
-        if((financeiroAtualizado != null) && (financeiroAtualizado.getIdFinanceiro() == idFinanceiro)) {
-            financeiroAtualizado.setIdFinanceiro(idFinanceiro);
-
-            Financeiro f = new Financeiro(request.getValor(), request.getDtInvestimento(), request.getFkProjeto());
-
-            repository.insert(f);
-
-            return f;
-        }
-
-        throw new EntidadeSemRetornoException("Financeiro não encontrado");
+    public FinanceiroResponseDto atualizar(Integer idFinanceiro, @Valid AtualizarFinanceiroRequestDto request) {
+        Financeiro financeiro = repository.update(idFinanceiro, request);
+        return FinanceiroMapper.toDto(financeiro);
     }
 }

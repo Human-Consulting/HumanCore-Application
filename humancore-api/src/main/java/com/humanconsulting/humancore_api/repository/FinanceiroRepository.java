@@ -1,10 +1,12 @@
 package com.humanconsulting.humancore_api.repository;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro.AtualizarFinanceiroRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Financeiro;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -77,5 +79,18 @@ public class FinanceiroRepository {
                 .param(idProjeto)
                 .query(Financeiro.class)
                 .list();
+    }
+
+    public Financeiro update(Integer idFinanceiro, @Valid AtualizarFinanceiroRequestDto request) {
+        this.jdbcClient.sql(
+                        """
+                                UPDATE financeiro SET valor = ?, 
+                                dtInvestimento = ? 
+                                WHERE idFinanceiro = ?"""
+                )
+                .params(request.getValor(), request.getDtInvestimento(), idFinanceiro)
+                .update();
+
+        return this.selectWhereId(idFinanceiro);
     }
 }

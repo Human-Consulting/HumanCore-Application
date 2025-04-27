@@ -4,7 +4,6 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.Atualiz
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Tarefa;
-import com.humanconsulting.humancore_api.service.UsuarioService;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -14,11 +13,9 @@ import java.util.List;
 public class TarefaRepository {
 
     private final JdbcClient jdbcClient;
-    private final UsuarioService usuarioService;
 
-    public TarefaRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
+    public TarefaRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
-        this.usuarioService = usuarioService;
     }
 
     public Tarefa insert(Tarefa tarefa) {

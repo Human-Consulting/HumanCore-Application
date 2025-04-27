@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("financeiros")
+@CrossOrigin("*")
 public class FinanceiroController {
 
     @Autowired
@@ -29,11 +30,6 @@ public class FinanceiroController {
         return ResponseEntity.status(200).body(service.listar());
     }
 
-    @GetMapping("/buscarPorProjeto/{idProjeto}")
-    public ResponseEntity<List<FinanceiroResponseDto>> listarPorId(@PathVariable Integer idProjeto) {
-        return ResponseEntity.status(200).body(service.listarPorProjeto(idProjeto));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<FinanceiroResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));
@@ -46,14 +42,7 @@ public class FinanceiroController {
     }
 
     @PutMapping("/{idFinanceiro}")
-    public ResponseEntity<Financeiro> atualizar(
-            @PathVariable
-            Integer idFinanceiro,
-            @Valid
-            @RequestBody
-            AtualizarFinanceiroRequestDto request) {
-        Financeiro financeiroAtualizado = service.atualizar(idFinanceiro, request);
-
-        return ResponseEntity.status(200).body(financeiroAtualizado);
+    public ResponseEntity<FinanceiroResponseDto> atualizar(@PathVariable Integer idFinanceiro, @Valid @RequestBody AtualizarFinanceiroRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizar(idFinanceiro, request));
     }
 }

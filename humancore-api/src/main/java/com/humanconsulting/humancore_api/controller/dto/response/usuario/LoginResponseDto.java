@@ -1,5 +1,7 @@
 package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 
+import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+
 import java.util.List;
 
 public class LoginResponseDto {
@@ -19,7 +21,9 @@ public class LoginResponseDto {
 
     private List<Integer> projetosVinculados;
 
-    public LoginResponseDto(Integer idUsuario, String nome, String permissao, Integer fkEmpresa, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados) {
+    private List<TarefaResponseDto> tarefasVinculadas;
+
+    public LoginResponseDto(Integer idUsuario, String nome, String permissao, Integer fkEmpresa, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas) {
         this.idUsuario = idUsuario;
         this.nome = nome;
         this.permissao = permissao;
@@ -28,6 +32,7 @@ public class LoginResponseDto {
         this.qtdTarefas = qtdTarefas;
         this.comImpedimento = comImpedimento;
         this.projetosVinculados = projetosVinculados;
+        this.tarefasVinculadas = tarefasVinculadas;
     }
 
     public Integer getIdUsuario() {
@@ -92,5 +97,13 @@ public class LoginResponseDto {
 
     public void setProjetosVinculados(List<Integer> projetosVinculados) {
         this.projetosVinculados = projetosVinculados;
+    }
+
+    public List<TarefaResponseDto> getTarefasVinculadas() {
+        return tarefasVinculadas;
+    }
+
+    public void setTarefasVinculadas(List<TarefaResponseDto> tarefasVinculadas) {
+        this.tarefasVinculadas = tarefasVinculadas;
     }
 }

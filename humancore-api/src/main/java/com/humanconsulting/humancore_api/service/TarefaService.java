@@ -9,7 +9,6 @@ import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
 import com.humanconsulting.humancore_api.model.Tarefa;
-import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;

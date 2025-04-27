@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.Usuari
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
+import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -150,6 +151,16 @@ public class UsuarioRepository {
                         WHERE fkResponsavel = ?""")
                 .param(idUsuario)
                 .query(Integer.class)
+                .list();
+    }
+
+    public List<Tarefa> getTarefasVInculadas(Integer idUsuario) {
+        return this.jdbcClient
+                .sql("""
+                        SELECT * FROM tarefa
+                        WHERE fkResponsavel = ?""")
+                .param(idUsuario)
+                .query(Tarefa.class)
                 .list();
     }
 }

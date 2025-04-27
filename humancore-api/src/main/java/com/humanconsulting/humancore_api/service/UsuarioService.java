@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
@@ -10,6 +11,7 @@ import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
+import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
@@ -25,6 +27,8 @@ public class UsuarioService {
     @Autowired private UsuarioRepository usuarioRepository;
 
     @Autowired private EmpresaRepository empresaRepository;
+
+    @Autowired private TarefaService tarefaService;
 
     public UsuarioResponseDto cadastrar(UsuarioRequestDto usuarioRequestDto) {
         if (usuarioRepository.existsByEmail(usuarioRequestDto.getEmail())) throw new EntidadeConflitanteException(usuarioRequestDto.getEmail() + " já registrado.");
@@ -113,6 +117,11 @@ public class UsuarioService {
         Integer qtdTarefas = usuarioRepository.getTotalTarefas(usuario.getIdUsuario());
         Boolean comImpedimento = usuarioRepository.isComImpedimento(usuario.getIdUsuario());
         List<Integer> projetosVinculados = usuarioRepository.getProjetosVinculados(usuario.getIdUsuario());
-        return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados);
+        List<Tarefa> tarefasVinculadas = usuarioRepository.getTarefasVInculadas(usuario.getIdUsuario());
+        List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
+        for (Tarefa tarefasVinculada : tarefasVinculadas) {
+            tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada, usuario.getIdUsuario()));
+        }
+        return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse);
     }
 }
