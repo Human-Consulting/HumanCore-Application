@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UsuarioRepository {
@@ -76,6 +77,15 @@ public class UsuarioRepository {
                 .param(idEmpresa)
                 .query(Usuario.class)
                 .list();
+    }
+
+    public Optional<Usuario> selectWhereEmail(String email) {
+        if (!existsByEmail(email)) return Optional.empty();
+        return Optional.of(this.jdbcClient
+                .sql("SELECT * FROM usuario WHERE email = ?")
+                .param(email)
+                .query(Usuario.class)
+                .single());
     }
 
     public boolean deleteWhere(Integer id) {

@@ -1,14 +1,18 @@
 package com.humanconsulting.humancore_api.service;
 
+import com.humanconsulting.humancore_api.config.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenDto;
+import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
 import com.humanconsulting.humancore_api.model.Tarefa;
@@ -16,10 +20,16 @@ import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -30,10 +40,19 @@ public class UsuarioService {
 
     @Autowired private TarefaService tarefaService;
 
-    public UsuarioResponseDto cadastrar(UsuarioRequestDto usuarioRequestDto) {
-        if (usuarioRepository.existsByEmail(usuarioRequestDto.getEmail())) throw new EntidadeConflitanteException(usuarioRequestDto.getEmail() + " já registrado.");
-        Usuario usuario = UsuarioMapper.toEntity(usuarioRequestDto);
-        return passarParaResponse(usuarioRepository.insert(usuario));
+    @Autowired private PasswordEncoder passwordEncoder;
+
+    @Autowired private GerenciadorTokenJwt gerenciadorTokenJwt;
+
+    @Autowired private AuthenticationManager authenticationManager;
+
+    public Usuario cadastrar(Usuario novoUsuario) {
+        String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
+        novoUsuario.setSenha(senhaCriptografada);
+
+        this.usuarioRepository.insert(novoUsuario);
+
+        return novoUsuario;
     }
 
     public LoginResponseDto buscarPorId(Integer id) {
@@ -90,10 +109,17 @@ public class UsuarioService {
         return passarParaResponse(usuarioAtualizado);
     }
 
-    public LoginResponseDto antenticar(LoginRequestDto usuarioAutenticar) {
-        Usuario usuario = usuarioRepository.antenticar(usuarioAutenticar);
-        if (usuario == null) throw new EntidadeSemRetornoException("Usuário não autenticado");
-        return passarParaLoginResponse(usuario);
+    public UsuarioTokenDto autenticar(Usuario usuario) {
+        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha());
+        final Authentication authentication = this.authenticationManager.authenticate(credentials);
+
+        Optional<Usuario> usuarioAuteticado = usuarioRepository.selectWhereEmail(usuario.getEmail());
+        if (usuarioAuteticado.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não cadastrado");
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = gerenciadorTokenJwt.generateToken(authentication);
+
+        return UsuarioTokenMapper.of(usuarioAuteticado.get(), token);
     }
 
     public List<UsuarioResponseDto> listarPorEmpresa(Integer idEmpresa) {

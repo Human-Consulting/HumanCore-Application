@@ -1,24 +1,34 @@
 package com.humanconsulting.humancore_api.controller.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class SprintResponseDto {
 
+    @Schema(description = "ID da Sprint", example = "1")
     private Integer idSprint;
 
+    @Schema(description = "Descrição da Sprint", example = "Sprint de desenvolvimento da API")
     private String descricao;
 
+    @Schema(description = "Data de início da Sprint", example = "2025-04-01")
     private LocalDate dtInicio;
 
+    @Schema(description = "Data de término da Sprint", example = "2025-04-15")
     private LocalDate dtFim;
 
+    @Schema(description = "Progresso da Sprint em percentual", example = "75.5")
     private Double progresso;
 
+    @Schema(description = "Indica se há impedimentos na Sprint", example = "true")
     private Boolean comImpedimento;
 
+    @Schema(description = "ID do projeto associado à Sprint", example = "101")
     private Integer fkProjeto;
 
+    @Schema(description = "Lista de tarefas associadas à Sprint", implementation = TarefaResponseDto.class)
     private List<TarefaResponseDto> tarefas;
 
     public SprintResponseDto(Integer idSprint, String descricao, LocalDate dtInicio, LocalDate dtFim, Double progresso, Boolean comImpedimento, Integer fkProjeto, List<TarefaResponseDto> tarefas) {

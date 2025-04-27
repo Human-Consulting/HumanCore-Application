@@ -1,23 +1,33 @@
 package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 
-public class UsuarioResponseDto {
+import io.swagger.v3.oas.annotations.media.Schema;
 
+public class UsuarioResponseDto {
+    @Schema(description = "ID do usuário", example = "1")
     private Integer idUsuario;
 
+    @Schema(description = "Nome completo do usuário", example = "João Silva")
     private String nome;
 
+    @Schema(description = "Endereço de e-mail do usuário", example = "joao.silva@email.com")
     private String email;
 
+    @Schema(description = "Senha do usuário", example = "senha123")
     private String senha;
 
+    @Schema(description = "Cargo do usuário dentro da empresa", example = "Desenvolvedor")
     private String cargo;
 
+    @Schema(description = "Área de atuação do usuário", example = "TI")
     private String area;
 
+    @Schema(description = "Permissão atribuída ao usuário", example = "CONSULTOR")
     private String permissao;
 
+    @Schema(description = "Quantidade de tarefas atribuídas ao usuário", example = "5")
     private Integer qtdTarefas;
 
+    @Schema(description = "Indica se o usuário tem alguma tarefa com impedimento", example = "false")
     private Boolean comImpedimento;
 
     public UsuarioResponseDto(Integer idUsuario, String nome, String email, String senha, String cargo, String area, String permissao, Integer qtdTarefas, Boolean comImpedimento) {
@@ -30,6 +40,9 @@ public class UsuarioResponseDto {
         this.permissao = permissao;
         this.qtdTarefas = qtdTarefas;
         this.comImpedimento = comImpedimento;
+    }
+
+    public UsuarioResponseDto() {
     }
 
     public Integer getIdUsuario() {

@@ -5,6 +5,9 @@ import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenDto;
+import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
+import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,11 @@ public class UsuarioController {
     private UsuarioService service;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
-        return ResponseEntity.status(201).body(service.cadastrar(usuarioRequestDto));
+    public ResponseEntity<Usuario> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
+        final Usuario usuario = UsuarioTokenMapper.of(usuarioRequestDto);
+        Usuario novoUsuario = this.service.cadastrar(usuario);
+
+        return ResponseEntity.status(201).body(novoUsuario);
     }
 
     @GetMapping
@@ -53,7 +59,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/autenticar")
-    public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
-        return ResponseEntity.status(200).body(service.antenticar(usuarioAutenticar));
+    public ResponseEntity<UsuarioTokenDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
+        final Usuario usuario = UsuarioTokenMapper.of(usuarioAutenticar);
+        UsuarioTokenDto usuarioTokenDto = this.service.autenticar(usuario);
+
+        return ResponseEntity.status(200).body(usuarioTokenDto);
     }
 }

@@ -2,24 +2,33 @@ package com.humanconsulting.humancore_api.controller.dto.response.empresa;
 
 import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
 import com.humanconsulting.humancore_api.model.Area;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
 public class DashboardEmpresaResponseDto {
+    @Schema(description = "ID da Empresa", example = "1")
     private Integer idEmpresa;
 
+    @Schema(description = "Nome completo do Responsável pela Empresa", example = "Carlos Silva")
     private String nomeResponsavel;
 
+    @Schema(description = "Indica se a empresa possui algum projeto com impedimentos", example = "false")
     private boolean comImpedimento;
 
+    @Schema(description = "Progresso total da empresa em porcentagem", example = "75.5")
     private Double progresso;
 
+    @Schema(description = "Orçamento total da empresa", example = "1000000.0")
     private Double orcamento;
 
+    @Schema(description = "Áreas associadas à empresa", example = "[\"TI\", \"Financeiro\"]")
     private List<Area> areas;
 
+    @Schema(description = "Lista de dados financeiros da empresa", implementation = FinanceiroResponseDto.class)
     private List<FinanceiroResponseDto> financeiroResponseDtos;
 
+    @Schema(description = "Total de itens da empresa", example = "25")
     private Integer totalItens;
 
     public DashboardEmpresaResponseDto(Integer idEmpresa, String nomeResponsavel, boolean comImpedimento, Double progreso, Double orcamento, List<Area> areas, Integer totalItens, List<FinanceiroResponseDto> financeiroResponseDtos) {
