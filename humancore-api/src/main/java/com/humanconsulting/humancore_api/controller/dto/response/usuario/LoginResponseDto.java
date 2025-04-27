@@ -9,6 +9,8 @@ public class LoginResponseDto {
 
     private String nome;
 
+    private String email;
+
     private String permissao;
 
     private Integer fkEmpresa;
@@ -50,6 +52,10 @@ public class LoginResponseDto {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     public String getPermissao() {
         return permissao;

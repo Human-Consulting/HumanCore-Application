@@ -10,6 +10,7 @@ import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.observer.EmailNotifier;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class TarefaService {
     @Autowired private TarefaRepository tarefaRepository;
 
     @Autowired private UsuarioRepository usuarioRepository;
+
+    @Autowired private EmailNotifier emailNotifier;
 
     public TarefaResponseDto cadastrar(TarefaRequestDto tarefaRequestDto) {
         if (tarefaRequestDto.getDtInicio().isAfter(tarefaRequestDto.getDtFim()) || tarefaRequestDto.getDtInicio().isEqual(tarefaRequestDto.getDtFim())) throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
@@ -75,6 +78,11 @@ public class TarefaService {
         Integer fkResponsavel = tarefaRepository.selectWhereId(idTarefa).getFkResponsavel();
         if (request.getIdEditor() == fkResponsavel) {
             Tarefa tarefa = tarefaRepository.updateImpedimento(idTarefa);
+
+            if (tarefa.getComImpedimento()){
+                emailNotifier.update(tarefa);
+            }
+
             return passarParaResponse(tarefa, request.getIdEditor());
         }
         throw new AcessoNegadoException("Usuário não é responsável pela tarefa");
