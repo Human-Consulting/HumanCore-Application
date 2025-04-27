@@ -110,7 +110,7 @@ public class UsuarioService {
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
         Optional<Usuario> usuarioAuteticado = usuarioRepository.selectWhereEmail(usuario.getEmail());
-        if (usuarioAuteticado == null) throw new EntidadeNaoEncontradaException("Usuário não cadastrado");
+        if (usuarioAuteticado.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não cadastrado");
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);

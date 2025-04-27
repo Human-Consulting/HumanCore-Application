@@ -55,13 +55,12 @@ public class UsuarioRepository {
     }
 
     public boolean existsByEmail(String email) {
-        if (this.jdbcClient
+        return this.jdbcClient
                 .sql("SELECT 1 FROM usuario WHERE email = ?")
                 .param(email)
                 .query(Integer.class)
                 .optional()
-                .isPresent()) return true;
-        return false;
+                .isPresent();
     }
 
     public Usuario selectWhereId(Integer id) {
@@ -74,7 +73,7 @@ public class UsuarioRepository {
     }
 
     public Optional<Usuario> selectWhereEmail(String email) {
-        existsByEmail(email);
+        if (!existsByEmail(email)) return Optional.empty();
         return Optional.of(this.jdbcClient
                 .sql("SELECT * FROM usuario WHERE email = ?")
                 .param(email)
