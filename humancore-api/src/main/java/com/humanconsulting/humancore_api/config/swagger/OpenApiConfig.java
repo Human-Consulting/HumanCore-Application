@@ -18,12 +18,16 @@ import org.springframework.context.annotation.Configuration;
                         url = "https://humanconsulting.com.br/",
                         email = "contato@humanconsulting.com.br"
                 ),
-                license = @License(name = "UNLICENSED"),
+                license = @License(name = "UNLICENSED", url = "https://unlicense.org/"),
                 version = "1.0.0"
         )
 )
 @SecurityScheme(
-        name = "Bearer", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT"
+        name = "Bearer",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT",
+        description = "Insira o token JWT no formato: Bearer {seu_token}"
 )
 public class OpenApiConfig {
 }

@@ -1,17 +1,22 @@
 package com.humanconsulting.humancore_api.controller.dto.response.financeiro;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
 
 import java.time.LocalDate;
 
 public class FinanceiroResponseDto {
+    @Schema(description = "ID do registro financeiro")
     @Id
     private Integer idFinanceiro;
 
+    @Schema(description = "Valor do investimento", example = "10000.00")
     private Double valor;
 
+    @Schema(description = "Data do investimento", example = "2025-04-27")
     private LocalDate dtInvestimento;
 
+    @Schema(description = "ID do projeto relacionado ao investimento", example = "1")
     private Integer fkProjeto;
 
     public FinanceiroResponseDto(Integer idFinanceiro, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
