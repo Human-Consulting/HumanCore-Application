@@ -1,9 +1,12 @@
 package com.humanconsulting.humancore_api.repository;
 
-import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeRequisicaoFalhaException;
 import com.humanconsulting.humancore_api.model.Sprint;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.service.UsuarioService;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -13,22 +16,22 @@ import java.util.List;
 public class SprintRepository {
 
     private final JdbcClient jdbcClient;
+    private final UsuarioService usuarioService;
 
-    public SprintRepository(JdbcClient jdbcClient) {
+    public SprintRepository(JdbcClient jdbcClient, UsuarioService usuarioService) {
         this.jdbcClient = jdbcClient;
+        this.usuarioService = usuarioService;
     }
 
     public Sprint insert(Sprint sprint) {
-        int result = jdbcClient.sql("INSERT INTO sprint (descricao, dtInicio, dtFim, progresso, comImpedimento, fkProjeto) VALUES (?, ?, ?, ?, ?, ?)")
+        int result = jdbcClient.sql("INSERT INTO sprint (descricao, dtInicio, dtFim, fkProjeto) VALUES (?, ?, ?, ?)")
                 .param(sprint.getDescricao())
                 .param(sprint.getDtInicio())
                 .param(sprint.getDtFim())
-                .param(sprint.getProgresso())
-                .param(sprint.getComImpedimento())
                 .param(sprint.getFkProjeto())
                 .update();
 
-        if (result > 0) {;
+        if (result > 0) {
             sprint.setIdSprint(jdbcClient.sql("SELECT LAST_INSERT_ID()")
                     .query(Integer.class).single());
             return sprint;
@@ -68,5 +71,26 @@ public class SprintRepository {
                 .sql("DELETE FROM sprint WHERE idSprint = ?")
                 .param(id)
                 .update() > 0;
+    }
+
+    public List<Sprint> selectWhereIdProjeto(Integer idProjeto) {
+        return this.jdbcClient
+                .sql("SELECT * FROM sprint WHERE fkProjeto = ?")
+                .param(idProjeto)
+                .query(Sprint.class)
+                .list();
+    }
+
+    public Sprint update(Integer idSprint, SprintAtualizarRequestDto dto) {
+        this.jdbcClient.sql(
+                        "UPDATE sprint SET descricao = ?, " +
+                                "dtInicio = ?, " +
+                                "dtFim = ? " +
+                                "WHERE idSprint = ?"
+                )
+                .params(dto.getDescricao(), dto.getDtInicio(), dto.getDtFim(), idSprint)
+                .update();
+
+        return this.selectWhereId(idSprint);
     }
 }

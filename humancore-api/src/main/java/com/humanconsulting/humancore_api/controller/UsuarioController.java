@@ -1,6 +1,10 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
+import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,32 +15,45 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin("*")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService service;
 
     @PostMapping
-    public ResponseEntity<Usuario> cadastrarUsuario(@Valid @RequestBody Usuario usuario) {
-        Usuario usuarioCadastrado = service.cadastrar(usuario);
-        return ResponseEntity.status(201).body(usuarioCadastrado);
+    public ResponseEntity<UsuarioResponseDto> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(usuarioRequestDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() {
-        List<Usuario> all = service.listar();
-        return ResponseEntity.status(200).body(all);
+    public ResponseEntity<List<UsuarioResponseDto>> listar() {
+        return ResponseEntity.status(200).body(service.listar());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id) {
-        Usuario usuario = service.buscarPorId(id);
-        return ResponseEntity.status(200).body(usuario);
+    @GetMapping("/buscarPorEmpresa/{idEmpresa}")
+    public ResponseEntity<List<UsuarioResponseDto>> listar(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.status(200).body(service.listarPorEmpresa(idEmpresa));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.status(200).body(service.buscarPorId(idUsuario));
+    }
+
+    @DeleteMapping("/{idUsuario}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idUsuario) {
+        service.deletar(idUsuario);
         return ResponseEntity.status(204).build();
+    }
+
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarDto usuarioAtualizar) {
+        return ResponseEntity.status(200).body(service.atualizarPorId(idUsuario, usuarioAtualizar));
+    }
+
+    @PostMapping("/autenticar")
+    public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
+        return ResponseEntity.status(200).body(service.antenticar(usuarioAutenticar));
     }
 }

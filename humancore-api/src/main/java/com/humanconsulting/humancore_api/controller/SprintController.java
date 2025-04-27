@@ -1,5 +1,8 @@
 package com.humanconsulting.humancore_api.controller;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
+import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.SprintService;
 import jakarta.validation.Valid;
@@ -11,15 +14,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("sprints")
+@CrossOrigin("*")
 public class SprintController {
 
     @Autowired
     private SprintService service;
 
     @PostMapping
-    public ResponseEntity<Sprint> cadastrarSprint(@Valid @RequestBody Sprint sprint) {
-        Sprint sprintCadastrada = service.cadastrar(sprint);
-        return ResponseEntity.status(201).body(sprintCadastrada);
+    public ResponseEntity<SprintResponseDto> cadastrarSprint(@Valid @RequestBody SprintRequestDto sprintRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(sprintRequestDto));
     }
 
     @GetMapping
@@ -34,9 +37,19 @@ public class SprintController {
         return ResponseEntity.status(200).body(sprint);
     }
 
+    @GetMapping("/buscarPorProjeto/{idProjeto}")
+    public ResponseEntity<List<SprintResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idProjeto) {
+        return ResponseEntity.status(200).body(service.buscarPorIdProjeto(idProjeto));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PutMapping("/{idSprint}")
+    public ResponseEntity<SprintResponseDto> atualizar(@PathVariable Integer idSprint, @Valid @RequestBody SprintAtualizarRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizar(idSprint, request));
     }
 }

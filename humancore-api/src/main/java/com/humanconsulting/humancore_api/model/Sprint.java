@@ -12,23 +12,21 @@ public class Sprint {
     @Id
     private Integer idSprint;
 
-    @NotNull
     private String descricao;
 
-    @NotNull
     private LocalDate dtInicio;
 
-    @NotNull
     private LocalDate dtFim;
 
-    @NotNull
-    private Double progresso;
-
-    @NotNull
-    private Boolean comImpedimento;
-
-    @NotNull
     private Integer fkProjeto;
+
+    public Sprint(Integer idSprint, String descricao, LocalDate dtInicio, LocalDate dtFim, Integer fkProjeto) {
+        this.idSprint = idSprint;
+        this.descricao = descricao;
+        this.dtInicio = dtInicio;
+        this.dtFim = dtFim;
+        this.fkProjeto = fkProjeto;
+    }
 
     public Integer getIdSprint() {
         return idSprint;
@@ -38,55 +36,35 @@ public class Sprint {
         this.idSprint = idSprint;
     }
 
-    public @NotBlank String getDescricao() {
+    public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(@NotBlank String descricao) {
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    public @NotNull LocalDate getDtInicio() {
+    public LocalDate getDtInicio() {
         return dtInicio;
     }
 
-    public void setDtInicio(@NotNull LocalDate dtInicio) {
+    public void setDtInicio(LocalDate dtInicio) {
         this.dtInicio = dtInicio;
     }
 
-    public @NotNull LocalDate getDtFim() {
+    public LocalDate getDtFim() {
         return dtFim;
     }
 
-    public void setDtFim(@NotNull LocalDate dtFim) {
+    public void setDtFim(LocalDate dtFim) {
         this.dtFim = dtFim;
     }
 
-    public @NotNull Double getProgresso() {
-        return progresso;
-    }
-
-    public void setProgresso(@NotNull Double progresso) {
-        this.progresso = progresso;
-    }
-
-    public @NotNull Boolean getComImpedimento() {
-        return comImpedimento;
-    }
-
-    public void setComImpedimento(@NotNull Boolean comImpedimento) {
-        this.comImpedimento = comImpedimento;
-    }
-
-    public @NotNull Integer getFkProjeto() {
+    public Integer getFkProjeto() {
         return fkProjeto;
     }
 
-    public void setFkProjeto(@NotNull Integer fkProjeto) {
+    public void setFkProjeto(Integer fkProjeto) {
         this.fkProjeto = fkProjeto;
-    }
-
-    public boolean getFinalizado() {
-        return this.progresso == 100;
     }
 }

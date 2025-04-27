@@ -12,25 +12,30 @@ public class Usuario {
     @Id
     private Integer idUsuario;
 
-    @NotBlank
     private String nome;
 
-    @NotNull
-    @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 6)
     private String senha;
 
-    @NotBlank
     private String cargo;
 
-    @NotBlank
     private String area;
 
-    @NotNull
+    private String permissao;
+
     private Integer fkEmpresa;
+
+    public Usuario(String nome, String email, String senha, String cargo, String area, String permissao, Integer fkEmpresa) {
+        this.idUsuario = null;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.cargo = cargo;
+        this.area = area;
+        this.permissao = permissao;
+        this.fkEmpresa = fkEmpresa;
+    }
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -40,51 +45,59 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public @NotBlank String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(@NotBlank String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public @Email String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@Email String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @NotBlank @Size(min = 6) String getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(@NotBlank @Size(min = 6) String senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    public @NotBlank String getCargo() {
+    public String getCargo() {
         return cargo;
     }
 
-    public void setCargo(@NotBlank String cargo) {
+    public void setCargo(String cargo) {
         this.cargo = cargo;
     }
 
-    public @NotBlank String getArea() {
+    public String getArea() {
         return area;
     }
 
-    public void setArea(@NotBlank String area) {
+    public void setArea(String area) {
         this.area = area;
     }
 
-    public @NotNull Integer getFkEmpresa() {
+    public String getPermissao() {
+        return permissao;
+    }
+
+    public void setPermissao(String permissao) {
+        this.permissao = permissao;
+    }
+
+    public Integer getFkEmpresa() {
         return fkEmpresa;
     }
 
-    public void setFkEmpresa(@NotNull Integer fkEmpresa) {
+    public void setFkEmpresa(Integer fkEmpresa) {
         this.fkEmpresa = fkEmpresa;
     }
 }

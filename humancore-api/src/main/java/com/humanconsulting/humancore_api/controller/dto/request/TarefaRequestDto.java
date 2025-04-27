@@ -1,16 +1,10 @@
-package com.humanconsulting.humancore_api.model;
+package com.humanconsulting.humancore_api.controller.dto.request;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
-public class Entrega {
-    @Id
-    private Integer idSprint;
+public class TarefaRequestDto {
 
     @NotNull
     private String descricao;
@@ -22,30 +16,16 @@ public class Entrega {
     private LocalDate dtFim;
 
     @NotNull
-    private Double progresso;
-
-    @NotNull
-    private Boolean comImpedimento;
-
-    @NotNull
     private Integer fkSprint;
 
     @NotNull
     private Integer fkResponsavel;
 
-    public Integer getIdSprint() {
-        return idSprint;
-    }
-
-    public void setIdSprint(Integer idSprint) {
-        this.idSprint = idSprint;
-    }
-
-    public @NotBlank String getDescricao() {
+    public @NotNull String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(@NotBlank String descricao) {
+    public void setDescricao(@NotNull String descricao) {
         this.descricao = descricao;
     }
 
@@ -65,22 +45,6 @@ public class Entrega {
         this.dtFim = dtFim;
     }
 
-    public @NotNull Double getProgresso() {
-        return progresso;
-    }
-
-    public void setProgresso(@NotNull Double progresso) {
-        this.progresso = progresso;
-    }
-
-    public @NotNull Boolean getComImpedimento() {
-        return comImpedimento;
-    }
-
-    public void setComImpedimento(@NotNull Boolean comImpedimento) {
-        this.comImpedimento = comImpedimento;
-    }
-
     public @NotNull Integer getFkSprint() {
         return fkSprint;
     }
@@ -95,9 +59,5 @@ public class Entrega {
 
     public void setFkResponsavel(@NotNull Integer fkResponsavel) {
         this.fkResponsavel = fkResponsavel;
-    }
-
-    public boolean getFinalizado() {
-        return this.progresso == 100;
     }
 }

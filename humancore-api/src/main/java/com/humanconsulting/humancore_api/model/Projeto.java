@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -10,23 +11,24 @@ public class Projeto {
     @Id
     private Integer idProjeto;
 
-    @NotNull
     private String descricao;
 
-    @NotNull
-    private Double progresso;
-
-    @NotNull
     private Double orcamento;
 
-    @NotNull
-    private Boolean com_impedimento;
+    private String urlImagem;
 
-    @NotNull
     private Integer fkEmpresa;
 
-    @NotNull
     private Integer fkResponsavel;
+
+    public Projeto(Integer idProjeto, String descricao, Double orcamento, String urlImagem, Integer fkEmpresa, Integer fkResponsavel) {
+        this.idProjeto = idProjeto;
+        this.descricao = descricao;
+        this.orcamento = orcamento;
+        this.urlImagem = urlImagem;
+        this.fkEmpresa = fkEmpresa;
+        this.fkResponsavel = fkResponsavel;
+    }
 
     public Integer getIdProjeto() {
         return idProjeto;
@@ -36,51 +38,43 @@ public class Projeto {
         this.idProjeto = idProjeto;
     }
 
-    public @NotNull String getDescricao() {
+    public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(@NotNull String descricao) {
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    public @NotNull Double getProgresso() {
-        return progresso;
-    }
-
-    public void setProgresso(@NotNull Double progresso) {
-        this.progresso = progresso;
-    }
-
-    public @NotNull Double getOrcamento() {
+    public Double getOrcamento() {
         return orcamento;
     }
 
-    public void setOrcamento(@NotNull Double orcamento) {
+    public void setOrcamento(Double orcamento) {
         this.orcamento = orcamento;
     }
 
-    public @NotNull Boolean getCom_impedimento() {
-        return com_impedimento;
+    public String getUrlImagem() {
+        return urlImagem;
     }
 
-    public void setCom_impedimento(@NotNull Boolean com_impedimento) {
-        this.com_impedimento = com_impedimento;
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 
-    public @NotNull Integer getFk_empresa() {
+    public Integer getFkEmpresa() {
         return fkEmpresa;
     }
 
-    public void setFk_empresa(@NotNull Integer fkEmpresa) {
+    public void setFkEmpresa(Integer fkEmpresa) {
         this.fkEmpresa = fkEmpresa;
     }
 
-    public @NotNull Integer  getFk_responsavel() {
+    public Integer getFkResponsavel() {
         return fkResponsavel;
     }
 
-    public void setFk_responsavel(@NotNull Integer fkResponsavel) {
+    public void setFkResponsavel(Integer fkResponsavel) {
         this.fkResponsavel = fkResponsavel;
     }
 }

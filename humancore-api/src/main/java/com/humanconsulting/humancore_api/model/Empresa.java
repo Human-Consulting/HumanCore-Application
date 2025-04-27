@@ -10,11 +10,18 @@ public class Empresa {
     @Id
     private Integer idEmpresa;
 
-    @NotNull
+    private String nome;
+
     private String cnpj;
 
-    @NotBlank
-    private String nome;
+    private String urlImagem;
+
+    public Empresa(String cnpj, String nome, String urlImagem) {
+        this.idEmpresa = null;
+        this.cnpj = cnpj;
+        this.nome = nome;
+        this.urlImagem = urlImagem;
+    }
 
     public Integer getIdEmpresa() {
         return idEmpresa;
@@ -24,19 +31,27 @@ public class Empresa {
         this.idEmpresa = idEmpresa;
     }
 
-    public @NotNull String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(@NotNull String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public @NotBlank String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(@NotBlank String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 }

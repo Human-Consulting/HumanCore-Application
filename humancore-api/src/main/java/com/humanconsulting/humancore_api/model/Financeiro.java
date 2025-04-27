@@ -11,14 +11,17 @@ public class Financeiro {
     @Id
     private Integer idFinanceiro;
 
-    @NotNull
     private Double valor;
 
-    @NotNull
     private LocalDate dtInvestimento;
 
-    @NotNull
     private Integer fkProjeto;
+
+    public Financeiro(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+        this.valor = valor;
+        this.dtInvestimento = dtInvestimento;
+        this.fkProjeto = fkProjeto;
+    }
 
     public Integer getIdFinanceiro() {
         return idFinanceiro;
@@ -28,27 +31,27 @@ public class Financeiro {
         this.idFinanceiro = idFinanceiro;
     }
 
-    public @NotNull Double getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(@NotNull Double valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 
-    public @NotNull LocalDate getDtInvestimento() {
+    public LocalDate getDtInvestimento() {
         return dtInvestimento;
     }
 
-    public void setDtInvestimento(@NotNull LocalDate dtInvestimento) {
+    public void setDtInvestimento(LocalDate dtInvestimento) {
         this.dtInvestimento = dtInvestimento;
     }
 
-    public @NotNull Integer getFkProjeto() {
+    public Integer getFkProjeto() {
         return fkProjeto;
     }
 
-    public void setFkProjeto(@NotNull Integer fkProjeto) {
+    public void setFkProjeto(Integer fkProjeto) {
         this.fkProjeto = fkProjeto;
     }
 }

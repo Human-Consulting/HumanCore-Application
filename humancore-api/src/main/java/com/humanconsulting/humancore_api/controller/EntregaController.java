@@ -1,7 +1,10 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.model.Entrega;
-import com.humanconsulting.humancore_api.service.EntregaService;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.service.TarefaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,33 +13,51 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("entregas")
+@RequestMapping("tarefas")
+@CrossOrigin("*")
 public class EntregaController {
 
     @Autowired
-    private EntregaService service;
+    private TarefaService service;
 
     @PostMapping
-    public ResponseEntity<Entrega> cadastrarEntrega(@Valid @RequestBody Entrega entrega) {
-        Entrega entregaCadastrada = service.cadastrar(entrega);
-        return ResponseEntity.status(201).body(entregaCadastrada);
+    public ResponseEntity<TarefaResponseDto> cadastrarEntrega(@Valid @RequestBody TarefaRequestDto entregaRequestDto) {
+        return ResponseEntity.status(201).body(service.cadastrar(entregaRequestDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Entrega>> listar() {
-        List<Entrega> all = service.listar();
-        return ResponseEntity.status(200).body(all);
+    public ResponseEntity<List<TarefaResponseDto>> listar() {
+        return ResponseEntity.status(200).body(service.listar());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Entrega> buscarPorId(@PathVariable Integer id) {
-        Entrega entrega = service.buscarPorId(id);
-        return ResponseEntity.status(200).body(entrega);
+    @GetMapping("/buscarPorSprint/{idSprint}")
+    public ResponseEntity<List<TarefaResponseDto>> listarPorIdSprint(@PathVariable Integer idSprint) {
+        return ResponseEntity.status(200).body(service.listarPorSprint(idSprint));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    @GetMapping("/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.status(200).body(service.buscarPorId(id));
+    }
+
+    @DeleteMapping("/{idTarefa}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idTarefa) {
+        service.deletar(idTarefa);
         return ResponseEntity.status(204).build();
+    }
+
+    @PutMapping("/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizar(@PathVariable Integer idTarefa, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
+        return ResponseEntity.status(200).body(service.atualizar(idTarefa, entrega));
+    }
+
+    @PutMapping("/finalizada/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizarFinalizada(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizarFinalizada(idTarefa, request));
+    }
+
+    @PutMapping("/impedimento/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizarImpedimento(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {
+        return ResponseEntity.status(200).body(service.atualizarImpedimento(idTarefa, request));
     }
 }
