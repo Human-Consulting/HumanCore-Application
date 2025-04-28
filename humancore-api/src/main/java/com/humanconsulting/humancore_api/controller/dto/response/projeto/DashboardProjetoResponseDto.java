@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.controller.dto.response.projeto;
 
-import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.model.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -25,13 +25,13 @@ public class DashboardProjetoResponseDto {
     @Schema(description = "Lista de áreas envolvidas no projeto", implementation = Area.class)
     private List<Area> areas;
 
-    @Schema(description = "Lista de informações financeiras do projeto", implementation = FinanceiroResponseDto.class)
-    private List<FinanceiroResponseDto> financeiroResponseDtos;
+    @Schema(description = "Lista de informações financeiras do projeto", implementation = InvestimentoResponseDto.class)
+    private List<InvestimentoResponseDto> financeiroResponseDtos;
 
     @Schema(description = "Total de itens no projeto", example = "10")
     private Integer totalItens;
 
-    public DashboardProjetoResponseDto(Integer idProjeto, String nomeResponsavel, boolean comImpedimento, Double progreso, Double orcamento, List<Area> areas, Integer totalItens, List<FinanceiroResponseDto> financeiroResponseDtos) {
+    public DashboardProjetoResponseDto(Integer idProjeto, String nomeResponsavel, boolean comImpedimento, Double progreso, Double orcamento, List<Area> areas, Integer totalItens, List<InvestimentoResponseDto> financeiroResponseDtos) {
         this.idProjeto = idProjeto;
         this.nomeResponsavel = nomeResponsavel;
         this.comImpedimento = comImpedimento;
@@ -98,11 +98,11 @@ public class DashboardProjetoResponseDto {
         this.totalItens = totalItens;
     }
 
-    public List<FinanceiroResponseDto> getFinanceiroResponseDtos() {
+    public List<InvestimentoResponseDto> getFinanceiroResponseDtos() {
         return financeiroResponseDtos;
     }
 
-    public void setFinanceiroResponseDtos(List<FinanceiroResponseDto> financeiroResponseDtos) {
+    public void setFinanceiroResponseDtos(List<InvestimentoResponseDto> financeiroResponseDtos) {
         this.financeiroResponseDtos = financeiroResponseDtos;
     }
 }

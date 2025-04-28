@@ -2,15 +2,15 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.EmpresaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.empresa.DashboardEmpresaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.EmpresaMapper;
-import com.humanconsulting.humancore_api.mapper.FinanceiroMapper;
+import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.model.Area;
 import com.humanconsulting.humancore_api.model.Empresa;
-import com.humanconsulting.humancore_api.model.Financeiro;
+import com.humanconsulting.humancore_api.model.Investimento;
 import com.humanconsulting.humancore_api.repository.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
@@ -75,7 +75,7 @@ public class EmpresaService {
         Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
         Integer projetos = dashRepository.totalProjetos(empresa.getIdEmpresa());
         Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
-        List<FinanceiroResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getIdEmpresa());
+        List<InvestimentoResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getIdEmpresa());
 
         return EmpresaMapper.toDashboard(empresa, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }
@@ -91,11 +91,11 @@ public class EmpresaService {
                 .collect(Collectors.toList());
     }
 
-    public List<FinanceiroResponseDto> listarFinanceiroPorEmpresa(Integer idEmpresa) {
-        List<Financeiro> financeiros = dashRepository.listarFinanceiroPorEmpresa(idEmpresa);
-        List<FinanceiroResponseDto> financeiroResponseDtos = new ArrayList<>();
-        for (Financeiro financeiro : financeiros) {
-            financeiroResponseDtos.add(FinanceiroMapper.toDto(financeiro));
+    public List<InvestimentoResponseDto> listarFinanceiroPorEmpresa(Integer idEmpresa) {
+        List<Investimento> financeiros = dashRepository.listarFinanceiroPorEmpresa(idEmpresa);
+        List<InvestimentoResponseDto> financeiroResponseDtos = new ArrayList<>();
+        for (Investimento financeiro : financeiros) {
+            financeiroResponseDtos.add(InvestimentoMapper.toDto(financeiro));
         }
         return financeiroResponseDtos;
     }

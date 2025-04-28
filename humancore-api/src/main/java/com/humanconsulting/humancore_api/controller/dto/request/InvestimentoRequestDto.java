@@ -1,11 +1,11 @@
-package com.humanconsulting.humancore_api.controller.dto.financeiro;
+package com.humanconsulting.humancore_api.controller.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public class FinanceiroRequestDto {
+public class InvestimentoRequestDto {
     @Schema(description = "Valor do investimento", example = "5000.00")
     @NotNull
     private Double valor;

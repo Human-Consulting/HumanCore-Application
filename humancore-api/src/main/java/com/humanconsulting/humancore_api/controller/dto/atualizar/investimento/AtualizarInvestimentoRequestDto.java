@@ -1,11 +1,11 @@
-package com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro;
+package com.humanconsulting.humancore_api.controller.dto.atualizar.investimento;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public class AtualizarFinanceiroRequestDto {
+public class AtualizarInvestimentoRequestDto {
     @Schema(description = "Valor do investimento", example = "15000.75")
     @NotNull
     private Double valor;

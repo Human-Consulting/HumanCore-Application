@@ -1,10 +1,9 @@
 package com.humanconsulting.humancore_api.controller;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.financeiro.AtualizarFinanceiroRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.financeiro.FinanceiroRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
-import com.humanconsulting.humancore_api.model.Financeiro;
-import com.humanconsulting.humancore_api.service.FinanceiroService;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.investimento.AtualizarInvestimentoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.InvestimentoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
+import com.humanconsulting.humancore_api.service.InvestimentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("financeiros")
+@RequestMapping("investimentos")
 @CrossOrigin("*")
-public class FinanceiroController {
+public class InvestimentoController {
 
     @Autowired
-    private FinanceiroService service;
+    private InvestimentoService service;
 
     @Operation(
             summary = "Cadastrar um novo financeiro",
@@ -29,7 +28,7 @@ public class FinanceiroController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @PostMapping
-    public ResponseEntity<FinanceiroResponseDto> cadastrarFinanceiro(@Valid @RequestBody FinanceiroRequestDto financeiroRequestDto) {
+    public ResponseEntity<InvestimentoResponseDto> cadastrarFinanceiro(@Valid @RequestBody InvestimentoRequestDto financeiroRequestDto) {
         return ResponseEntity.status(201).body(service.cadastrar(financeiroRequestDto));
     }
 
@@ -39,7 +38,7 @@ public class FinanceiroController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @GetMapping
-    public ResponseEntity<List<FinanceiroResponseDto>> listar() {
+    public ResponseEntity<List<InvestimentoResponseDto>> listar() {
         return ResponseEntity.status(200).body(service.listar());
     }
 
@@ -50,7 +49,7 @@ public class FinanceiroController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @GetMapping("/buscarPorProjeto/{idProjeto}")
-    public ResponseEntity<List<FinanceiroResponseDto>> listarPorId(@PathVariable Integer idProjeto) {
+    public ResponseEntity<List<InvestimentoResponseDto>> listarPorId(@PathVariable Integer idProjeto) {
         return ResponseEntity.status(200).body(service.listarPorProjeto(idProjeto));
     }
 
@@ -61,7 +60,7 @@ public class FinanceiroController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @GetMapping("/{id}")
-    public ResponseEntity<FinanceiroResponseDto> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<InvestimentoResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));
     }
 
@@ -84,7 +83,7 @@ public class FinanceiroController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @PutMapping("/{idFinanceiro}")
-    public ResponseEntity<FinanceiroResponseDto> atualizar(@PathVariable Integer idFinanceiro, @Valid @RequestBody AtualizarFinanceiroRequestDto request) {
+    public ResponseEntity<InvestimentoResponseDto> atualizar(@PathVariable Integer idFinanceiro, @Valid @RequestBody AtualizarInvestimentoRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idFinanceiro, request));
     }
 }

@@ -19,10 +19,10 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuarioOptional = usuarioRepository.selectWhereEmail(username);
+        Usuario usuarioOptional = usuarioRepository.selectWhereEmail(username);
 
-        if (usuarioOptional.isEmpty()) throw new UsernameNotFoundException(String.format("Usuário: %s não encontrado", username));
+        if (usuarioOptional == null) throw new UsernameNotFoundException(String.format("Usuário: %s não encontrado", username));
 
-        return new UsuarioDetalhesDto(usuarioOptional.get());
+        return new UsuarioDetalhesDto(usuarioOptional);
     }
 }

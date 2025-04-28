@@ -2,15 +2,15 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.DashboardProjetoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
-import com.humanconsulting.humancore_api.mapper.FinanceiroMapper;
+import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.Area;
-import com.humanconsulting.humancore_api.model.Financeiro;
+import com.humanconsulting.humancore_api.model.Investimento;
 import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.*;
@@ -92,7 +92,7 @@ public class ProjetoService {
         Double orcamento = dashboardProjetoRepository.orcamentoTotal(projeto.getIdProjeto());
         Integer projetos = dashboardProjetoRepository.totalSprints(projeto.getIdProjeto());
         Boolean comImpedimento = dashboardProjetoRepository.projetoComImpedimento(projeto.getIdProjeto());
-        List<FinanceiroResponseDto> allResponse = listarFinanceiroPorProjeto(projeto.getIdProjeto());
+        List<InvestimentoResponseDto> allResponse = listarFinanceiroPorProjeto(projeto.getIdProjeto());
 
         return ProjetoMapper.toDashboard(projeto, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }
@@ -108,11 +108,11 @@ public class ProjetoService {
                 .collect(Collectors.toList());
     }
 
-    public List<FinanceiroResponseDto> listarFinanceiroPorProjeto(Integer idProjeto) {
-        List<Financeiro> financeiros = dashboardProjetoRepository.listarFinanceiroPorEmpresa(idProjeto);
-        List<FinanceiroResponseDto> financeiroResponseDtos = new ArrayList<>();
-        for (Financeiro financeiro : financeiros) {
-            financeiroResponseDtos.add(FinanceiroMapper.toDto(financeiro));
+    public List<InvestimentoResponseDto> listarFinanceiroPorProjeto(Integer idProjeto) {
+        List<Investimento> financeiros = dashboardProjetoRepository.listarFinanceiroPorEmpresa(idProjeto);
+        List<InvestimentoResponseDto> financeiroResponseDtos = new ArrayList<>();
+        for (Investimento financeiro : financeiros) {
+            financeiroResponseDtos.add(InvestimentoMapper.toDto(financeiro));
         }
         return financeiroResponseDtos;
     }

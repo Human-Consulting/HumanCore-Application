@@ -79,13 +79,13 @@ public class UsuarioRepository {
                 .list();
     }
 
-    public Optional<Usuario> selectWhereEmail(String email) {
-        if (!existsByEmail(email)) return Optional.empty();
-        return Optional.of(this.jdbcClient
+    public Usuario selectWhereEmail(String email) {
+        if (!existsByEmail(email)) throw new EntidadeNaoEncontradaException("Usuário não cadastrado");
+        return this.jdbcClient
                 .sql("SELECT * FROM usuario WHERE email = ?")
                 .param(email)
                 .query(Usuario.class)
-                .single());
+                .single();
     }
 
     public boolean deleteWhere(Integer id) {
@@ -126,7 +126,7 @@ public class UsuarioRepository {
         return this.jdbcClient
                 .sql("SELECT nome FROM usuario " +
                      "WHERE fkEmpresa = ? " +
-                     "AND permissao = 'DIRETOR'")
+                     "AND permissao = 'DIRETOR' LIMIT 1")
                 .param(idEmpresa)
                 .query(String.class)
                 .optional().orElse("Diretor não registrado.");

@@ -14,8 +14,8 @@ public class UsuarioMapper {
         return new Usuario(usuarioRequestDto.getNome(), usuarioRequestDto.getEmail(), usuarioRequestDto.getSenha(), usuarioRequestDto.getCargo(), usuarioRequestDto.getArea(), usuarioRequestDto.getPermissao(), usuarioRequestDto.getFkEmpresa());
     }
 
-    public static LoginResponseDto toLoginDto(Usuario usuario, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas) {
-        return new LoginResponseDto(usuario.getIdUsuario(), usuario.getNome(), usuario.getPermissao(), usuario.getFkEmpresa(), nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasVinculadas);
+    public static LoginResponseDto toLoginDto(Usuario usuario, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas, String token) {
+        return new LoginResponseDto(usuario.getIdUsuario(), usuario.getNome(), usuario.getEmail(), usuario.getPermissao(), usuario.getFkEmpresa(), nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasVinculadas, token);
     }
 
     public static UsuarioResponseDto toUsuarioDto(Usuario usuario, Integer qtdTarefas, Boolean comImpedimento) {

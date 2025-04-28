@@ -1,14 +1,14 @@
-package com.humanconsulting.humancore_api.controller.dto.response.financeiro;
+package com.humanconsulting.humancore_api.controller.dto.response.investimento;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
 
 import java.time.LocalDate;
 
-public class FinanceiroResponseDto {
+public class InvestimentoResponseDto {
     @Schema(description = "ID do registro financeiro")
     @Id
-    private Integer idFinanceiro;
+    private Integer idInvestimento;
 
     @Schema(description = "Valor do investimento", example = "10000.00")
     private Double valor;
@@ -19,19 +19,19 @@ public class FinanceiroResponseDto {
     @Schema(description = "ID do projeto relacionado ao investimento", example = "1")
     private Integer fkProjeto;
 
-    public FinanceiroResponseDto(Integer idFinanceiro, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
-        this.idFinanceiro = idFinanceiro;
+    public InvestimentoResponseDto(Integer idInvestimento, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+        this.idInvestimento = idInvestimento;
         this.valor = valor;
         this.dtInvestimento = dtInvestimento;
         this.fkProjeto = fkProjeto;
     }
 
-    public Integer getIdFinanceiro() {
-        return idFinanceiro;
+    public Integer getIdInvestimento() {
+        return idInvestimento;
     }
 
-    public void setIdFinanceiro(Integer idFinanceiro) {
-        this.idFinanceiro = idFinanceiro;
+    public void setIdInvestimento(Integer idInvestimento) {
+        this.idInvestimento = idInvestimento;
     }
 
     public Double getValor() {

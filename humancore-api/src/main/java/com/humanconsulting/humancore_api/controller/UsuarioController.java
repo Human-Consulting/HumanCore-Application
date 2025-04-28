@@ -59,10 +59,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/autenticar")
-    public ResponseEntity<UsuarioTokenDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
+    public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
         final Usuario usuario = UsuarioTokenMapper.of(usuarioAutenticar);
-        UsuarioTokenDto usuarioTokenDto = this.service.autenticar(usuario);
-
-        return ResponseEntity.status(200).body(usuarioTokenDto);
+        return ResponseEntity.status(200).body(this.service.autenticar(usuario));
     }
 }

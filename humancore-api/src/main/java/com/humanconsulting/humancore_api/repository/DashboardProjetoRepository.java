@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.repository;
 
-import com.humanconsulting.humancore_api.model.Financeiro;
+import com.humanconsulting.humancore_api.model.Investimento;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -80,15 +80,15 @@ public class DashboardProjetoRepository {
                 .single();
     }
 
-    public List<Financeiro> listarFinanceiroPorEmpresa(Integer idProjeto) {
+    public List<Investimento> listarFinanceiroPorEmpresa(Integer idProjeto) {
         return this.jdbcClient.sql(
                 """
-                SELECT * FROM financeiro
+                SELECT * FROM investimento
                 WHERE fkProjeto = ?
                 ORDER BY dtInvestimento ASC;"""
         )
                 .param(idProjeto)
-                .query(Financeiro.class)
+                .query(Investimento.class)
                 .list();
     }
 }

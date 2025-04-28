@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.controller.dto.response.empresa;
 
-import com.humanconsulting.humancore_api.controller.dto.response.financeiro.FinanceiroResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.model.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -22,16 +22,16 @@ public class DashboardEmpresaResponseDto {
     @Schema(description = "Orçamento total da empresa", example = "1000000.0")
     private Double orcamento;
 
-    @Schema(description = "Áreas associadas à empresa", example = "[\"TI\", \"Financeiro\"]")
+    @Schema(description = "Áreas associadas à empresa", example = "[\"TI\", \"Investimento\"]")
     private List<Area> areas;
 
-    @Schema(description = "Lista de dados financeiros da empresa", implementation = FinanceiroResponseDto.class)
-    private List<FinanceiroResponseDto> financeiroResponseDtos;
+    @Schema(description = "Lista de dados financeiros da empresa", implementation = InvestimentoResponseDto.class)
+    private List<InvestimentoResponseDto> financeiroResponseDtos;
 
     @Schema(description = "Total de itens da empresa", example = "25")
     private Integer totalItens;
 
-    public DashboardEmpresaResponseDto(Integer idEmpresa, String nomeResponsavel, boolean comImpedimento, Double progreso, Double orcamento, List<Area> areas, Integer totalItens, List<FinanceiroResponseDto> financeiroResponseDtos) {
+    public DashboardEmpresaResponseDto(Integer idEmpresa, String nomeResponsavel, boolean comImpedimento, Double progreso, Double orcamento, List<Area> areas, Integer totalItens, List<InvestimentoResponseDto> financeiroResponseDtos) {
         this.idEmpresa = idEmpresa;
         this.nomeResponsavel = nomeResponsavel;
         this.comImpedimento = comImpedimento;
@@ -98,11 +98,11 @@ public class DashboardEmpresaResponseDto {
         this.totalItens = totalItens;
     }
 
-    public List<FinanceiroResponseDto> getFinanceiroResponseDtos() {
+    public List<InvestimentoResponseDto> getFinanceiroResponseDtos() {
         return financeiroResponseDtos;
     }
 
-    public void setFinanceiroResponseDtos(List<FinanceiroResponseDto> financeiroResponseDtos) {
+    public void setFinanceiroResponseDtos(List<InvestimentoResponseDto> financeiroResponseDtos) {
         this.financeiroResponseDtos = financeiroResponseDtos;
     }
 }

@@ -17,12 +17,12 @@ import java.util.List;
 
 @Component
 public class EmailNotifier implements Observer{
-    private JavaMailSender emailSender;
-    private UsuarioService usuarioService;
-    private SprintService sprintService;
-    private ProjetoService projetoService;
+    private final JavaMailSender emailSender;
+    private final UsuarioService usuarioService;
+    private final SprintService sprintService;
+    private final ProjetoService projetoService;
 
-    @Autowired
+//    @Autowired
     public EmailNotifier(JavaMailSender emailSender, UsuarioService usuarioService, SprintService sprintService, ProjetoService projetoService) {
         this.emailSender = emailSender;
         this.usuarioService = usuarioService;
@@ -30,7 +30,7 @@ public class EmailNotifier implements Observer{
         this.projetoService = projetoService;
     }
 
-    public EmailNotifier(JavaMailSender emailSender) { this.emailSender = emailSender; }
+//    public EmailNotifier(JavaMailSender emailSender) { this.emailSender = emailSender; }
 
     @Override
     public void update(Tarefa tarefa) {

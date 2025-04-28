@@ -35,9 +35,12 @@ public class LoginResponseDto {
     @Schema(description = "Lista de tarefas vinculadas ao usuário", implementation = TarefaResponseDto.class)
     private List<TarefaResponseDto> tarefasVinculadas;
 
-    public LoginResponseDto(Integer idUsuario, String nome, String permissao, Integer fkEmpresa, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas) {
+    private String token;
+
+    public LoginResponseDto(Integer idUsuario, String email, String nome, String permissao, Integer fkEmpresa, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas, String token) {
         this.idUsuario = idUsuario;
         this.nome = nome;
+        this.email = email;
         this.permissao = permissao;
         this.fkEmpresa = fkEmpresa;
         this.nomeEmpresa = nomeEmpresa;
@@ -45,6 +48,7 @@ public class LoginResponseDto {
         this.comImpedimento = comImpedimento;
         this.projetosVinculados = projetosVinculados;
         this.tarefasVinculadas = tarefasVinculadas;
+        this.token = token;
     }
 
     public Integer getIdUsuario() {
@@ -121,5 +125,13 @@ public class LoginResponseDto {
 
     public void setTarefasVinculadas(List<TarefaResponseDto> tarefasVinculadas) {
         this.tarefasVinculadas = tarefasVinculadas;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

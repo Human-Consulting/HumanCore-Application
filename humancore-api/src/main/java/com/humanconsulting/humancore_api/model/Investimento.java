@@ -2,14 +2,13 @@ package com.humanconsulting.humancore_api.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 @Entity
-public class Financeiro {
+public class Investimento {
     @Id
-    private Integer idFinanceiro;
+    private Integer idInvestimento;
 
     private Double valor;
 
@@ -17,18 +16,18 @@ public class Financeiro {
 
     private Integer fkProjeto;
 
-    public Financeiro(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
+    public Investimento(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
         this.valor = valor;
         this.dtInvestimento = dtInvestimento;
         this.fkProjeto = fkProjeto;
     }
 
-    public Integer getIdFinanceiro() {
-        return idFinanceiro;
+    public Integer getIdInvestimento() {
+        return idInvestimento;
     }
 
-    public void setIdFinanceiro(Integer idFinanceiro) {
-        this.idFinanceiro = idFinanceiro;
+    public void setIdInvestimento(Integer idInvestimento) {
+        this.idInvestimento = idInvestimento;
     }
 
     public Double getValor() {

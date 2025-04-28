@@ -56,7 +56,7 @@ public class UsuarioService {
     }
 
     public LoginResponseDto buscarPorId(Integer id) {
-        return passarParaLoginResponse(usuarioRepository.selectWhereId(id));
+        return passarParaLoginResponse(usuarioRepository.selectWhereId(id), null);
     }
 
     public List<UsuarioResponseDto> listar() {
@@ -109,17 +109,16 @@ public class UsuarioService {
         return passarParaResponse(usuarioAtualizado);
     }
 
-    public UsuarioTokenDto autenticar(Usuario usuario) {
+    public LoginResponseDto autenticar(Usuario usuario) {
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha());
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
-        Optional<Usuario> usuarioAuteticado = usuarioRepository.selectWhereEmail(usuario.getEmail());
-        if (usuarioAuteticado.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não cadastrado");
+        Usuario usuarioAutenticado = usuarioRepository.selectWhereEmail(usuario.getEmail());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);
-
-        return UsuarioTokenMapper.of(usuarioAuteticado.get(), token);
+        String tokenUsuario = UsuarioTokenMapper.of(usuarioAutenticado, token).getToken();
+        return passarParaLoginResponse(usuarioAutenticado, tokenUsuario);
     }
 
     public List<UsuarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
@@ -138,7 +137,7 @@ public class UsuarioService {
         return UsuarioMapper.toUsuarioDto(usuario, qtdTarefas, comImpedimento);
     }
 
-    public LoginResponseDto passarParaLoginResponse(Usuario usuario) {
+    public LoginResponseDto passarParaLoginResponse(Usuario usuario, String tokenUsuario) {
         String nomeEmpresa = empresaRepository.selectWhereId(usuario.getFkEmpresa()).getNome();
         Integer qtdTarefas = usuarioRepository.getTotalTarefas(usuario.getIdUsuario());
         Boolean comImpedimento = usuarioRepository.isComImpedimento(usuario.getIdUsuario());
@@ -148,6 +147,6 @@ public class UsuarioService {
         for (Tarefa tarefasVinculada : tarefasVinculadas) {
             tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada, usuario.getIdUsuario()));
         }
-        return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse);
+        return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse, tokenUsuario);
     }
 }

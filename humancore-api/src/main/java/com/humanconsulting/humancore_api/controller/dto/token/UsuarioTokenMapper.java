@@ -3,17 +3,12 @@ package com.humanconsulting.humancore_api.controller.dto.token;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
 import com.humanconsulting.humancore_api.model.Usuario;
 
 public class UsuarioTokenMapper {
     public static Usuario of(UsuarioRequestDto usuarioRequestDto) {
-        Usuario usuario = new Usuario();
-
-        usuario.setEmail(usuarioRequestDto.getEmail());
-        usuario.setNome(usuarioRequestDto.getNome());
-        usuario.setSenha(usuarioRequestDto.getSenha());
-
-        return usuario;
+        return UsuarioMapper.toEntity(usuarioRequestDto);
     }
 
     public static Usuario of(LoginRequestDto loginRequestDto) {
