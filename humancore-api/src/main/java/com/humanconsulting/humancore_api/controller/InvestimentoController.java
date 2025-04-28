@@ -6,6 +6,8 @@ import com.humanconsulting.humancore_api.controller.dto.response.investimento.In
 import com.humanconsulting.humancore_api.service.InvestimentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,10 @@ public class InvestimentoController {
             description = "Esse endpoint cria um novo registro financeiro.",
             security = @SecurityRequirement(name = "Bearer")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Investimento cadastrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
+    })
     @PostMapping
     public ResponseEntity<InvestimentoResponseDto> cadastrarFinanceiro(@Valid @RequestBody InvestimentoRequestDto financeiroRequestDto) {
         return ResponseEntity.status(201).body(service.cadastrar(financeiroRequestDto));
@@ -37,6 +43,7 @@ public class InvestimentoController {
             description = "Esse endpoint retorna todos os registros financeiros cadastrados.",
             security = @SecurityRequirement(name = "Bearer")
     )
+    @ApiResponse(responseCode = "200", description = "Lista de investimentos retornada com sucesso")
     @GetMapping
     public ResponseEntity<List<InvestimentoResponseDto>> listar() {
         return ResponseEntity.status(200).body(service.listar());
@@ -48,6 +55,10 @@ public class InvestimentoController {
             parameters = @Parameter(name = "idProjeto", description = "ID do projeto para buscar os registros financeiros."),
             security = @SecurityRequirement(name = "Bearer")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Investimentos encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Investimentos não encontrados")
+    })
     @GetMapping("/buscarPorProjeto/{idProjeto}")
     public ResponseEntity<List<InvestimentoResponseDto>> listarPorId(@PathVariable Integer idProjeto) {
         return ResponseEntity.status(200).body(service.listarPorProjeto(idProjeto));
@@ -59,6 +70,10 @@ public class InvestimentoController {
             parameters = @Parameter(name = "id", description = "ID do registro financeiro."),
             security = @SecurityRequirement(name = "Bearer")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Investimento encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<InvestimentoResponseDto> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(service.buscarPorId(id));
@@ -70,6 +85,10 @@ public class InvestimentoController {
             parameters = @Parameter(name = "id", description = "ID do registro financeiro a ser deletado."),
             security = @SecurityRequirement(name = "Bearer")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Investimento deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
@@ -82,6 +101,11 @@ public class InvestimentoController {
             parameters = @Parameter(name = "idFinanceiro", description = "ID do registro financeiro a ser atualizado."),
             security = @SecurityRequirement(name = "Bearer")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Investimento atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+            @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
+    })
     @PutMapping("/{idFinanceiro}")
     public ResponseEntity<InvestimentoResponseDto> atualizar(@PathVariable Integer idFinanceiro, @Valid @RequestBody AtualizarInvestimentoRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idFinanceiro, request));

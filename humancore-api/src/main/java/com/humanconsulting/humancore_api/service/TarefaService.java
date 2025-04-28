@@ -68,12 +68,6 @@ public class TarefaService {
        return passarParaResponse(tarefa, tarefa.getFkResponsavel());
     }
 
-    public TarefaResponseDto atualizarFinalizada(Integer idTarefa, AtualizarStatusRequestDto request) {
-        tarefaRepository.existsById(idTarefa);
-        Tarefa tarefa = tarefaRepository.updateFinalizar(idTarefa);
-        return passarParaResponse(tarefa, request.getIdEditor());
-    }
-
     public TarefaResponseDto atualizarImpedimento(Integer idTarefa, AtualizarStatusRequestDto request) {
         Integer fkResponsavel = tarefaRepository.selectWhereId(idTarefa).getFkResponsavel();
         if (request.getIdEditor() == fkResponsavel) {

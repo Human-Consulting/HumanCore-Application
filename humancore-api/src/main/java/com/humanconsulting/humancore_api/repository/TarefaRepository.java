@@ -106,16 +106,6 @@ public class TarefaRepository {
         return this.selectWhereId(idTarefa);
     }
 
-    public Tarefa updateFinalizar(Integer idTarefa) {
-        this.jdbcClient.sql(
-                        "UPDATE tarefa SET progresso = 100 WHERE idTarefa = ?"
-                )
-                .param(idTarefa)
-                .update();
-
-        return this.selectWhereId(idTarefa);
-    }
-
     public double mediaProgressoSprint(Integer idProjeto) {
         return this.jdbcClient
                 .sql(
