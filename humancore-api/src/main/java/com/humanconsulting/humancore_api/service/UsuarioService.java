@@ -50,17 +50,22 @@ public class UsuarioService {
         String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
         novoUsuario.setSenha(senhaCriptografada);
 
-        this.usuarioRepository.insert(novoUsuario);
+        this.usuarioRepository.save(novoUsuario);
 
         return novoUsuario;
     }
 
     public LoginResponseDto buscarPorId(Integer id) {
-        return passarParaLoginResponse(usuarioRepository.selectWhereId(id), null);
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+
+        if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
+
+        Usuario usuario = optUsuario.get();
+        return passarParaLoginResponse(usuario, null);
     }
 
     public List<UsuarioResponseDto> listar() {
-        List<Usuario> all = usuarioRepository.selectAll();
+        List<Usuario> all = usuarioRepository.findAll();
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : all) {
@@ -70,15 +75,21 @@ public class UsuarioService {
     }
 
     public void deletar(Integer id) {
-        usuarioRepository.deleteWhere(id);
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+
+        if (usuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
+
+        usuarioRepository.deleteById(id);
     }
 
     public UsuarioResponseDto atualizarPorId(Integer idUsuario, UsuarioAtualizarDto usuarioAtualizar) {
-        usuarioRepository.existsById(idUsuario);
+        Optional<Usuario> optUsuarioAlvo = usuarioRepository.findById(idUsuario);
+        Usuario usuarioAlvo = optUsuarioAlvo.get();
 
-        Usuario usuarioAlvo = usuarioRepository.selectWhereId(idUsuario);
+        Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(usuarioAtualizar.getIdEditor());
+        Usuario usuarioEditor = optUsuarioEditor.get();
 
-        Usuario usuarioEditor = usuarioRepository.selectWhereId(usuarioAtualizar.getIdEditor());
+        if (optUsuarioAlvo.isEmpty() || optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
         PermissaoEnum permissaoEditor;
         PermissaoEnum permissaoAlvo;
@@ -105,7 +116,7 @@ public class UsuarioService {
             throw new AcessoNegadoException("Você não pode alterar sua própria permissão.");
         }
 
-        Usuario usuarioAtualizado = usuarioRepository.update(idUsuario, usuarioAtualizar);
+        Usuario usuarioAtualizado = usuarioRepository.save(usuarioEditor);
         return passarParaResponse(usuarioAtualizado);
     }
 
@@ -113,7 +124,8 @@ public class UsuarioService {
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha());
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
-        Usuario usuarioAutenticado = usuarioRepository.selectWhereEmail(usuario.getEmail());
+        Optional<Usuario> optUsuarioAutenticado = usuarioRepository.findByEmail(usuario.getEmail());
+        Usuario usuarioAutenticado = optUsuarioAutenticado.get();
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);
@@ -122,7 +134,7 @@ public class UsuarioService {
     }
 
     public List<UsuarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
-        List<Usuario> all = usuarioRepository.selectWhereIdEmpresa(idEmpresa);
+        List<Usuario> all = usuarioRepository.findByFkEmpresa(idEmpresa);
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : all) {
@@ -132,17 +144,17 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDto passarParaResponse(Usuario usuario) {
-        Integer qtdTarefas = usuarioRepository.getTotalTarefas(usuario.getIdUsuario());
-        Boolean comImpedimento = usuarioRepository.isComImpedimento(usuario.getIdUsuario());
+        Integer qtdTarefas = usuarioRepository.countTarefasByUsuario(usuario.getIdUsuario());
+        Boolean comImpedimento = usuarioRepository.hasTarefaComImpedimento(usuario.getIdUsuario());
         return UsuarioMapper.toUsuarioDto(usuario, qtdTarefas, comImpedimento);
     }
 
     public LoginResponseDto passarParaLoginResponse(Usuario usuario, String tokenUsuario) {
-        String nomeEmpresa = empresaRepository.selectWhereId(usuario.getFkEmpresa()).getNome();
-        Integer qtdTarefas = usuarioRepository.getTotalTarefas(usuario.getIdUsuario());
-        Boolean comImpedimento = usuarioRepository.isComImpedimento(usuario.getIdUsuario());
-        List<Integer> projetosVinculados = usuarioRepository.getProjetosVinculados(usuario.getIdUsuario());
-        List<Tarefa> tarefasVinculadas = usuarioRepository.getTarefasVInculadas(usuario.getIdUsuario());
+        String nomeEmpresa = usuario.getEmpresa().getNome();
+        Integer qtdTarefas = usuarioRepository.countTarefasByUsuario(usuario.getIdUsuario());
+        Boolean comImpedimento = usuarioRepository.hasTarefaComImpedimento(usuario.getIdUsuario());
+        List<Integer> projetosVinculados = usuarioRepository.findProjetosVinculados(usuario.getIdUsuario());
+        List<Tarefa> tarefasVinculadas = usuarioRepository.findTarefasVinculadas(usuario.getIdUsuario());
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefasVinculada : tarefasVinculadas) {
             tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada, usuario.getIdUsuario()));

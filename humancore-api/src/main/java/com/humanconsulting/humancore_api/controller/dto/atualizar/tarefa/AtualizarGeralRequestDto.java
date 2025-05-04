@@ -1,10 +1,19 @@
 package com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa;
 
+import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AtualizarGeralRequestDto {
     @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
     @NotNull
@@ -22,60 +31,11 @@ public class AtualizarGeralRequestDto {
     @NotNull
     private Double progresso;
 
-    @Schema(description = "ID do responsável pela tarefa", example = "3")
+    @Schema(description = "Usuário responsável pela tarefa", example = "3")
     @NotNull
-    private Integer fkResponsavel;
+    private Usuario responsavel;
 
     @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
     @NotNull
     private Integer idEditor;
-
-    @Schema(description = "Permissão do editor", example = "CONSULTOR")
-    public @NotNull Integer getIdEditor() {
-        return idEditor;
-    }
-
-    public void setIdEditor(@NotNull Integer idEditor) {
-        this.idEditor = idEditor;
-    }
-
-    public @NotNull String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(@NotNull String descricao) {
-        this.descricao = descricao;
-    }
-
-    public @NotNull LocalDate getDtInicio() {
-        return dtInicio;
-    }
-
-    public void setDtInicio(@NotNull LocalDate dtInicio) {
-        this.dtInicio = dtInicio;
-    }
-
-    public @NotNull LocalDate getDtFim() {
-        return dtFim;
-    }
-
-    public void setDtFim(@NotNull LocalDate dtFim) {
-        this.dtFim = dtFim;
-    }
-
-    public @NotNull Double getProgresso() {
-        return progresso;
-    }
-
-    public void setProgresso(@NotNull Double progresso) {
-        this.progresso = progresso;
-    }
-
-    public @NotNull Integer getFkResponsavel() {
-        return fkResponsavel;
-    }
-
-    public void setFkResponsavel(@NotNull Integer fkResponsavel) {
-        this.fkResponsavel = fkResponsavel;
-    }
 }

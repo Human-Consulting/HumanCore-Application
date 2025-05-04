@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.mapper;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
@@ -9,10 +10,32 @@ import java.util.List;
 
 public class SprintMapper {
     public static Sprint toEntity(SprintRequestDto sprintRequestDto) {
-        return new Sprint(null, sprintRequestDto.getDescricao(), sprintRequestDto.getDtInicio(), sprintRequestDto.getDtFim(), sprintRequestDto.getFkProjeto());
+        return Sprint.builder()
+                .descricao(sprintRequestDto.getDescricao())
+                .dtInicio(sprintRequestDto.getDtInicio())
+                .dtFim(sprintRequestDto.getDtFim())
+                .projeto(sprintRequestDto.getProjeto())
+                .build();
+    }
+
+    public static Sprint toEntity(SprintAtualizarRequestDto sprintAtualizarRequestDto) {
+        return Sprint.builder()
+                .descricao(sprintAtualizarRequestDto.getDescricao())
+                .dtInicio(sprintAtualizarRequestDto.getDtInicio())
+                .dtFim(sprintAtualizarRequestDto.getDtFim())
+                .build();
     }
 
     public static SprintResponseDto toDto(Sprint sprint, double progresso, boolean comImpedimento, List<TarefaResponseDto> entregas) {
-        return new SprintResponseDto(sprint.getIdSprint(), sprint.getDescricao(), sprint.getDtInicio(), sprint.getDtFim(), progresso, comImpedimento, sprint.getFkProjeto(), entregas);
+        return SprintResponseDto.builder()
+                .idSprint(sprint.getIdSprint())
+                .descricao(sprint.getDescricao())
+                .dtInicio(sprint.getDtInicio())
+                .dtFim(sprint.getDtFim())
+                .progresso(progresso)
+                .comImpedimento(comImpedimento)
+                .projeto(sprint.getProjeto())
+                .tarefas(entregas)
+                .build();
     }
 }

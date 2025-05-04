@@ -109,7 +109,7 @@ public class SprintController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
     })
-    @PutMapping("/{idSprint}")
+    @PatchMapping("/{idSprint}")
     public ResponseEntity<SprintResponseDto> atualizar(@PathVariable Integer idSprint, @Valid @RequestBody SprintAtualizarRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idSprint, request));
     }

@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("tarefas")
 @CrossOrigin("*")
-public class EntregaController {
+public class TarefaController {
 
     @Autowired
     private TarefaService service;
@@ -104,9 +104,9 @@ public class EntregaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
     })
-    @PutMapping("/{idTarefa}")
-    public ResponseEntity<TarefaResponseDto> atualizar(@PathVariable Integer idTarefa, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
-        return ResponseEntity.status(200).body(service.atualizar(idTarefa, entrega));
+    @PatchMapping("/{idTarefa}")
+    public ResponseEntity<TarefaResponseDto> atualizar(@PathVariable Integer idEditor, @PathVariable Integer idTarefa, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
+        return ResponseEntity.status(200).body(service.atualizar(idEditor, idTarefa, entrega));
     }
 
     @Operation(
@@ -120,7 +120,7 @@ public class EntregaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
     })
-    @PutMapping("/impedimento/{idTarefa}")
+    @PatchMapping("/impedimento/{idTarefa}")
     public ResponseEntity<TarefaResponseDto> atualizarImpedimento(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizarImpedimento(idTarefa, request));
     }

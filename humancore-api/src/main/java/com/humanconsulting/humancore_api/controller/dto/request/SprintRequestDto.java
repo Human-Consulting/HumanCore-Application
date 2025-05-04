@@ -1,11 +1,18 @@
 package com.humanconsulting.humancore_api.controller.dto.request;
 
+import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SprintRequestDto {
     @Schema(description = "Descrição da Sprint", example = "Sprint de desenvolvimento de funcionalidades para a versão 1.0")
     @NotNull
@@ -19,39 +26,7 @@ public class SprintRequestDto {
     @NotNull
     private LocalDate dtFim;
 
-    @Schema(description = "ID do projeto ao qual a Sprint pertence", example = "1001")
+    @Schema(description = "Projeto ao qual a Sprint pertence", example = "1001")
     @NotNull
-    private Integer fkProjeto;
-
-    public @NotNull String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(@NotNull String descricao) {
-        this.descricao = descricao;
-    }
-
-    public @NotNull LocalDate getDtInicio() {
-        return dtInicio;
-    }
-
-    public void setDtInicio(@NotNull LocalDate dtInicio) {
-        this.dtInicio = dtInicio;
-    }
-
-    public @NotNull LocalDate getDtFim() {
-        return dtFim;
-    }
-
-    public void setDtFim(@NotNull LocalDate dtFim) {
-        this.dtFim = dtFim;
-    }
-
-    public @NotNull Integer getFkProjeto() {
-        return fkProjeto;
-    }
-
-    public void setFkProjeto(@NotNull Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
-    }
+    private Projeto projeto;
 }

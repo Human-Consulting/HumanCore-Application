@@ -114,7 +114,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    @PutMapping("/{idUsuario}")
+    @PatchMapping("/{idUsuario}")
     public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarDto usuarioAtualizar) {
         return ResponseEntity.status(200).body(service.atualizarPorId(idUsuario, usuarioAtualizar));
     }
