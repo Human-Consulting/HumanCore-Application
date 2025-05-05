@@ -36,6 +36,8 @@ public enum PermissaoEnum {
     CONSULTOR_DIRETOR(
             Arrays.asList(
                     "MODIFICAR_PROPRIO",
+                    "MODIFICAR_GESTOR",
+                    "MODIFICAR_FUNC",
                     "EDITAR_USUARIOS_EMPRESA",
                     "EXCLUIR_USUARIOS_EMPRESA",
                     "ADICIONAR_USUARIOS_EMPRESA"
@@ -45,6 +47,8 @@ public enum PermissaoEnum {
     CONSULTOR(
             Arrays.asList(
                     "MODIFICAR_PROPRIO",
+                    "MODIFICAR_GESTOR",
+                    "MODIFICAR_FUNC",
                     "MODIFICAR_PROPRIO_POR_DIRETOR",
                     "EDITAR_USUARIOS_EMPRESA_EXCETO_DIRETOR",
                     "EXCLUIR_USUARIOS_EMPRESA_EXCETO_DIRETOR",

@@ -22,15 +22,12 @@ public class EmailNotifier implements Observer{
     private final SprintService sprintService;
     private final ProjetoService projetoService;
 
-//    @Autowired
     public EmailNotifier(JavaMailSender emailSender, UsuarioService usuarioService, SprintService sprintService, ProjetoService projetoService) {
         this.emailSender = emailSender;
         this.usuarioService = usuarioService;
         this.sprintService = sprintService;
         this.projetoService = projetoService;
     }
-
-//    public EmailNotifier(JavaMailSender emailSender) { this.emailSender = emailSender; }
 
     @Override
     public void update(Tarefa tarefa) {
