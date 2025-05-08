@@ -61,21 +61,21 @@ public class EmpresaService {
     }
 
     public EmpresaResponseDto passarParaResponse(Empresa empresa) {
-        String nomeDiretor = usuarioRepository.getDiretor(empresa.getIdEmpresa());
-        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
-        Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
-        Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
+        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getFkEmpresa()));
+        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getFkEmpresa());
+        Double progresso = dashRepository.mediaProgresso(empresa.getFkEmpresa());
+        Double orcamento = dashRepository.orcamentoTotal(empresa.getFkEmpresa());
         return EmpresaMapper.toDto(empresa, nomeDiretor, comImpedimento, progresso, orcamento);
     }
 
     public DashboardEmpresaResponseDto criarDashboardResponse(Empresa empresa) {
-        String nomeDiretor = usuarioRepository.getDiretor(empresa.getIdEmpresa());
-        Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
-        List<Area> areas = listarTarefasPorArea(empresa.getIdEmpresa());
-        Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
-        Integer projetos = dashRepository.totalProjetos(empresa.getIdEmpresa());
-        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
-        List<InvestimentoResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getIdEmpresa());
+        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getFkEmpresa()));
+        Double progresso = dashRepository.mediaProgresso(empresa.getFkEmpresa());
+        List<Area> areas = listarTarefasPorArea(empresa.getFkEmpresa());
+        Double orcamento = dashRepository.orcamentoTotal(empresa.getFkEmpresa());
+        Integer projetos = dashRepository.totalProjetos(empresa.getFkEmpresa());
+        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getFkEmpresa());
+        List<InvestimentoResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getFkEmpresa());
 
         return EmpresaMapper.toDashboard(empresa, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }

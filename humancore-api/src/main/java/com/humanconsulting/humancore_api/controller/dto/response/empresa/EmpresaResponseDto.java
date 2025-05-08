@@ -1,7 +1,13 @@
 package com.humanconsulting.humancore_api.controller.dto.response.empresa;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmpresaResponseDto {
     @Schema(description = "ID da Empresa", example = "1")
     private Integer idEmpresa;
@@ -26,17 +32,6 @@ public class EmpresaResponseDto {
 
     @Schema(description = "Orçamento total da empresa", example = "5000000.0")
     private Double orcamento;
-
-    public EmpresaResponseDto(Integer idEmpresa, String nome, String cnpj, String nomeDiretor, boolean comImpedimento, Double progreso, String urlImagemEmpresa, Double orcamento) {
-        this.idEmpresa = idEmpresa;
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.nomeDiretor = nomeDiretor;
-        this.comImpedimento = comImpedimento;
-        this.progresso = progreso;
-        this.urlImagemEmpresa = urlImagemEmpresa;
-        this.orcamento = orcamento;
-    }
 
     public Integer getIdEmpresa() {
         return idEmpresa;

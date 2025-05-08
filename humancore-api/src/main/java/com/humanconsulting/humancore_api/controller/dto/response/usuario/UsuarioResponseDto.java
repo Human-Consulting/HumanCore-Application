@@ -1,7 +1,13 @@
 package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioResponseDto {
     @Schema(description = "ID do usuário", example = "1")
     private Integer idUsuario;
@@ -29,21 +35,6 @@ public class UsuarioResponseDto {
 
     @Schema(description = "Indica se o usuário tem alguma tarefa com impedimento", example = "false")
     private Boolean comImpedimento;
-
-    public UsuarioResponseDto(Integer idUsuario, String nome, String email, String senha, String cargo, String area, String permissao, Integer qtdTarefas, Boolean comImpedimento) {
-        this.idUsuario = idUsuario;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.cargo = cargo;
-        this.area = area;
-        this.permissao = permissao;
-        this.qtdTarefas = qtdTarefas;
-        this.comImpedimento = comImpedimento;
-    }
-
-    public UsuarioResponseDto() {
-    }
 
     public Integer getIdUsuario() {
         return idUsuario;

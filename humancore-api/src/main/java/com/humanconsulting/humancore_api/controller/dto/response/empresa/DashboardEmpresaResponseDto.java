@@ -3,9 +3,15 @@ package com.humanconsulting.humancore_api.controller.dto.response.empresa;
 import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.model.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DashboardEmpresaResponseDto {
     @Schema(description = "ID da Empresa", example = "1")
     private Integer idEmpresa;
@@ -30,17 +36,6 @@ public class DashboardEmpresaResponseDto {
 
     @Schema(description = "Total de itens da empresa", example = "25")
     private Integer totalItens;
-
-    public DashboardEmpresaResponseDto(Integer idEmpresa, String nomeResponsavel, boolean comImpedimento, Double progreso, Double orcamento, List<Area> areas, Integer totalItens, List<InvestimentoResponseDto> financeiroResponseDtos) {
-        this.idEmpresa = idEmpresa;
-        this.nomeResponsavel = nomeResponsavel;
-        this.comImpedimento = comImpedimento;
-        this.progresso = progreso;
-        this.orcamento = orcamento;
-        this.areas = areas;
-        this.totalItens = totalItens;
-        this.financeiroResponseDtos = financeiroResponseDtos;
-    }
 
     public Integer getIdEmpresa() {
         return idEmpresa;

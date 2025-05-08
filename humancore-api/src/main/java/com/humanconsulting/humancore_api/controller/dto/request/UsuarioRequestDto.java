@@ -1,11 +1,18 @@
 package com.humanconsulting.humancore_api.controller.dto.request;
 
+import com.humanconsulting.humancore_api.model.Empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioRequestDto {
     @Schema(description = "Nome do usuário", example = "João Silva")
     @NotBlank
@@ -35,7 +42,7 @@ public class UsuarioRequestDto {
 
     @Schema(description = "ID da empresa associada ao usuário", example = "1")
     @NotNull
-    private Integer fkEmpresa;
+    private Empresa empresa;
 
     public @NotBlank String getNome() {
         return nome;
@@ -85,11 +92,11 @@ public class UsuarioRequestDto {
         this.permissao = permissao;
     }
 
-    public @NotNull Integer getFkEmpresa() {
-        return fkEmpresa;
+    public @NotNull Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setFkEmpresa(@NotNull Integer fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
+    public void setEmpresa(@NotNull Empresa empresa) {
+        this.empresa = empresa;
     }
 }

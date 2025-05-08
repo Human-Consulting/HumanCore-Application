@@ -38,7 +38,7 @@ public class ProjetoService {
     @Autowired private DashboardProjetoRepository dashboardProjetoRepository;
 
     public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
-        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getEmpresa().getIdEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
+        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getEmpresa().getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
 
         Projeto projeto = projetoRepository.save(ProjetoMapper.toEntity(projetoRequestDto));
         return passarParaResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto());
@@ -69,15 +69,15 @@ public class ProjetoService {
         projetoRepository.deleteById(id);
     }
 
-    public ProjetoResponseDto atualizar(Integer idEditor, Integer idProjeto, ProjetoAtualizarRequestDto projetoAtualizarRequestDto) {
+    public ProjetoResponseDto atualizar(Integer idProjeto, ProjetoAtualizarRequestDto projetoAtualizarRequestDto) {
         String urlImagemOriginal = buscarPorId(idProjeto).getUrlImagem();
         if (projetoAtualizarRequestDto.getUrlImagem().isEmpty()) projetoAtualizarRequestDto.setUrlImagem(urlImagemOriginal);
 
-        Optional<Usuario> optEditor = usuarioRepository.findById(idEditor);
+        Optional<Usuario> optEditor = usuarioRepository.findById(projetoAtualizarRequestDto.getIdEditor());
         PermissaoEnum permissaoEditor = PermissaoEnum.valueOf(optEditor.get().getPermissao());
         if (optEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Editor não encontrado.");
 
-        if (!permissaoEditor.equals(PermissaoEnum.GESTOR) || idEditor != projetoAtualizarRequestDto.getResponsavel().getIdUsuario()) throw new AcessoNegadoException("Usuário não tem permissão para atualizar");
+        if (!permissaoEditor.equals(PermissaoEnum.GESTOR) || projetoAtualizarRequestDto.getIdEditor() != projetoAtualizarRequestDto.getResponsavel().getIdUsuario()) throw new AcessoNegadoException("Usuário não tem permissão para atualizar");
 
         Projeto projeto = ProjetoMapper.toEntity(projetoAtualizarRequestDto);
         projeto.setIdProjeto(idProjeto);
@@ -108,7 +108,7 @@ public class ProjetoService {
         }
 
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(idProjeto);
-        String urlImagemEmpresa = empresaRepository.getUrlImagemEmpresaByIdEmpresa(projeto.getEmpresa().getIdEmpresa());
+        String urlImagemEmpresa = empresaRepository.getUrlImagemEmpresaByIdEmpresa(projeto.getEmpresa().getFkEmpresa());
 
         return ProjetoMapper.toDto(projeto, progressoProjeto, comImpedimento);
     }

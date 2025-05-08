@@ -25,7 +25,7 @@ public class EmpresaRepository {
                 .update();
 
         if (result > 0) {;
-            empresa.setIdEmpresa(jdbcClient.sql("SELECT LAST_INSERT_ID()")
+            empresa.setFkEmpresa(jdbcClient.sql("SELECT LAST_INSERT_ID()")
                     .query(Integer.class).single());
             return empresa;
         } throw new EntidadeRequisicaoFalhaException("Falha na inserção de empresa");

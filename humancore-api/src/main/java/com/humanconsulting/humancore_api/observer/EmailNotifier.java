@@ -7,7 +7,6 @@ import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.ProjetoService;
 import com.humanconsulting.humancore_api.service.SprintService;
 import com.humanconsulting.humancore_api.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -34,10 +33,10 @@ public class EmailNotifier implements Observer{
 
     @Override
     public void update(Tarefa tarefa) {
-        Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getFkSprint());
-        Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getFkProjeto());
-        LoginResponseDto responsavelProjeto = usuarioService.buscarPorId(projetoEntrega.getFkResponsavel());
-        LoginResponseDto responsavelEntrega = usuarioService.buscarPorId(tarefa.getFkResponsavel());
+        Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getSprint().getIdSprint());
+        Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getProjeto().getIdProjeto());
+        LoginResponseDto responsavelProjeto = usuarioService.buscarPorId(projetoEntrega.getResponsavel().getIdUsuario());
+        LoginResponseDto responsavelEntrega = usuarioService.buscarPorId(tarefa.getResponsavel().getIdUsuario());
 
         List<String> emails = new ArrayList<>();
         emails.add(responsavelProjeto.getEmail());

@@ -1,10 +1,17 @@
 package com.humanconsulting.humancore_api.controller.dto.response.investimento;
 
+import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class InvestimentoResponseDto {
     @Schema(description = "ID do registro financeiro")
     @Id
@@ -17,14 +24,7 @@ public class InvestimentoResponseDto {
     private LocalDate dtInvestimento;
 
     @Schema(description = "ID do projeto relacionado ao investimento", example = "1")
-    private Integer fkProjeto;
-
-    public InvestimentoResponseDto(Integer idInvestimento, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
-        this.idInvestimento = idInvestimento;
-        this.valor = valor;
-        this.dtInvestimento = dtInvestimento;
-        this.fkProjeto = fkProjeto;
-    }
+    private Projeto projeto;
 
     public Integer getIdInvestimento() {
         return idInvestimento;
@@ -50,11 +50,11 @@ public class InvestimentoResponseDto {
         this.dtInvestimento = dtInvestimento;
     }
 
-    public Integer getFkProjeto() {
-        return fkProjeto;
+    public Projeto getProjeto() {
+        return projeto;
     }
 
-    public void setFkProjeto(Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
+    public void setProjeto(Projeto projeto) {
+        this.projeto = projeto;
     }
 }

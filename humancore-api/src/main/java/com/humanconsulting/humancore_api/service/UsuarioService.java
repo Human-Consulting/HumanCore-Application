@@ -157,7 +157,7 @@ public class UsuarioService {
         List<Tarefa> tarefasVinculadas = usuarioRepository.findTarefasVinculadas(usuario.getIdUsuario());
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefasVinculada : tarefasVinculadas) {
-            tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada, usuario.getIdUsuario()));
+            tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
         }
         return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse, tokenUsuario);
     }

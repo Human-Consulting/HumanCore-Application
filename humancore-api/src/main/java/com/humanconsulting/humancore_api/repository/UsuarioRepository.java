@@ -31,7 +31,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query("SELECT COUNT(t.idTarefa) > 0 FROM Tarefa t WHERE t.responsavel.idUsuario = :idUsuario AND t.comImpedimento = true")
     Boolean hasTarefaComImpedimento(@Param("idUsuario") Integer idUsuario);
 
-    @Query("SELECT DISTINCT t.projeto FROM Tarefa t JOIN t.sprint s WHERE t.responsavel.idUsuario = :idUsuario")
+//    @Query("SELECT DISTINCT t.projeto FROM Tarefa t JOIN t.sprint s WHERE t.responsavel.idUsuario = :idUsuario")
+    @Query("SELECT DISTINCT s.projeto FROM Tarefa t JOIN t.sprint s WHERE t.responsavel.idUsuario = :idUsuario")
     List<Integer> findProjetosVinculados(@Param("idUsuario") Integer idUsuario);
 
     @Query("SELECT t FROM Tarefa t WHERE t.responsavel.idUsuario = :idUsuario")

@@ -1,10 +1,17 @@
 package com.humanconsulting.humancore_api.controller.dto.request;
 
+import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class InvestimentoRequestDto {
     @Schema(description = "Valor do investimento", example = "5000.00")
     @NotNull
@@ -16,7 +23,7 @@ public class InvestimentoRequestDto {
 
     @Schema(description = "ID do projeto relacionado ao investimento", example = "1")
     @NotNull
-    private Integer fkProjeto;
+    private Projeto projeto;
 
     public @NotNull Double getValor() {
         return valor;
@@ -34,11 +41,11 @@ public class InvestimentoRequestDto {
         this.dtInvestimento = dtInvestimento;
     }
 
-    public @NotNull Integer getFkProjeto() {
-        return fkProjeto;
+    public @NotNull Projeto getProjeto() {
+        return projeto;
     }
 
-    public void setFkProjeto(@NotNull Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
+    public void setProjeto(@NotNull Projeto projeto) {
+        this.projeto = projeto;
     }
 }

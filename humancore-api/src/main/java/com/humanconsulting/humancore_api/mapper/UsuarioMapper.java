@@ -11,14 +11,52 @@ import java.util.List;
 public class UsuarioMapper {
 
     public static Usuario toEntity(UsuarioRequestDto usuarioRequestDto) {
-        return new Usuario(usuarioRequestDto.getNome(), usuarioRequestDto.getEmail(), usuarioRequestDto.getSenha(), usuarioRequestDto.getCargo(), usuarioRequestDto.getArea(), usuarioRequestDto.getPermissao(), usuarioRequestDto.getFkEmpresa());
+        return Usuario.builder()
+                .nome(usuarioRequestDto.getNome())
+                .email(usuarioRequestDto.getEmail())
+                .senha(usuarioRequestDto.getSenha())
+                .cargo(usuarioRequestDto.getCargo())
+                .area(usuarioRequestDto.getArea())
+                .permissao(usuarioRequestDto.getPermissao())
+                .empresa(usuarioRequestDto.getEmpresa())
+                .build();
     }
 
-    public static LoginResponseDto toLoginDto(Usuario usuario, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas, String token) {
-        return new LoginResponseDto(usuario.getIdUsuario(), usuario.getNome(), usuario.getEmail(), usuario.getPermissao(), usuario.getFkEmpresa(), nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasVinculadas, token);
+    public static LoginResponseDto toLoginDto(
+            Usuario usuario,
+            String nomeEmpresa,
+            Integer qtdTarefas,
+            Boolean comImpedimento,
+            List<Integer> projetosVinculados,
+            List<TarefaResponseDto> tarefasVinculadas,
+            String token) {
+
+        return LoginResponseDto.builder()
+                .idUsuario(usuario.getIdUsuario())
+                .nome(usuario.getNome())
+                .email(usuario.getEmail())
+                .permissao(usuario.getPermissao())
+                .empresa(usuario.getEmpresa())
+                .nomeEmpresa(nomeEmpresa)
+                .qtdTarefas(qtdTarefas)
+                .comImpedimento(comImpedimento)
+                .projetosVinculados(projetosVinculados)
+                .tarefasVinculadas(tarefasVinculadas)
+                .token(token)
+                .build();
     }
 
     public static UsuarioResponseDto toUsuarioDto(Usuario usuario, Integer qtdTarefas, Boolean comImpedimento) {
-        return new UsuarioResponseDto(usuario.getIdUsuario(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.getCargo(), usuario.getArea(), usuario.getPermissao(), qtdTarefas, comImpedimento);
+        return UsuarioResponseDto.builder()
+                .idUsuario(usuario.getIdUsuario())
+                .nome(usuario.getNome())
+                .email(usuario.getEmail())
+                .senha(usuario.getSenha())
+                .cargo(usuario.getCargo())
+                .area(usuario.getArea())
+                .permissao(usuario.getPermissao())
+                .qtdTarefas(qtdTarefas)
+                .comImpedimento(comImpedimento)
+                .build();
     }
 }

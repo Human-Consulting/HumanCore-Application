@@ -1,10 +1,17 @@
 package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 
 import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.model.Empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginResponseDto {
     @Schema(description = "ID do usuário", example = "1")
     private Integer idUsuario;
@@ -18,7 +25,7 @@ public class LoginResponseDto {
     private String permissao;
 
     @Schema(description = "Id da empresa à qual o usuário pertence", example = "5")
-    private Integer fkEmpresa;
+    private Empresa empresa;
 
     @Schema(description = "Nome da empresa à qual o usuário pertence", example = "Tech Corp")
     private String nomeEmpresa;
@@ -36,20 +43,6 @@ public class LoginResponseDto {
     private List<TarefaResponseDto> tarefasVinculadas;
 
     private String token;
-
-    public LoginResponseDto(Integer idUsuario, String email, String nome, String permissao, Integer fkEmpresa, String nomeEmpresa, Integer qtdTarefas, Boolean comImpedimento, List<Integer> projetosVinculados, List<TarefaResponseDto> tarefasVinculadas, String token) {
-        this.idUsuario = idUsuario;
-        this.nome = nome;
-        this.email = email;
-        this.permissao = permissao;
-        this.fkEmpresa = fkEmpresa;
-        this.nomeEmpresa = nomeEmpresa;
-        this.qtdTarefas = qtdTarefas;
-        this.comImpedimento = comImpedimento;
-        this.projetosVinculados = projetosVinculados;
-        this.tarefasVinculadas = tarefasVinculadas;
-        this.token = token;
-    }
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -79,12 +72,12 @@ public class LoginResponseDto {
         this.permissao = permissao;
     }
 
-    public Integer getFkEmpresa() {
-        return fkEmpresa;
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setFkEmpresa(Integer fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     public String getNomeEmpresa() {

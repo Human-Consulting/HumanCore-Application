@@ -106,7 +106,7 @@ public class InvestimentoController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
     })
-    @PutMapping("/{idFinanceiro}")
+    @PatchMapping("/{idFinanceiro}")
     public ResponseEntity<InvestimentoResponseDto> atualizar(@PathVariable Integer idFinanceiro, @Valid @RequestBody AtualizarInvestimentoRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idFinanceiro, request));
     }
