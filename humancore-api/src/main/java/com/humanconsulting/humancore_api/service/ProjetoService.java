@@ -38,7 +38,7 @@ public class ProjetoService {
     @Autowired private DashboardProjetoRepository dashboardProjetoRepository;
 
     public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
-        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getEmpresa().getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
+        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getEmpresa().getIdEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
 
         Projeto projeto = projetoRepository.save(ProjetoMapper.toEntity(projetoRequestDto));
         return passarParaResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto());
