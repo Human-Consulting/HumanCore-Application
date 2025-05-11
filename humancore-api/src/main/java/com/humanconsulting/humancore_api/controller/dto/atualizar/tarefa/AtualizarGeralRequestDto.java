@@ -3,15 +3,13 @@ package com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AtualizarGeralRequestDto {

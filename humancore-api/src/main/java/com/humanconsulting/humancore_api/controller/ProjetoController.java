@@ -108,7 +108,7 @@ public class ProjetoController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Projeto não encontrado")
     })
-    @PutMapping("/{idProjeto}")
+    @PatchMapping("/{idProjeto}")
     public ResponseEntity<ProjetoResponseDto> atualizar(@PathVariable Integer idProjeto, @Valid @RequestBody ProjetoAtualizarRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idProjeto, request));
     }

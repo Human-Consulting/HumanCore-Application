@@ -3,7 +3,13 @@ package com.humanconsulting.humancore_api.controller.dto.atualizar.empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmpresaAtualizarRequestDto {
     @Schema(description = "CNPJ da empresa", example = "12.345.678/0001-99")
     @NotNull
@@ -23,44 +29,4 @@ public class EmpresaAtualizarRequestDto {
 
     @Schema(description = "URL da imagem de logo da empresa", example = "https://linkdaimagem.com/logo.png")
     private String urlImagem;
-
-    public @NotNull Integer getIdEditor() {
-        return idEditor;
-    }
-
-    public void setIdEditor(@NotNull Integer idEditor) {
-        this.idEditor = idEditor;
-    }
-
-    public @NotNull String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(@NotNull String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public @NotBlank String getNome() {
-        return nome;
-    }
-
-    public void setNome(@NotBlank String nome) {
-        this.nome = nome;
-    }
-
-    public @NotBlank String getPermissaoEditor() {
-        return permissaoEditor;
-    }
-
-    public void setPermissaoEditor(@NotBlank String permissaoEditor) {
-        this.permissaoEditor = permissaoEditor;
-    }
-
-    public String getUrlImagem() {
-        return urlImagem;
-    }
-
-    public void setUrlImagem(String urlImagem) {
-        this.urlImagem = urlImagem;
-    }
 }

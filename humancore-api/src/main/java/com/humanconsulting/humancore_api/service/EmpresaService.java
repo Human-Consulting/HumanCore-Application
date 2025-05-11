@@ -32,16 +32,16 @@ public class EmpresaService {
 
     public EmpresaResponseDto cadastrar(EmpresaRequestDto empresaRequestDto) {
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
-        Empresa empresaCadastrada = empresaRepository.insert(EmpresaMapper.toEntity(empresaRequestDto));
+        Empresa empresaCadastrada = empresaRepository.save(EmpresaMapper.toEntity(empresaRequestDto));
         return passarParaResponse(empresaCadastrada);
     }
 
     public Empresa buscarPorId(Integer id) {
-        return empresaRepository.selectWhereId(id);
+        return empresaRepository.findById(id).get();
     }
 
     public List<EmpresaResponseDto> listar() {
-        List<Empresa> all = empresaRepository.selectAll();
+        List<Empresa> all = empresaRepository.findAll();
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<EmpresaResponseDto> allResponses = new ArrayList<>();
         for (Empresa empresa : all) {
@@ -51,31 +51,36 @@ public class EmpresaService {
     }
 
     public void deletar(Integer id) {
-        empresaRepository.deleteWhere(id);
+        empresaRepository.deleteById(id);
     }
 
     public EmpresaResponseDto atualizar(Integer idEmpresa, EmpresaAtualizarRequestDto request) {
         String urlImagemOriginal = buscarPorId(idEmpresa).getUrlImagem();
         if (request.getUrlImagem().isEmpty()) request.setUrlImagem(urlImagemOriginal);
-        return passarParaResponse(empresaRepository.update(idEmpresa, request));
+
+        Empresa empresa = EmpresaMapper.toEntity(request);
+        empresa.setIdEmpresa(idEmpresa);
+
+
+        return passarParaResponse(empresa);
     }
 
     public EmpresaResponseDto passarParaResponse(Empresa empresa) {
-        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getFkEmpresa()));
-        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getFkEmpresa());
-        Double progresso = dashRepository.mediaProgresso(empresa.getFkEmpresa());
-        Double orcamento = dashRepository.orcamentoTotal(empresa.getFkEmpresa());
+        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa()));
+        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
+        Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
+        Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
         return EmpresaMapper.toDto(empresa, nomeDiretor, comImpedimento, progresso, orcamento);
     }
 
     public DashboardEmpresaResponseDto criarDashboardResponse(Empresa empresa) {
-        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getFkEmpresa()));
-        Double progresso = dashRepository.mediaProgresso(empresa.getFkEmpresa());
-        List<Area> areas = listarTarefasPorArea(empresa.getFkEmpresa());
-        Double orcamento = dashRepository.orcamentoTotal(empresa.getFkEmpresa());
-        Integer projetos = dashRepository.totalProjetos(empresa.getFkEmpresa());
-        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getFkEmpresa());
-        List<InvestimentoResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getFkEmpresa());
+        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa()));
+        Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
+        List<Area> areas = listarTarefasPorArea(empresa.getIdEmpresa());
+        Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
+        Integer projetos = dashRepository.totalProjetos(empresa.getIdEmpresa());
+        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
+        List<InvestimentoResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getIdEmpresa());
 
         return EmpresaMapper.toDashboard(empresa, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }

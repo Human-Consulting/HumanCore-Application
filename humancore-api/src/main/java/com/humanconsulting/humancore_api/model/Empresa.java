@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 public class Empresa {
     @Id
-    private Integer fkEmpresa;
+    private Integer idEmpresa;
 
     private String nome;
 

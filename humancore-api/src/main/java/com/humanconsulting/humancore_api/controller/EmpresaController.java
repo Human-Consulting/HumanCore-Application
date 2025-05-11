@@ -83,7 +83,7 @@ public class EmpresaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
-    @PutMapping("/{idEmpresa}")
+    @PatchMapping("/{idEmpresa}")
     public ResponseEntity<EmpresaResponseDto> atualizar(@PathVariable Integer idEmpresa, @Valid @RequestBody EmpresaAtualizarRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idEmpresa, request));
     }

@@ -108,7 +108,7 @@ public class ProjetoService {
         }
 
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(idProjeto);
-        String urlImagemEmpresa = empresaRepository.getUrlImagemEmpresaByIdEmpresa(projeto.getEmpresa().getFkEmpresa());
+        String urlImagemEmpresa = empresaRepository.findUrlImagemById(projeto.getEmpresa().getIdEmpresa());
 
         return ProjetoMapper.toDto(projeto, progressoProjeto, comImpedimento);
     }
