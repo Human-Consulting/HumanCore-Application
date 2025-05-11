@@ -29,7 +29,7 @@ public class EmpresaMapper {
 
     public static EmpresaResponseDto toDto(Empresa empresa, String nomeDiretor, Boolean comImpedimento, Double progresso, Double orcamento) {
         return EmpresaResponseDto.builder()
-                .idEmpresa(empresa.getFkEmpresa())
+                .idEmpresa(empresa.getIdEmpresa())
                 .nome(empresa.getNome())
                 .cnpj(empresa.getCnpj())
                 .nomeDiretor(nomeDiretor)
@@ -43,7 +43,7 @@ public class EmpresaMapper {
     public static DashboardEmpresaResponseDto toDashboard(Empresa empresa, String nomeDiretor, Double progresso, List<Area> areas, Double orcamento, Integer projetos, Boolean comImpedimento, List<InvestimentoResponseDto> financeiroResponseDtos) {
 
         return DashboardEmpresaResponseDto.builder()
-                .idEmpresa(empresa.getFkEmpresa())
+                .idEmpresa(empresa.getIdEmpresa())
                 .nomeResponsavel(nomeDiretor)
                 .comImpedimento(comImpedimento)
                 .progresso(progresso)
