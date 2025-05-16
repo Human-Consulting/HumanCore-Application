@@ -17,6 +17,10 @@ public class InvestimentoDashResponseDto {
     @Id
     private Integer idInvestimento;
 
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    @NotNull
+    private String descricao;
+
     @Schema(description = "Valor do investimento", example = "15000.00")
     @NotNull
     private Double valor;

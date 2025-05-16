@@ -13,6 +13,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AtualizarInvestimentoRequestDto {
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    @NotNull
+    private String descricao;
+
     @Schema(description = "Valor do investimento", example = "15000.75")
     @NotNull
     private Double valor;

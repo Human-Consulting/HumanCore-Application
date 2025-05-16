@@ -10,6 +10,7 @@ public class InvestimentoMapper {
 
     public static Investimento toEntity(InvestimentoRequestDto financeiroRequestDto, Projeto projeto) {
         return Investimento.builder()
+                .descricao(financeiroRequestDto.getDescricao())
                 .valor(financeiroRequestDto.getValor())
                 .dtInvestimento(financeiroRequestDto.getDtInvestimento())
                 .projeto(projeto)
@@ -19,6 +20,7 @@ public class InvestimentoMapper {
     public static Investimento toEntity(AtualizarInvestimentoRequestDto atualizarRequest, Integer idInvestimento, Projeto projeto) {
         return Investimento.builder()
                 .idInvestimento(idInvestimento)
+                .descricao(atualizarRequest.getDescricao())
                 .valor(atualizarRequest.getValor())
                 .dtInvestimento(atualizarRequest.getDtInvestimento())
                 .projeto(projeto)
@@ -28,6 +30,7 @@ public class InvestimentoMapper {
     public static InvestimentoResponseDto toDto(Investimento financeiro) {
         return InvestimentoResponseDto.builder()
                 .idInvestimento(financeiro.getIdInvestimento())
+                .descricao(financeiro.getDescricao())
                 .valor(financeiro.getValor())
                 .dtInvestimento(financeiro.getDtInvestimento())
                 .projeto(financeiro.getProjeto())

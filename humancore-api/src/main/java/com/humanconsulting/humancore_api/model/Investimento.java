@@ -16,6 +16,8 @@ public class Investimento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idInvestimento;
 
+    private String descricao;
+
     private Double valor;
 
     private LocalDate dtInvestimento;

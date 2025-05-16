@@ -13,6 +13,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class InvestimentoRequestDto {
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    @NotNull
+    private String descricao;
+
     @Schema(description = "Valor do investimento", example = "5000.00")
     @NotNull
     private Double valor;

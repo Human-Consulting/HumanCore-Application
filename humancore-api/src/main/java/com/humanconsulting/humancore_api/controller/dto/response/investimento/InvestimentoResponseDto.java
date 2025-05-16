@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.controller.dto.response.investimento;
 import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,9 +14,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InvestimentoResponseDto {
+
     @Schema(description = "ID do registro financeiro")
     @Id
     private Integer idInvestimento;
+
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    private String descricao;
 
     @Schema(description = "Valor do investimento", example = "10000.00")
     private Double valor;

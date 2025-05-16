@@ -13,6 +13,7 @@ public class TarefaMapper {
                 .descricao(tarefaRequestDto.getDescricao())
                 .dtInicio(tarefaRequestDto.getDtInicio())
                 .dtFim(tarefaRequestDto.getDtFim())
+                .comImpedimento(false)
                 .sprint(sprint)
                 .responsavel(responsavel)
                 .build();
