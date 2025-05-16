@@ -14,7 +14,7 @@ import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
-import com.humanconsulting.humancore_api.utils.Permissao;
+import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class EmpresaService {
     private UsuarioRepository usuarioRepository;
 
     public EmpresaResponseDto cadastrar(EmpresaRequestDto empresaRequestDto) {
-        Permissao.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
+        PermissaoValidator.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
 
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
         Empresa empresaCadastrada = empresaRepository.save(EmpresaMapper.toEntity(empresaRequestDto));
@@ -58,7 +58,7 @@ public class EmpresaService {
     }
 
     public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_EMPRESA");
+        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_EMPRESA");
 
         Optional<Empresa> optEmpresa = empresaRepository.findById(id);
         if (optEmpresa.isEmpty()) throw new EntidadeNaoEncontradaException("Empresa não encontrada.");
@@ -74,7 +74,7 @@ public class EmpresaService {
 
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Permissao.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_EMPRESA");
+        PermissaoValidator.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_EMPRESA");
 
         Empresa empresaAtualizada = empresaRepository.save(EmpresaMapper.toEntity(request, idEmpresa));
         return passarParaResponse(empresaAtualizada);

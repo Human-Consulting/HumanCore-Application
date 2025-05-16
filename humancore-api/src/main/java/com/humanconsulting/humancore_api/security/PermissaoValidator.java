@@ -1,9 +1,9 @@
-package com.humanconsulting.humancore_api.utils;
+package com.humanconsulting.humancore_api.security;
 
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 
-public class Permissao {
+public class PermissaoValidator {
 
     public static void validarPermissao(String permissaoEditor, String acao) {
 

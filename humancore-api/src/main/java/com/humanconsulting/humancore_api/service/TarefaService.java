@@ -5,12 +5,10 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.Atualiz
 import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
-import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
-import com.humanconsulting.humancore_api.mapper.SprintMapper;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Tarefa;
@@ -19,7 +17,7 @@ import com.humanconsulting.humancore_api.observer.EmailNotifier;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
-import com.humanconsulting.humancore_api.utils.Permissao;
+import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +41,7 @@ public class TarefaService {
     private EmailNotifier emailNotifier;
 
     public TarefaResponseDto cadastrar(TarefaRequestDto tarefaRequestDto) {
-        Permissao.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
+        PermissaoValidator.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
 
         Sprint sprint = sprintRepository.findById(tarefaRequestDto.getFkSprint()).get();
         if (tarefaRequestDto.getDtInicio().isAfter(tarefaRequestDto.getDtFim()) ||
@@ -86,7 +84,7 @@ public class TarefaService {
     }
 
     public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_TAREFA");
+        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_TAREFA");
 
         Optional<Tarefa> optTarefa = tarefaRepository.findById(id);
         if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("Tarefa não encontrada.");
@@ -101,7 +99,7 @@ public class TarefaService {
 
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Permissao.validarPermissao(requestUpdate.getPermissaoEditor(), "MODIFICAR_TAREFA");
+        PermissaoValidator.validarPermissao(requestUpdate.getPermissaoEditor(), "MODIFICAR_TAREFA");
 
         Usuario usuario = usuarioRepository.findById(requestUpdate.getFkResponsavel()).get();
 

@@ -13,7 +13,7 @@ import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.*;
-import com.humanconsulting.humancore_api.utils.Permissao;
+import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class ProjetoService {
     @Autowired private DashboardProjetoRepository dashboardProjetoRepository;
 
     public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
-        Permissao.validarPermissao(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
+        PermissaoValidator.validarPermissao(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
 
         if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
 
@@ -65,7 +65,7 @@ public class ProjetoService {
     }
 
     public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_PROJETO");
+        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_PROJETO");
         buscarPorId(id);
 
         projetoRepository.deleteById(id);
@@ -82,7 +82,7 @@ public class ProjetoService {
 
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Permissao.validarPermissao(projetoAtualizarRequestDto.getPermissaoEditor(), "MODIFICAR_PROJETO");
+        PermissaoValidator.validarPermissao(projetoAtualizarRequestDto.getPermissaoEditor(), "MODIFICAR_PROJETO");
 
         Usuario usuario = usuarioRepository.findById(projetoAtualizarRequestDto.getFkResponsavel()).get();
 

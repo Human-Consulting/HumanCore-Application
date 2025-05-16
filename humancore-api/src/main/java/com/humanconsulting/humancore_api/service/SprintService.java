@@ -8,14 +8,13 @@ import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseD
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
-import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.mapper.SprintMapper;
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.ProjetoRepository;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
-import com.humanconsulting.humancore_api.utils.Permissao;
+import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,7 @@ public class SprintService {
     @Autowired private TarefaService tarefaService;
 
     public SprintResponseDto cadastrar(SprintRequestDto sprintRequestDto) {
-        Permissao.validarPermissao(sprintRequestDto.getPermissaoEditor(), "ADICIONAR_SPRINT");
+        PermissaoValidator.validarPermissao(sprintRequestDto.getPermissaoEditor(), "ADICIONAR_SPRINT");
 
         if (sprintRequestDto.getDtInicio().isAfter(sprintRequestDto.getDtFim()) || sprintRequestDto.getDtInicio().isEqual(sprintRequestDto.getDtFim())) throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
         Sprint sprint = sprintRepository.save(SprintMapper.toEntity(sprintRequestDto, projetoRepository.findById(sprintRequestDto.getFkProjeto()).get()));
@@ -60,7 +59,7 @@ public class SprintService {
     }
 
     public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_SPRINT");
+        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_SPRINT");
 
         Optional<Sprint> optSprint = sprintRepository.findById(id);
         if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("Sprint não encontrada.");
@@ -74,7 +73,7 @@ public class SprintService {
 
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Permissao.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_SPRINT");
+        PermissaoValidator.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_SPRINT");
 
         Sprint sprintAtualizada = sprintRepository.save(SprintMapper.toEntity(request, idSprint, sprint.getProjeto()));
 

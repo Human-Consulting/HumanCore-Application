@@ -7,15 +7,13 @@ import com.humanconsulting.humancore_api.controller.dto.response.investimento.In
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
-import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.Investimento;
 import com.humanconsulting.humancore_api.model.Projeto;
-import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.InvestimentoRepository;
 import com.humanconsulting.humancore_api.repository.ProjetoRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
-import com.humanconsulting.humancore_api.utils.Permissao;
+import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,7 @@ public class InvestimentoService {
     @Autowired private UsuarioRepository usuarioRepository;
 
     public InvestimentoResponseDto cadastrar(InvestimentoRequestDto financeiroRequestDto) {
-        Permissao.validarPermissao(financeiroRequestDto.getPermissaoEditor(), "ADICIONAR_INVESTIMENTO");
+        PermissaoValidator.validarPermissao(financeiroRequestDto.getPermissaoEditor(), "ADICIONAR_INVESTIMENTO");
 
         Projeto projeto = projetoRepository.findById(financeiroRequestDto.getFkProjeto()).get();
         Investimento financeiro = investimentoRepository.save(InvestimentoMapper.toEntity(financeiroRequestDto, projeto));
@@ -69,7 +67,7 @@ public class InvestimentoService {
     }
 
     public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_INVESTIMENTO");
+        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_INVESTIMENTO");
         investimentoRepository.deleteById(id);
     }
 
@@ -80,7 +78,7 @@ public class InvestimentoService {
 
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Permissao.validarPermissao(atualizarInvestimentoRequestDto.getPermissaoEditor(), "MODIFICAR_INVESTIMENTO");
+        PermissaoValidator.validarPermissao(atualizarInvestimentoRequestDto.getPermissaoEditor(), "MODIFICAR_INVESTIMENTO");
 
         Investimento investimentoAtualizado = investimentoRepository.save(InvestimentoMapper.toEntity(atualizarInvestimentoRequestDto, idInvestimento, investimento.getProjeto()));
 
