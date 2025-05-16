@@ -2,6 +2,8 @@ package com.humanconsulting.humancore_api.controller.dto.request;
 
 import com.humanconsulting.humancore_api.model.Empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,5 +44,5 @@ public class UsuarioRequestDto {
 
     @Schema(description = "ID da empresa associada ao usuário", example = "1")
     @NotNull
-    private Empresa empresa;
+    private Integer fkEmpresa;
 }

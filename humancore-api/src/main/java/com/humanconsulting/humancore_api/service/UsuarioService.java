@@ -15,6 +15,7 @@ import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
+import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
@@ -46,9 +47,10 @@ public class UsuarioService {
 
     @Autowired private AuthenticationManager authenticationManager;
 
-    public Usuario cadastrar(Usuario novoUsuario) {
+    public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
         String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
         novoUsuario.setSenha(senhaCriptografada);
+        novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
 
         this.usuarioRepository.save(novoUsuario);
 
@@ -115,8 +117,8 @@ public class UsuarioService {
                 !usuarioAtualizar.getPermissao().equals(usuarioAlvo.getPermissao())) {
             throw new AcessoNegadoException("Você não pode alterar sua própria permissão.");
         }
-
-        Usuario usuarioAtualizado = usuarioRepository.save(usuarioEditor);
+        Empresa empresa = usuarioRepository.findById(idUsuario).get().getEmpresa();
+        Usuario usuarioAtualizado = usuarioRepository.save(UsuarioMapper.toEntity(usuarioAtualizar, idUsuario, empresa));
         return passarParaResponse(usuarioAtualizado);
     }
 

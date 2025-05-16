@@ -20,4 +20,7 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
     boolean existsByEmpresa_IdEmpresaAndDescricao(Integer idEmpresa, String descricao);
 
     List<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa);
+
+    @Query("SELECT p.urlImagem FROM Projeto p WHERE p.id = :idProjeto")
+    String findUrlImagemById(Integer idProjeto);
 }

@@ -2,35 +2,42 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.EmpresaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.empresa.DashboardEmpresaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.empresa.EmpresaResponseDto;
+import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.EmpresaMapper;
 import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
-import com.humanconsulting.humancore_api.model.Area;
-import com.humanconsulting.humancore_api.model.Empresa;
-import com.humanconsulting.humancore_api.model.Investimento;
+import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.utils.Permissao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class EmpresaService {
 
-    @Autowired private EmpresaRepository empresaRepository;
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
-    @Autowired private DashboardEmpresaRepository dashRepository;
+    @Autowired
+    private DashboardEmpresaRepository dashRepository;
 
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public EmpresaResponseDto cadastrar(EmpresaRequestDto empresaRequestDto) {
+        Permissao.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
+
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
         Empresa empresaCadastrada = empresaRepository.save(EmpresaMapper.toEntity(empresaRequestDto));
         return passarParaResponse(empresaCadastrada);
@@ -50,31 +57,40 @@ public class EmpresaService {
         return allResponses;
     }
 
-    public void deletar(Integer id) {
+    public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
+        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_EMPRESA");
+
+        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
+        if (optEmpresa.isEmpty()) throw new EntidadeNaoEncontradaException("Empresa não encontrada.");
         empresaRepository.deleteById(id);
     }
 
     public EmpresaResponseDto atualizar(Integer idEmpresa, EmpresaAtualizarRequestDto request) {
-        String urlImagemOriginal = buscarPorId(idEmpresa).getUrlImagem();
+        String urlImagemOriginal = empresaRepository.findUrlImagemById(idEmpresa);
+
         if (request.getUrlImagem().isEmpty()) request.setUrlImagem(urlImagemOriginal);
 
-        Empresa empresa = EmpresaMapper.toEntity(request);
-        empresa.setIdEmpresa(idEmpresa);
+        Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(request.getIdEditor());
 
+        if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        return passarParaResponse(empresa);
+        Permissao.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_EMPRESA");
+
+        Empresa empresaAtualizada = empresaRepository.save(EmpresaMapper.toEntity(request, idEmpresa));
+        return passarParaResponse(empresaAtualizada);
     }
 
     public EmpresaResponseDto passarParaResponse(Empresa empresa) {
-        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa()));
+        Optional<String> nomeDiretor = usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa());
+
         Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
         Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
         Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
-        return EmpresaMapper.toDto(empresa, nomeDiretor, comImpedimento, progresso, orcamento);
+        return EmpresaMapper.toDto(empresa, nomeDiretor.orElse(null), comImpedimento, progresso, orcamento);
     }
 
     public DashboardEmpresaResponseDto criarDashboardResponse(Empresa empresa) {
-        String nomeDiretor = String.valueOf(usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa()));
+        String nomeDiretor = usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa()).get();
         Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
         List<Area> areas = listarTarefasPorArea(empresa.getIdEmpresa());
         Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());

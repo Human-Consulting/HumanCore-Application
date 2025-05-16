@@ -2,11 +2,10 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.DashboardProjetoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.ProjetoResponseDto;
-import com.humanconsulting.humancore_api.enums.PermissaoEnum;
-import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
@@ -14,6 +13,7 @@ import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.*;
+import com.humanconsulting.humancore_api.utils.Permissao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +38,11 @@ public class ProjetoService {
     @Autowired private DashboardProjetoRepository dashboardProjetoRepository;
 
     public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
-        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getEmpresa().getIdEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
+        Permissao.validarPermissao(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
 
-        Projeto projeto = projetoRepository.save(ProjetoMapper.toEntity(projetoRequestDto));
+        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
+
+        Projeto projeto = projetoRepository.save(ProjetoMapper.toEntity(projetoRequestDto, empresaRepository.findById(projetoRequestDto.getFkEmpresa()).get(), usuarioRepository.findById(projetoRequestDto.getFkResponsavel()).get()));
         return passarParaResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto());
     }
 
@@ -62,26 +64,29 @@ public class ProjetoService {
         return allResponse;
     }
 
-    public void deletar(Integer id) {
-        Optional<Projeto> optProjeto = projetoRepository.findById(id);
-        if (optProjeto.isEmpty()) throw new EntidadeNaoEncontradaException("Nenhum projeto encontrado.");
+    public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
+        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_PROJETO");
+        buscarPorId(id);
 
         projetoRepository.deleteById(id);
     }
 
     public ProjetoResponseDto atualizar(Integer idProjeto, ProjetoAtualizarRequestDto projetoAtualizarRequestDto) {
-        String urlImagemOriginal = buscarPorId(idProjeto).getUrlImagem();
+        Projeto projeto = buscarPorId(idProjeto);
+
+        String urlImagemOriginal = projetoRepository.findUrlImagemById(idProjeto);
+
         if (projetoAtualizarRequestDto.getUrlImagem().isEmpty()) projetoAtualizarRequestDto.setUrlImagem(urlImagemOriginal);
 
-        Optional<Usuario> optEditor = usuarioRepository.findById(projetoAtualizarRequestDto.getIdEditor());
-        PermissaoEnum permissaoEditor = PermissaoEnum.valueOf(optEditor.get().getPermissao());
-        if (optEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Editor não encontrado.");
+        Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(projetoAtualizarRequestDto.getIdEditor());
 
-        if (!permissaoEditor.equals(PermissaoEnum.GESTOR) || projetoAtualizarRequestDto.getIdEditor() != projetoAtualizarRequestDto.getResponsavel().getIdUsuario()) throw new AcessoNegadoException("Usuário não tem permissão para atualizar");
+        if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Projeto projeto = ProjetoMapper.toEntity(projetoAtualizarRequestDto);
-        projeto.setIdProjeto(idProjeto);
-        Projeto projetoAtualizado = projetoRepository.save(projeto);
+        Permissao.validarPermissao(projetoAtualizarRequestDto.getPermissaoEditor(), "MODIFICAR_PROJETO");
+
+        Usuario usuario = usuarioRepository.findById(projetoAtualizarRequestDto.getFkResponsavel()).get();
+
+        Projeto projetoAtualizado = projetoRepository.save(ProjetoMapper.toEntity(projetoAtualizarRequestDto, idProjeto, usuario, projeto.getEmpresa()));
 
         return passarParaResponse(projetoAtualizado, projetoAtualizado.getResponsavel().getIdUsuario(), projetoAtualizado.getIdProjeto());
     }
@@ -102,7 +107,7 @@ public class ProjetoService {
 
         List<Sprint> sprints = sprintRepository.findAll();
         Double progressoProjeto = 0.0;
-        for (Sprint sprint : sprints){
+        for (Sprint sprint : sprints) {
             Double progressoSprint = tarefaRepository.mediaProgressoSprint(sprint.getIdSprint());
             progressoProjeto += progressoSprint;
         }

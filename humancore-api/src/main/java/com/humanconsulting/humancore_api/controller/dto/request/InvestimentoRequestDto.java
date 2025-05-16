@@ -23,5 +23,13 @@ public class InvestimentoRequestDto {
 
     @Schema(description = "ID do projeto relacionado ao investimento", example = "1")
     @NotNull
-    private Projeto projeto;
+    private Integer fkProjeto;
+
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
+
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
 }

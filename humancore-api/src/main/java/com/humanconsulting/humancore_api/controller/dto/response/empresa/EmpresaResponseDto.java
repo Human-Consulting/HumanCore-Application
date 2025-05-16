@@ -28,7 +28,7 @@ public class EmpresaResponseDto {
     private Double progresso;
 
     @Schema(description = "URL do logo da empresa", example = "http://example.com/imagem-empresa.jpg")
-    private String urlImagemEmpresa;
+    private String urlImagem;
 
     @Schema(description = "Orçamento total da empresa", example = "5000000.0")
     private Double orcamento;

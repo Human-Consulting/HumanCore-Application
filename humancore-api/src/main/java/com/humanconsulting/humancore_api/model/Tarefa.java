@@ -1,9 +1,6 @@
 package com.humanconsulting.humancore_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Tarefa {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTarefa;
 
     private String descricao;

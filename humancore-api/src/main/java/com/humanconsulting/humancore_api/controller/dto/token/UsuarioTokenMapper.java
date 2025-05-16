@@ -5,8 +5,11 @@ import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDt
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
 import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.repository.EmpresaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UsuarioTokenMapper {
+
     public static Usuario of(UsuarioRequestDto usuarioRequestDto) {
         return UsuarioMapper.toEntity(usuarioRequestDto);
     }

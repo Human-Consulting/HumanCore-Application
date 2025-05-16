@@ -4,25 +4,28 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.SprintA
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
+import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.model.Sprint;
 
 import java.util.List;
 
 public class SprintMapper {
-    public static Sprint toEntity(SprintRequestDto sprintRequestDto) {
+    public static Sprint toEntity(SprintRequestDto sprintRequestDto, Projeto projeto) {
         return Sprint.builder()
                 .descricao(sprintRequestDto.getDescricao())
                 .dtInicio(sprintRequestDto.getDtInicio())
                 .dtFim(sprintRequestDto.getDtFim())
-                .projeto(sprintRequestDto.getProjeto())
+                .projeto(projeto)
                 .build();
     }
 
-    public static Sprint toEntity(SprintAtualizarRequestDto sprintAtualizarRequestDto) {
+    public static Sprint toEntity(SprintAtualizarRequestDto sprintAtualizarRequestDto, Integer idSprint, Projeto projeto) {
         return Sprint.builder()
+                .idSprint(idSprint)
                 .descricao(sprintAtualizarRequestDto.getDescricao())
                 .dtInicio(sprintAtualizarRequestDto.getDtInicio())
                 .dtFim(sprintAtualizarRequestDto.getDtFim())
+                .projeto(projeto)
                 .build();
     }
 

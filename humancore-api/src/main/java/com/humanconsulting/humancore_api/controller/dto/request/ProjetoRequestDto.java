@@ -26,9 +26,17 @@ public class ProjetoRequestDto {
 
     @Schema(description = "Empresa associada ao projeto", example = "1")
     @NotNull
-    private Empresa empresa;
+    private Integer fkEmpresa;
 
     @Schema(description = "Responsável pelo projeto", example = "3")
     @NotNull
-    private Usuario responsavel;
+    private Integer fkResponsavel;
+
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
+
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
 }

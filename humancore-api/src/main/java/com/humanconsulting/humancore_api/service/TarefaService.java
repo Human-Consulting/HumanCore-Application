@@ -3,18 +3,23 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
+import com.humanconsulting.humancore_api.mapper.SprintMapper;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
+import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.repository.SprintRepository;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.utils.Permissao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,25 +30,39 @@ import java.util.Optional;
 @Service
 public class TarefaService {
 
-    @Autowired private TarefaRepository tarefaRepository;
+    @Autowired
+    private TarefaRepository tarefaRepository;
 
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired
+    private SprintRepository sprintRepository;
 
-    @Autowired private EmailNotifier emailNotifier;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EmailNotifier emailNotifier;
 
     public TarefaResponseDto cadastrar(TarefaRequestDto tarefaRequestDto) {
-        if (tarefaRequestDto.getDtInicio().isAfter(tarefaRequestDto.getDtFim()) || tarefaRequestDto.getDtInicio().isEqual(tarefaRequestDto.getDtFim())) throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
-        Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto));
+        Permissao.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
+
+        Sprint sprint = sprintRepository.findById(tarefaRequestDto.getFkSprint()).get();
+        if (tarefaRequestDto.getDtInicio().isAfter(tarefaRequestDto.getDtFim()) ||
+                tarefaRequestDto.getDtInicio().isEqual(tarefaRequestDto.getDtFim()) ||
+                tarefaRequestDto.getDtInicio().isBefore(sprint.getDtInicio()) ||
+                tarefaRequestDto.getDtFim().isAfter(sprint.getDtFim()))
+            throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
+
+        Usuario usuario = usuarioRepository.findById(tarefaRequestDto.getFkResponsavel()).get();
+        Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto, sprint, usuario));
         return passarParaResponse(tarefa);
     }
 
-    public TarefaResponseDto buscarPorId(Integer id) {
+    public Tarefa buscarPorId(Integer id) {
         Optional<Tarefa> optTarefa = tarefaRepository.findById(id);
-        Tarefa tarefa = optTarefa.get();
 
         if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("Tarefa não encontada");
 
-        return passarParaResponse(tarefa);
+        return optTarefa.get();
     }
 
     public List<TarefaResponseDto> listar() {
@@ -66,36 +85,28 @@ public class TarefaService {
         return allResponse;
     }
 
-    public void deletar(Integer id) {
-        Optional<Tarefa> optTarefa = tarefaRepository.findById(id);
+    public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
+        Permissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_TAREFA");
 
+        Optional<Tarefa> optTarefa = tarefaRepository.findById(id);
         if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("Tarefa não encontrada.");
 
         tarefaRepository.deleteById(id);
     }
 
-    public TarefaResponseDto atualizar(Integer idEditor, Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
-        Optional<Tarefa> optTarefa = tarefaRepository.findById(idTarefa);
-        if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("Tarefa não encotrada.");
+    public TarefaResponseDto atualizar(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
+        Tarefa tarefa = buscarPorId(idTarefa);
 
-        Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(idEditor);
-        requestUpdate.setIdEditor(idEditor);
-        Usuario usuarioEditor = optUsuarioEditor.get();
-        PermissaoEnum permissaoEditor;
+        Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(requestUpdate.getIdEditor());
 
-        try {
-            permissaoEditor = PermissaoEnum.valueOf(usuarioEditor.getPermissao());
-        } catch (IllegalArgumentException e) {
-            throw new AcessoNegadoException("Permissão inválida informada.");
-        }
+        if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        if (!idEditor.equals(requestUpdate.getResponsavel().getIdUsuario()) || !permissaoEditor.equals(PermissaoEnum.DIRETOR)) throw new AcessoNegadoException("Usuário não tem permissão para efetuar a ação");
+        Permissao.validarPermissao(requestUpdate.getPermissaoEditor(), "MODIFICAR_TAREFA");
 
-        Tarefa tarefa = TarefaMapper.toEntity(requestUpdate);
-        tarefa.setIdTarefa(idTarefa);
+        Usuario usuario = usuarioRepository.findById(requestUpdate.getFkResponsavel()).get();
 
-       Tarefa tarefaSalva = tarefaRepository.save(tarefa);
-       return passarParaResponse(tarefaSalva);
+        Tarefa tarefaAtualizada = tarefaRepository.save(TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.getSprint(), usuario));
+        return passarParaResponse(tarefaAtualizada);
     }
 
     public TarefaResponseDto atualizarImpedimento(Integer idTarefa, AtualizarStatusRequestDto request) {
@@ -103,11 +114,12 @@ public class TarefaService {
         Tarefa tarefa = optTarefa.get();
         Integer fkResponsavel = tarefa.getResponsavel().getIdUsuario();
 
-        if (!request.getIdEditor().equals(fkResponsavel)) throw new AcessoNegadoException("Usuário não é responsável pela tarefa");
+        if (!request.getIdEditor().equals(fkResponsavel))
+            throw new AcessoNegadoException("Usuário não é responsável pela tarefa");
 
         tarefaRepository.toggleImpedimento(idTarefa);
 
-        if (tarefa.getComImpedimento()){
+        if (tarefa.getComImpedimento()) {
             emailNotifier.update(tarefa);
         }
 

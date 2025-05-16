@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.investimento.AtualizarInvestimentoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.InvestimentoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.service.InvestimentoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,28 +71,14 @@ public class InvestimentoController {
             parameters = @Parameter(name = "id", description = "ID do registro financeiro."),
             security = @SecurityRequirement(name = "Bearer")
     )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Investimento encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<InvestimentoResponseDto> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(service.buscarPorId(id));
-    }
 
-    @Operation(
-            summary = "Deletar um registro financeiro",
-            description = "Esse endpoint deleta um registro financeiro a partir do seu ID.",
-            parameters = @Parameter(name = "id", description = "ID do registro financeiro a ser deletado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Investimento deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+        service.deletar(id, usuarioPermissaoDto);
         return ResponseEntity.status(204).build();
     }
 

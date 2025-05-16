@@ -6,27 +6,31 @@ import com.humanconsulting.humancore_api.controller.dto.response.investimento.In
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.DashboardProjetoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.model.Area;
+import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Projeto;
+import com.humanconsulting.humancore_api.model.Usuario;
 
 import java.util.List;
 
 public class ProjetoMapper {
-    public static Projeto toEntity(ProjetoRequestDto projetoRequestDto) {
+    public static Projeto toEntity(ProjetoRequestDto projetoRequestDto, Empresa empresa, Usuario usuario) {
         return Projeto.builder()
                 .descricao(projetoRequestDto.getDescricao())
                 .orcamento(projetoRequestDto.getOrcamento())
                 .urlImagem(projetoRequestDto.getUrlImagem())
-                .empresa(projetoRequestDto.getEmpresa())
-                .responsavel(projetoRequestDto.getResponsavel())
+                .empresa(empresa)
+                .responsavel(usuario)
                 .build();
     }
 
-    public static Projeto toEntity(ProjetoAtualizarRequestDto projetoAtualizarRequestDto) {
+    public static Projeto toEntity(ProjetoAtualizarRequestDto projetoAtualizarRequestDto, Integer idProjeto, Usuario usuario, Empresa empresa) {
         return Projeto.builder()
+                .idProjeto(idProjeto)
                 .descricao(projetoAtualizarRequestDto.getDescricao())
                 .orcamento(projetoAtualizarRequestDto.getOrcamento())
                 .urlImagem(projetoAtualizarRequestDto.getUrlImagem())
-                .responsavel(projetoAtualizarRequestDto.getResponsavel())
+                .empresa(empresa)
+                .responsavel(usuario)
                 .build();
     }
 

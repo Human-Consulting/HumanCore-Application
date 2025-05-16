@@ -19,8 +19,9 @@ public class EmpresaMapper {
                 .build();
     }
 
-    public static Empresa toEntity(EmpresaAtualizarRequestDto empresaRequestDto) {
+    public static Empresa toEntity(EmpresaAtualizarRequestDto empresaRequestDto, Integer idEmpresa) {
         return Empresa.builder()
+                .idEmpresa(idEmpresa)
                 .cnpj(empresaRequestDto.getCnpj())
                 .nome(empresaRequestDto.getNome())
                 .urlImagem(empresaRequestDto.getUrlImagem())
@@ -35,7 +36,7 @@ public class EmpresaMapper {
                 .nomeDiretor(nomeDiretor)
                 .comImpedimento(comImpedimento)
                 .progresso(progresso)
-                .urlImagemEmpresa(empresa.getUrlImagem())
+                .urlImagem(empresa.getUrlImagem())
                 .orcamento(orcamento)
                 .build();
     }

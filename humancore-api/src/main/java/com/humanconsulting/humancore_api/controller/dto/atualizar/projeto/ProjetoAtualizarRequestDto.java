@@ -18,7 +18,7 @@ public class ProjetoAtualizarRequestDto {
 
     @Schema(description = "Responsável pelo projeto", example = "5")
     @NotNull
-    private Usuario Responsavel;
+    private Integer fkResponsavel;
 
     @Schema(description = "Orçamento alocado para o projeto", example = "100000.00")
     @NotNull

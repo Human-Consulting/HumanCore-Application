@@ -41,7 +41,7 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Usuario> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
         final Usuario usuario = UsuarioTokenMapper.of(usuarioRequestDto);
-        Usuario novoUsuario = this.service.cadastrar(usuario);
+        Usuario novoUsuario = this.service.cadastrar(usuario, usuarioRequestDto.getFkEmpresa());
 
         return ResponseEntity.status(201).body(novoUsuario);
     }

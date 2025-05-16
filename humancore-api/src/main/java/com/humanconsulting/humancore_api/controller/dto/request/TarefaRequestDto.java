@@ -29,9 +29,17 @@ public class TarefaRequestDto {
 
     @Schema(description = "ID da Sprint associada à tarefa", example = "2001")
     @NotNull
-    private Sprint sprint;
+    private Integer fkSprint;
 
     @Schema(description = "ID do responsável pela tarefa", example = "150")
     @NotNull
-    private Usuario responsavel;
+    private Integer fkResponsavel;
+
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
+
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
 }

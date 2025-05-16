@@ -4,22 +4,24 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.investimento.A
 import com.humanconsulting.humancore_api.controller.dto.request.InvestimentoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.model.Investimento;
+import com.humanconsulting.humancore_api.model.Projeto;
 
 public class InvestimentoMapper {
 
-    public static Investimento toEntity(InvestimentoRequestDto financeiroRequestDto) {
+    public static Investimento toEntity(InvestimentoRequestDto financeiroRequestDto, Projeto projeto) {
         return Investimento.builder()
                 .valor(financeiroRequestDto.getValor())
                 .dtInvestimento(financeiroRequestDto.getDtInvestimento())
-                .projeto(financeiroRequestDto.getProjeto())
+                .projeto(projeto)
                 .build();
     }
 
-    public static Investimento toEntity(AtualizarInvestimentoRequestDto atualizarRequest) {
+    public static Investimento toEntity(AtualizarInvestimentoRequestDto atualizarRequest, Integer idInvestimento, Projeto projeto) {
         return Investimento.builder()
+                .idInvestimento(idInvestimento)
                 .valor(atualizarRequest.getValor())
                 .dtInvestimento(atualizarRequest.getDtInvestimento())
-                .projeto(atualizarRequest.getProjeto())
+                .projeto(projeto)
                 .build();
     }
 

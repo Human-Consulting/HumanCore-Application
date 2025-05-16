@@ -23,7 +23,7 @@ public class AtualizarInvestimentoRequestDto {
 
     @Schema(description = "ID do projeto associado ao investimento", example = "1")
     @NotNull
-    private Projeto projeto;
+    private Integer fkProjeto;
 
     @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
     @NotNull

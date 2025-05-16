@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.SprintService;
@@ -93,8 +94,8 @@ public class SprintController {
             @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+        service.deletar(id, usuarioPermissaoDto);
         return ResponseEntity.status(204).build();
     }
 

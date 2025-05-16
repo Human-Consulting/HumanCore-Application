@@ -1,7 +1,6 @@
 package com.humanconsulting.humancore_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -12,11 +11,14 @@ import lombok.*;
 @NoArgsConstructor
 public class Empresa {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEmpresa;
 
     private String nome;
 
     private String cnpj;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String urlImagem;
 }
