@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.controller.dto.response;
 
 import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,6 +17,9 @@ public class SprintResponseDto {
 
     @Schema(description = "ID da Sprint", example = "1")
     private Integer idSprint;
+
+    @Schema(description = "Título da sprint", example = "Autenticação")
+    private String titulo;
 
     @Schema(description = "Descrição da Sprint", example = "Sprint de desenvolvimento da API")
     private String descricao;

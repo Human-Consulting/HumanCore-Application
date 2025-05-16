@@ -12,6 +12,7 @@ import java.util.List;
 public class SprintMapper {
     public static Sprint toEntity(SprintRequestDto sprintRequestDto, Projeto projeto) {
         return Sprint.builder()
+                .titulo(sprintRequestDto.getTitulo())
                 .descricao(sprintRequestDto.getDescricao())
                 .dtInicio(sprintRequestDto.getDtInicio())
                 .dtFim(sprintRequestDto.getDtFim())
@@ -22,6 +23,7 @@ public class SprintMapper {
     public static Sprint toEntity(SprintAtualizarRequestDto sprintAtualizarRequestDto, Integer idSprint, Projeto projeto) {
         return Sprint.builder()
                 .idSprint(idSprint)
+                .titulo(sprintAtualizarRequestDto.getTitulo())
                 .descricao(sprintAtualizarRequestDto.getDescricao())
                 .dtInicio(sprintAtualizarRequestDto.getDtInicio())
                 .dtFim(sprintAtualizarRequestDto.getDtFim())
@@ -32,6 +34,7 @@ public class SprintMapper {
     public static SprintResponseDto toDto(Sprint sprint, double progresso, boolean comImpedimento, List<TarefaResponseDto> entregas) {
         return SprintResponseDto.builder()
                 .idSprint(sprint.getIdSprint())
+                .titulo(sprint.getTitulo())
                 .descricao(sprint.getDescricao())
                 .dtInicio(sprint.getDtInicio())
                 .dtFim(sprint.getDtFim())

@@ -12,6 +12,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SprintAtualizarRequestDto {
+    @Schema(description = "Título da sprint", example = "Autenticação")
+    @NotNull
+    private String titulo;
+
     @Schema(description = "Descrição da sprint", example = "Sprint de desenvolvimento da nova funcionalidade de autenticação")
     @NotNull
     private String descricao;

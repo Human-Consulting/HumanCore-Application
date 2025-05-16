@@ -18,6 +18,8 @@ public class Sprint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSprint;
 
+    private String titulo;
+
     private String descricao;
 
     private LocalDate dtInicio;
