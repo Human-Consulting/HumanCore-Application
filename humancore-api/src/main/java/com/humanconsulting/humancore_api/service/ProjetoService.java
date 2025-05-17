@@ -14,6 +14,7 @@ import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.*;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
+import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,8 @@ public class ProjetoService {
     @Autowired private UsuarioRepository usuarioRepository;
 
     @Autowired private TarefaRepository tarefaRepository;
+
+    @Autowired private CheckpointRepository checkpointRepository;
 
     @Autowired private SprintRepository sprintRepository;
 
@@ -102,31 +105,30 @@ public class ProjetoService {
     }
 
     public ProjetoResponseDto passarParaResponse(Projeto projeto, Integer fkResponsavel, Integer idProjeto) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(fkResponsavel);
-        Usuario usuario = optUsuario.get();
 
         List<Sprint> sprints = sprintRepository.findAll();
-        Double progressoProjeto = 0.0;
-        for (Sprint sprint : sprints) {
-            Double progressoSprint = tarefaRepository.mediaProgressoSprint(sprint.getIdSprint());
-            progressoProjeto += progressoSprint;
-        }
 
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(idProjeto);
-        String urlImagemEmpresa = empresaRepository.findUrlImagemById(projeto.getEmpresa().getIdEmpresa());
 
-        return ProjetoMapper.toDto(projeto, progressoProjeto, comImpedimento);
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(idProjeto);
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+
+        return ProjetoMapper.toDto(projeto, progresso, comImpedimento);
     }
 
     public DashboardProjetoResponseDto criarDashboardResponse(Projeto projeto) {
         Optional<Usuario> usuario = usuarioRepository.findById(projeto.getResponsavel().getIdUsuario());
         String nomeDiretor = usuario.get().getNome();
-        Double progresso = dashboardProjetoRepository.mediaProgresso(projeto.getIdProjeto());
         List<Area> areas = listarTarefasPorArea(projeto.getIdProjeto());
         Double orcamento = dashboardProjetoRepository.orcamentoTotal(projeto.getIdProjeto());
         Integer projetos = dashboardProjetoRepository.totalSprints(projeto.getIdProjeto());
         Boolean comImpedimento = dashboardProjetoRepository.projetoComImpedimento(projeto.getIdProjeto());
         List<InvestimentoResponseDto> allResponse = listarFinanceiroPorProjeto(projeto.getIdProjeto());
+
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(projeto.getIdProjeto());
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
 
         return ProjetoMapper.toDashboard(projeto, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }

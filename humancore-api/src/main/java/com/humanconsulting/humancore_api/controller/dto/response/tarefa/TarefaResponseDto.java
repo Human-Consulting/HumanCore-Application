@@ -1,11 +1,13 @@
-package com.humanconsulting.humancore_api.controller.dto.response;
+package com.humanconsulting.humancore_api.controller.dto.response.tarefa;
 
+import com.humanconsulting.humancore_api.controller.dto.response.checkpoint.CheckpointResponseDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +18,9 @@ public class TarefaResponseDto {
 
     @Schema(description = "ID da Tarefa", example = "1")
     private Integer idTarefa;
+
+    @Schema(description = "Título da tarefa", example = "Login")
+    private String titulo;
 
     @Schema(description = "Descrição da Tarefa", example = "Desenvolver API para gestão de tarefas")
     private String descricao;
@@ -37,4 +42,7 @@ public class TarefaResponseDto {
 
     @Schema(description = "Usuário responsável pela Tarefa", example = "101")
     private Usuario responsavel;
+
+    @Schema(description = "Checkpoints da tarefa", example = "[{id: 1, descricao: 'Subtarefa', finalizado: true}]")
+    private List<CheckpointResponseDto> checkpoints;
 }

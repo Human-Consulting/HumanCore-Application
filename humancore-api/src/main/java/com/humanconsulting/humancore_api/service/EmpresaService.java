@@ -11,10 +11,12 @@ import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.EmpresaMapper;
 import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.model.*;
+import com.humanconsulting.humancore_api.repository.CheckpointRepository;
 import com.humanconsulting.humancore_api.repository.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
+import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +28,13 @@ import java.util.stream.Collectors;
 @Service
 public class EmpresaService {
 
-    @Autowired
-    private EmpresaRepository empresaRepository;
+    @Autowired private EmpresaRepository empresaRepository;
 
-    @Autowired
-    private DashboardEmpresaRepository dashRepository;
+    @Autowired private CheckpointRepository checkpointRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    @Autowired private DashboardEmpresaRepository dashRepository;
+
+    @Autowired private UsuarioRepository usuarioRepository;
 
     public EmpresaResponseDto cadastrar(EmpresaRequestDto empresaRequestDto) {
         PermissaoValidator.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
@@ -84,19 +85,26 @@ public class EmpresaService {
         Optional<String> nomeDiretor = usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa());
 
         Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
-        Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
         Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
+
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(empresa.getIdEmpresa());
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+
         return EmpresaMapper.toDto(empresa, nomeDiretor.orElse(null), comImpedimento, progresso, orcamento);
     }
 
     public DashboardEmpresaResponseDto criarDashboardResponse(Empresa empresa) {
         String nomeDiretor = usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa()).get();
-        Double progresso = dashRepository.mediaProgresso(empresa.getIdEmpresa());
         List<Area> areas = listarTarefasPorArea(empresa.getIdEmpresa());
         Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
         Integer projetos = dashRepository.totalProjetos(empresa.getIdEmpresa());
         Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
         List<InvestimentoResponseDto> allResponse = listarFinanceiroPorEmpresa(empresa.getIdEmpresa());
+
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(empresa.getIdEmpresa());
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
 
         return EmpresaMapper.toDashboard(empresa, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }

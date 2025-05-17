@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.model.Empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

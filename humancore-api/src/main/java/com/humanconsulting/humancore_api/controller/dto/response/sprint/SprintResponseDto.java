@@ -1,8 +1,8 @@
-package com.humanconsulting.humancore_api.controller.dto.response;
+package com.humanconsulting.humancore_api.controller.dto.response.sprint;
 
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;

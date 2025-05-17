@@ -4,7 +4,7 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.Atualiz
 import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.service.TarefaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

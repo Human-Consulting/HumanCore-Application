@@ -4,20 +4,25 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.Atualiz
 import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.checkpoint.CheckpointResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
+import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
+import com.humanconsulting.humancore_api.model.Checkpoint;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.repository.CheckpointRepository;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
+import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +33,17 @@ import java.util.Optional;
 @Service
 public class TarefaService {
 
-    @Autowired
-    private TarefaRepository tarefaRepository;
+    @Autowired private CheckpointService checkpointService;
 
-    @Autowired
-    private SprintRepository sprintRepository;
+    @Autowired private TarefaRepository tarefaRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    @Autowired private SprintRepository sprintRepository;
 
-    @Autowired
-    private EmailNotifier emailNotifier;
+    @Autowired private UsuarioRepository usuarioRepository;
+
+    @Autowired private CheckpointRepository checkpointRepository;
+
+    @Autowired private EmailNotifier emailNotifier;
 
     public TarefaResponseDto cadastrar(TarefaRequestDto tarefaRequestDto) {
         PermissaoValidator.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
@@ -104,6 +109,9 @@ public class TarefaService {
         Usuario usuario = usuarioRepository.findById(requestUpdate.getFkResponsavel()).get();
 
         Tarefa tarefaAtualizada = tarefaRepository.save(TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.getSprint(), usuario));
+
+        checkpointService.sincronizarCheckpointsDaTarefa(idTarefa, requestUpdate.getCheckpoints());
+
         return passarParaResponse(tarefaAtualizada);
     }
 
@@ -125,6 +133,14 @@ public class TarefaService {
     }
 
     public TarefaResponseDto passarParaResponse(Tarefa tarefa) {
-        return TarefaMapper.toDto(tarefa);
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_IdTarefa(tarefa.getIdTarefa());
+        List<CheckpointResponseDto> checkpointResponseDtos = new ArrayList<>();
+        for (Checkpoint checkpoint : checkpoints) {
+            checkpointResponseDtos.add(CheckpointMapper.toDto(checkpoint));
+        }
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+
+        return TarefaMapper.toDto(tarefa, checkpointResponseDtos, progresso);
     }
 }

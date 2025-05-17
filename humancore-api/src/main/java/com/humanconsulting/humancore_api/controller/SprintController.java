@@ -3,7 +3,7 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.SprintService;
 import io.swagger.v3.oas.annotations.Operation;

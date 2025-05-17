@@ -2,16 +2,12 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.config.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
-import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenDto;
 import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
-import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;

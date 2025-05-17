@@ -3,18 +3,18 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.checkpoint.CheckpointResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
+import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
 import com.humanconsulting.humancore_api.mapper.SprintMapper;
 import com.humanconsulting.humancore_api.model.*;
-import com.humanconsulting.humancore_api.repository.ProjetoRepository;
-import com.humanconsulting.humancore_api.repository.TarefaRepository;
-import com.humanconsulting.humancore_api.repository.SprintRepository;
-import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.repository.*;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
+import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +28,8 @@ public class SprintService {
     @Autowired private ProjetoRepository projetoRepository;
 
     @Autowired private SprintRepository sprintRepository;
+
+    @Autowired private CheckpointRepository checkpointRepository;
 
     @Autowired private TarefaRepository tarefaRepository;
 
@@ -91,13 +93,16 @@ public class SprintService {
     }
 
     public SprintResponseDto passarParaResponse(Sprint sprint, Integer idSprint) {
-        double progresso = tarefaRepository.mediaProgressoSprint(idSprint);
         boolean comImpedimento = tarefaRepository.existsImpedimentoBySprint(idSprint);
         List<Tarefa> tarefas = tarefaRepository.findByProjetoAndSprint(sprint.getProjeto().getIdProjeto(), sprint.getIdSprint());
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefa : tarefas) {
             tarefasResponse.add(tarefaService.passarParaResponse(tarefa));
         }
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_IdSprint(idSprint);
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+
         return SprintMapper.toDto(sprint, progresso, comImpedimento, tarefasResponse);
     }
 }

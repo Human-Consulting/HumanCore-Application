@@ -1,7 +1,5 @@
 package com.humanconsulting.humancore_api.controller.dto.request;
 
-import com.humanconsulting.humancore_api.model.Sprint;
-import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,6 +12,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TarefaRequestDto {
+    @Schema(description = "Título da tarefa", example = "Login")
+    @NotNull
+    private String titulo;
 
     @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
     @NotNull

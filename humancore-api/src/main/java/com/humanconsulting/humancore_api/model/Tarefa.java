@@ -16,14 +16,15 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTarefa;
 
+    private String titulo;
+
     private String descricao;
 
     private LocalDate dtInicio;
 
     private LocalDate dtFim;
 
-    private Double progresso;
-
+    @Column(columnDefinition = "TINYINT(1)")
     private Boolean comImpedimento;
 
     @ManyToOne

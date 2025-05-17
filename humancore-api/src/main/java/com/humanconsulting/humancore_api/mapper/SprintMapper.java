@@ -2,8 +2,8 @@ package com.humanconsulting.humancore_api.mapper;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.model.Sprint;
 

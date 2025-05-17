@@ -17,8 +17,8 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Integer> {
 
     List<Tarefa> findBySprint_IdSprint(Integer idSprint);
 
-    @Query("SELECT COALESCE(AVG(t.progresso), 0) FROM Tarefa t WHERE t.sprint.idSprint = :idSprint")
-    Double mediaProgressoSprint(@Param("idSprint") Integer idSprint);
+//    @Query("SELECT COALESCE(AVG(t.progresso), 0) FROM Tarefa t WHERE t.sprint.idSprint = :idSprint")
+//    Double mediaProgressoSprint(@Param("idSprint") Integer idSprint);
 
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Tarefa t WHERE t.comImpedimento = true AND t.sprint.idSprint = :idSprint")
     boolean existsImpedimentoBySprint(@Param("idSprint") Integer idSprint);

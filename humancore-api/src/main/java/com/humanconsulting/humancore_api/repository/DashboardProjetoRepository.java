@@ -25,13 +25,13 @@ public interface DashboardProjetoRepository extends JpaRepository<Tarefa, Intege
         """)
     List<Object[]> buscarTarefasPorArea(@Param("idProjeto") Integer idProjeto);
 
-    @Query("""
-        SELECT ROUND(AVG(t.progresso), 2)
-        FROM Tarefa t
-        JOIN t.sprint s
-        WHERE s.projeto.idProjeto = :idProjeto
-        """)
-    Double mediaProgresso(@Param("idProjeto") Integer idProjeto);
+//    @Query("""
+//        SELECT ROUND(AVG(t.progresso), 2)
+//        FROM Tarefa t
+//        JOIN t.sprint s
+//        WHERE s.projeto.idProjeto = :idProjeto
+//        """)
+//    Double mediaProgresso(@Param("idProjeto") Integer idProjeto);
 
     @Query("""
         SELECT p.orcamento
