@@ -34,6 +34,9 @@ public class AtualizarGeralRequestDto {
     @NotNull
     private Boolean comImpedimento;
 
+    @Schema(description = "Comentário da tarefa", example = "Impedimento em relação a...")
+    private String comentario;
+
     @Schema(description = "Usuário responsável pela tarefa", example = "3")
     @NotNull
     private Integer fkResponsavel;

@@ -116,8 +116,7 @@ public class TarefaService {
     }
 
     public TarefaResponseDto atualizarImpedimento(Integer idTarefa, AtualizarStatusRequestDto request) {
-        Optional<Tarefa> optTarefa = tarefaRepository.findById(idTarefa);
-        Tarefa tarefa = optTarefa.get();
+        Tarefa tarefa = buscarPorId(idTarefa);
         Integer fkResponsavel = tarefa.getResponsavel().getIdUsuario();
 
         if (!request.getIdEditor().equals(fkResponsavel))

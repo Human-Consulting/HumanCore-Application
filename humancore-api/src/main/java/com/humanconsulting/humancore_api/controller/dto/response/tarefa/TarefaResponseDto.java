@@ -43,6 +43,9 @@ public class TarefaResponseDto {
     @Schema(description = "Usuário responsável pela Tarefa", example = "101")
     private Usuario responsavel;
 
+    @Schema(description = "Comentário da Tarefa", example = "Impedimento referente a...")
+    private String comentario;
+
     @Schema(description = "Checkpoints da tarefa", example = "[{id: 1, descricao: 'Subtarefa', finalizado: true}]")
     private List<CheckpointResponseDto> checkpoints;
 }

@@ -18,6 +18,7 @@ public class TarefaMapper {
                 .dtInicio(tarefaRequestDto.getDtInicio())
                 .dtFim(tarefaRequestDto.getDtFim())
                 .comImpedimento(false)
+                .comentario(null)
                 .sprint(sprint)
                 .responsavel(responsavel)
                 .build();
@@ -31,6 +32,7 @@ public class TarefaMapper {
                 .dtInicio(atualizarTarefaRequestDto.getDtInicio())
                 .dtFim(atualizarTarefaRequestDto.getDtFim())
                 .comImpedimento(false)
+                .comentario(atualizarTarefaRequestDto.getComentario())
                 .sprint(sprint)
                 .responsavel(usuario)
                 .build();
@@ -45,6 +47,7 @@ public class TarefaMapper {
                 .dtFim(tarefa.getDtFim())
                 .progresso(progresso)
                 .comImpedimento(tarefa.getComImpedimento())
+                .comentario(tarefa.getComentario())
                 .sprint(tarefa.getSprint())
                 .responsavel(tarefa.getResponsavel())
                 .checkpoints(checkpoints)

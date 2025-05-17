@@ -27,6 +27,8 @@ public class Tarefa {
     @Column(columnDefinition = "TINYINT(1)")
     private Boolean comImpedimento;
 
+    private String comentario;
+
     @ManyToOne
     @JoinColumn(name = "fkSprint")
     private Sprint sprint;

@@ -40,18 +40,30 @@ public class EmailNotifier implements Observer{
 
         List<String> emails = new ArrayList<>();
         emails.add(responsavelProjeto.getEmail());
-        emails.add(responsavelEntrega.getEmail());
+        if (!responsavelProjeto.getEmail().equals(responsavelEntrega.getEmail())) emails.add(responsavelEntrega.getEmail());
 
         NotificacaoEmailDto notificacao = new NotificacaoEmailDto();
         notificacao.setNomeResponsavel(responsavelProjeto.getNome());
         notificacao.setEmails(emails);
-        notificacao.setMensagem(String.format(
-                "Impedimento no projeto: %s\n Impedimento registrado na Entrega: %s\n Sprint: %s\n Responsável: %s",
-                projetoEntrega.getDescricao(),
-                tarefa.getDescricao(),
-                sprintEntrega.getDescricao(),
-                responsavelEntrega.getNome()
-        ));
+        if (tarefa.getComImpedimento()) {
+            notificacao.setMensagem(String.format(
+                    "Impedimento no projeto: %s\n Impedimento registrado na Tarefa: %s\n Sprint: %s\n Responsável: %s\nComentário anexado: %s",
+                    projetoEntrega.getDescricao(),
+                    tarefa.getDescricao(),
+                    sprintEntrega.getDescricao(),
+                    responsavelEntrega.getNome(),
+                    tarefa.getComentario()
+            ));
+        } else {
+            notificacao.setMensagem(String.format(
+                    "Impedimento finalizado no projeto: %s\n Tarefa: %s\n Sprint: %s\n Responsável: %s\nComentário anexado: %s",
+                    projetoEntrega.getDescricao(),
+                    tarefa.getDescricao(),
+                    sprintEntrega.getDescricao(),
+                    responsavelEntrega.getNome(),
+                    tarefa.getComentario()
+            ));
+        }
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(emails.toArray(new String[0]));
