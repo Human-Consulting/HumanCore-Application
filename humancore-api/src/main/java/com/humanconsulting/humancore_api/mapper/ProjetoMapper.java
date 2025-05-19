@@ -15,6 +15,7 @@ import java.util.List;
 public class ProjetoMapper {
     public static Projeto toEntity(ProjetoRequestDto projetoRequestDto, Empresa empresa, Usuario usuario) {
         return Projeto.builder()
+                .titulo(projetoRequestDto.getTitulo())
                 .descricao(projetoRequestDto.getDescricao())
                 .orcamento(projetoRequestDto.getOrcamento())
                 .urlImagem(projetoRequestDto.getUrlImagem())
@@ -26,6 +27,7 @@ public class ProjetoMapper {
     public static Projeto toEntity(ProjetoAtualizarRequestDto projetoAtualizarRequestDto, Integer idProjeto, Usuario usuario, Empresa empresa) {
         return Projeto.builder()
                 .idProjeto(idProjeto)
+                .titulo(projetoAtualizarRequestDto.getTitulo())
                 .descricao(projetoAtualizarRequestDto.getDescricao())
                 .orcamento(projetoAtualizarRequestDto.getOrcamento())
                 .urlImagem(projetoAtualizarRequestDto.getUrlImagem())
@@ -37,6 +39,7 @@ public class ProjetoMapper {
     public static ProjetoResponseDto toDto(Projeto projeto, double progresso, boolean comImpedimento) {
         return ProjetoResponseDto.builder()
                 .idProjeto(projeto.getIdProjeto())
+                .titulo(projeto.getTitulo())
                 .descricao(projeto.getDescricao())
                 .orcamento(projeto.getOrcamento())
                 .urlImagem(projeto.getUrlImagem())

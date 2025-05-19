@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.controller.dto.request;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -12,6 +13,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjetoRequestDto {
+    @Schema(description = "Título do projeto", example = "Centro Comercial")
+    @NotBlank
+    private String titulo;
 
     @Schema(description = "Descrição do projeto", example = "Projeto de expansão imobiliária")
     @NotNull

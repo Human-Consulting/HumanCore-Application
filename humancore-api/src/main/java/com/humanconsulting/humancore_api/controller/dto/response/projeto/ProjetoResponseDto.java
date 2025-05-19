@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.controller.dto.response.projeto;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -13,6 +14,9 @@ import lombok.*;
 public class ProjetoResponseDto {
     @Schema(description = "ID do projeto", example = "1")
     private Integer idProjeto;
+
+    @Schema(description = "Título do projeto", example = "Centro Comercial")
+    private String titulo;
 
     @Schema(description = "Descrição do projeto", example = "Projeto de construção de um novo edifício comercial")
     private String descricao;

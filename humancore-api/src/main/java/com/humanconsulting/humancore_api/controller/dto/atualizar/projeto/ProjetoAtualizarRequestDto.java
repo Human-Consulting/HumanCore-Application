@@ -12,6 +12,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjetoAtualizarRequestDto {
+    @Schema(description = "Título do projeto", example = "Centro Comercial")
+    @NotBlank
+    private String titulo;
+
     @Schema(description = "Descrição detalhada do projeto", example = "Projeto de expansão do centro comercial")
     @NotBlank
     private String descricao;
