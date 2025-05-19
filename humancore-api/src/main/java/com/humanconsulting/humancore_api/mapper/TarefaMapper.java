@@ -31,7 +31,7 @@ public class TarefaMapper {
                 .descricao(atualizarTarefaRequestDto.getDescricao())
                 .dtInicio(atualizarTarefaRequestDto.getDtInicio())
                 .dtFim(atualizarTarefaRequestDto.getDtFim())
-                .comImpedimento(false)
+                .comImpedimento(atualizarTarefaRequestDto.getComImpedimento())
                 .comentario(atualizarTarefaRequestDto.getComentario())
                 .sprint(sprint)
                 .responsavel(usuario)

@@ -127,19 +127,26 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDto atualizarSenhaPorId(Integer idUsuario, @Valid UsuarioAtualizarSenhaDto usuarioAtualizar) {
-        if (usuarioAtualizar.getIdEditor().equals(idUsuario))
-            throw new AcessoNegadoException("Apenas o dono da sempre pode editá-la");
-        String senhaCriptografada = passwordEncoder.encode(usuarioAtualizar.getSenhaAtual());
-        usuarioAtualizar.setSenhaAtual(senhaCriptografada);
+        if (!usuarioAtualizar.getIdEditor().equals(idUsuario)) {
+            System.out.println("Apenas o dono da senha pode editá-la");
+            throw new AcessoNegadoException("Apenas o dono da senha pode editá-la");
+        }
 
-        Usuario usuarioAtual = usuarioRepository.findById(idUsuario).get();
+        Usuario usuarioAtual = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
-        if (!usuarioAtualizar.getSenhaAtual().equals(usuarioAtual.getSenha()))
+        if (!passwordEncoder.matches(usuarioAtualizar.getSenhaAtual(), usuarioAtual.getSenha())) {
+            System.out.println("Senha atual errada");
             throw new AcessoNegadoException("Senha atual errada");
-        if (!usuarioAtualizar.getSenhaAtualizada().equals(usuarioAtual.getSenha()))
-            throw new AcessoNegadoException("Nova senha deve ser diferente da atual");
+        }
 
-        Usuario usuarioAtualizado = usuarioRepository.save(UsuarioMapper.toEntity(usuarioAtual, usuarioAtualizar, idUsuario, usuarioAtual.getEmpresa()));
+        if (passwordEncoder.matches(usuarioAtualizar.getSenhaAtualizada(), usuarioAtual.getSenha())) {
+            System.out.println("Nova senha deve ser diferente da atual");
+            throw new AcessoNegadoException("Nova senha deve ser diferente da atual");
+        }
+
+        usuarioAtual.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenhaAtualizada()));
+        Usuario usuarioAtualizado = usuarioRepository.save(usuarioAtual);
         return passarParaResponse(usuarioAtualizado);
     }
 

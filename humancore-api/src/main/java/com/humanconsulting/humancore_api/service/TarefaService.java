@@ -108,7 +108,19 @@ public class TarefaService {
 
         Usuario usuario = usuarioRepository.findById(requestUpdate.getFkResponsavel()).get();
 
-        Tarefa tarefaAtualizada = tarefaRepository.save(TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.getSprint(), usuario));
+        Tarefa tarefaAtualizada = TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.getSprint(), usuario);
+
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_IdTarefa(tarefa.getIdTarefa());
+        List<CheckpointResponseDto> checkpointResponseDtos = new ArrayList<>();
+        for (Checkpoint checkpoint : checkpoints) {
+            checkpointResponseDtos.add(CheckpointMapper.toDto(checkpoint));
+        }
+
+        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+
+        if (progresso == 100) tarefaAtualizada.setComImpedimento(false);
+
+        tarefaRepository.save(tarefaAtualizada);
 
         checkpointService.sincronizarCheckpointsDaTarefa(idTarefa, requestUpdate.getCheckpoints());
 
