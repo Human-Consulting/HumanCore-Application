@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
@@ -73,21 +74,6 @@ public class UsuarioController {
     }
 
     @Operation(
-            summary = "Buscar usuário por ID",
-            description = "Esse endpoint retorna um usuário específico pelo seu ID.",
-            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser buscado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    })
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
-        return ResponseEntity.status(200).body(service.buscarPorId(idUsuario));
-    }
-
-    @Operation(
             summary = "Deletar um usuário",
             description = "Esse endpoint deleta um usuário baseado no seu ID.",
             parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser deletado."),
@@ -133,5 +119,36 @@ public class UsuarioController {
     public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
         final Usuario usuario = UsuarioTokenMapper.of(usuarioAutenticar);
         return ResponseEntity.status(200).body(this.service.autenticar(usuario));
+    }
+
+    @Operation(
+            summary = "Atualizar senha de um usuário",
+            description = "Esse endpoint atualiza a senha de um usuário existente.",
+            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    @PatchMapping("/atualizarSenha/{idUsuario}")
+    public ResponseEntity<UsuarioResponseDto> atualizarSenha(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarSenhaDto usuarioAtualizarSenhaDto) {
+        return ResponseEntity.status(200).body(service.atualizarSenhaPorId(idUsuario, usuarioAtualizarSenhaDto));
+    }
+
+    @Operation(
+            summary = "Buscar usuário por ID.",
+            description = "Esse endpoint retorna um usuário específico pelo seu ID.",
+            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser buscado."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
+    })
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.status(200).body(service.buscarPorId(idUsuario));
     }
 }

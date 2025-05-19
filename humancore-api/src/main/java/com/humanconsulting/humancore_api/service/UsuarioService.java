@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.config.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
@@ -16,6 +17,7 @@ import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,17 +33,23 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    @Autowired private EmpresaRepository empresaRepository;
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
-    @Autowired private TarefaService tarefaService;
+    @Autowired
+    private TarefaService tarefaService;
 
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @Autowired private GerenciadorTokenJwt gerenciadorTokenJwt;
+    @Autowired
+    private GerenciadorTokenJwt gerenciadorTokenJwt;
 
-    @Autowired private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
         String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
@@ -58,8 +66,7 @@ public class UsuarioService {
 
         if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-        Usuario usuario = optUsuario.get();
-        return passarParaLoginResponse(usuario, null);
+        return passarParaLoginResponse(optUsuario.get(), null);
     }
 
     public List<UsuarioResponseDto> listar() {
@@ -87,7 +94,8 @@ public class UsuarioService {
         Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(usuarioAtualizar.getIdEditor());
         Usuario usuarioEditor = optUsuarioEditor.get();
 
-        if (optUsuarioAlvo.isEmpty() || optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
+        if (optUsuarioAlvo.isEmpty() || optUsuarioEditor.isEmpty())
+            throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
         PermissaoEnum permissaoEditor;
         PermissaoEnum permissaoAlvo;
@@ -115,6 +123,23 @@ public class UsuarioService {
         }
         Empresa empresa = usuarioRepository.findById(idUsuario).get().getEmpresa();
         Usuario usuarioAtualizado = usuarioRepository.save(UsuarioMapper.toEntity(usuarioAtualizar, idUsuario, empresa));
+        return passarParaResponse(usuarioAtualizado);
+    }
+
+    public UsuarioResponseDto atualizarSenhaPorId(Integer idUsuario, @Valid UsuarioAtualizarSenhaDto usuarioAtualizar) {
+        if (usuarioAtualizar.getIdEditor().equals(idUsuario))
+            throw new AcessoNegadoException("Apenas o dono da sempre pode editá-la");
+        String senhaCriptografada = passwordEncoder.encode(usuarioAtualizar.getSenhaAtual());
+        usuarioAtualizar.setSenhaAtual(senhaCriptografada);
+
+        Usuario usuarioAtual = usuarioRepository.findById(idUsuario).get();
+
+        if (!usuarioAtualizar.getSenhaAtual().equals(usuarioAtual.getSenha()))
+            throw new AcessoNegadoException("Senha atual errada");
+        if (!usuarioAtualizar.getSenhaAtualizada().equals(usuarioAtual.getSenha()))
+            throw new AcessoNegadoException("Nova senha deve ser diferente da atual");
+
+        Usuario usuarioAtualizado = usuarioRepository.save(UsuarioMapper.toEntity(usuarioAtual, usuarioAtualizar, idUsuario, usuarioAtual.getEmpresa()));
         return passarParaResponse(usuarioAtualizado);
     }
 
@@ -149,14 +174,15 @@ public class UsuarioService {
 
     public LoginResponseDto passarParaLoginResponse(Usuario usuario, String tokenUsuario) {
         String nomeEmpresa = usuario.getEmpresa().getNome();
-        Integer qtdTarefas = usuarioRepository.countTarefasByUsuario(usuario.getIdUsuario());
         Boolean comImpedimento = usuarioRepository.hasTarefaComImpedimento(usuario.getIdUsuario());
         List<Integer> projetosVinculados = usuarioRepository.findProjetosVinculados(usuario.getIdUsuario());
         List<Tarefa> tarefasVinculadas = usuarioRepository.findTarefasVinculadas(usuario.getIdUsuario());
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefasVinculada : tarefasVinculadas) {
-            tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
+            TarefaResponseDto novaTarefa = tarefaService.passarParaResponse(tarefasVinculada);
+            if (novaTarefa.getProgresso() < 100) tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
         }
+        Integer qtdTarefas = tarefasResponse.size();
         return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse, tokenUsuario);
     }
 }

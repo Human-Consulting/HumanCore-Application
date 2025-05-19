@@ -4,6 +4,8 @@ import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginRe
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.model.Sprint;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.service.ProjetoService;
 import com.humanconsulting.humancore_api.service.SprintService;
 import com.humanconsulting.humancore_api.service.UsuarioService;
@@ -20,13 +22,15 @@ public class EmailNotifier implements Observer{
     private final UsuarioService usuarioService;
     private final SprintService sprintService;
     private final ProjetoService projetoService;
+    private final UsuarioRepository usuarioRepository;
 
 //    @Autowired
-    public EmailNotifier(JavaMailSender emailSender, UsuarioService usuarioService, SprintService sprintService, ProjetoService projetoService) {
+    public EmailNotifier(JavaMailSender emailSender, UsuarioService usuarioService, SprintService sprintService, ProjetoService projetoService, UsuarioRepository usuarioRepository) {
         this.emailSender = emailSender;
         this.usuarioService = usuarioService;
         this.sprintService = sprintService;
         this.projetoService = projetoService;
+        this.usuarioRepository = usuarioRepository;
     }
 
 //    public EmailNotifier(JavaMailSender emailSender) { this.emailSender = emailSender; }
@@ -35,8 +39,10 @@ public class EmailNotifier implements Observer{
     public void update(Tarefa tarefa) {
         Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getSprint().getIdSprint());
         Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getProjeto().getIdProjeto());
-        LoginResponseDto responsavelProjeto = usuarioService.buscarPorId(projetoEntrega.getResponsavel().getIdUsuario());
-        LoginResponseDto responsavelEntrega = usuarioService.buscarPorId(tarefa.getResponsavel().getIdUsuario());
+        Usuario tarefaResponsavel = usuarioRepository.findById(tarefa.getResponsavel().getIdUsuario()).get();
+        Usuario projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario()).get();
+        LoginResponseDto responsavelProjeto = usuarioService.passarParaLoginResponse(projetoResponsavel, null);
+        LoginResponseDto responsavelEntrega = usuarioService.passarParaLoginResponse(tarefaResponsavel, null);
 
         List<String> emails = new ArrayList<>();
         emails.add(responsavelProjeto.getEmail());

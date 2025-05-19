@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.mapper;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
@@ -33,6 +34,19 @@ public class UsuarioMapper {
                 .cargo(usuarioAtualizarDto.getCargo())
                 .area(usuarioAtualizarDto.getArea())
                 .permissao(usuarioAtualizarDto.getPermissao())
+                .empresa(empresa)
+                .build();
+    }
+
+    public static Usuario toEntity(Usuario usuario, UsuarioAtualizarSenhaDto usuarioAtualizarDto, Integer idUsuario, Empresa empresa) {
+        return Usuario.builder()
+                .idUsuario(idUsuario)
+                .nome(usuario.getNome())
+                .email(usuario.getEmail())
+                .senha(usuarioAtualizarDto.getSenhaAtual())
+                .cargo(usuario.getCargo())
+                .area(usuario.getArea())
+                .permissao(usuario.getPermissao())
                 .empresa(empresa)
                 .build();
     }
