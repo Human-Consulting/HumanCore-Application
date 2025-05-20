@@ -23,11 +23,6 @@ public class UsuarioAtualizarDto {
     @Email
     private String email;
 
-    @Schema(description = "Senha do usuário (mínimo de 6 caracteres)", example = "senha123")
-    @NotBlank
-    @Size(min = 6)
-    private String senha;
-
     @Schema(description = "Cargo do usuário na empresa", example = "Desenvolvedor")
     @NotBlank
     private String cargo;

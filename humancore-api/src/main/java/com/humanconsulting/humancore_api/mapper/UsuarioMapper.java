@@ -25,12 +25,12 @@ public class UsuarioMapper {
                 .build();
     }
 
-    public static Usuario toEntity(UsuarioAtualizarDto usuarioAtualizarDto, Integer idUsuario, Empresa empresa) {
+    public static Usuario toEntity(UsuarioAtualizarDto usuarioAtualizarDto, Integer idUsuario, Empresa empresa, String senha) {
         return Usuario.builder()
                 .idUsuario(idUsuario)
                 .nome(usuarioAtualizarDto.getNome())
                 .email(usuarioAtualizarDto.getEmail())
-                .senha(usuarioAtualizarDto.getSenha())
+                .senha(senha)
                 .cargo(usuarioAtualizarDto.getCargo())
                 .area(usuarioAtualizarDto.getArea())
                 .permissao(usuarioAtualizarDto.getPermissao())
@@ -80,7 +80,6 @@ public class UsuarioMapper {
                 .idUsuario(usuario.getIdUsuario())
                 .nome(usuario.getNome())
                 .email(usuario.getEmail())
-                .senha(usuario.getSenha())
                 .cargo(usuario.getCargo())
                 .area(usuario.getArea())
                 .permissao(usuario.getPermissao())

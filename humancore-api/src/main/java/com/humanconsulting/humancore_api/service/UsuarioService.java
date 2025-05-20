@@ -122,7 +122,7 @@ public class UsuarioService {
             throw new AcessoNegadoException("Você não pode alterar sua própria permissão.");
         }
         Empresa empresa = usuarioRepository.findById(idUsuario).get().getEmpresa();
-        Usuario usuarioAtualizado = usuarioRepository.save(UsuarioMapper.toEntity(usuarioAtualizar, idUsuario, empresa));
+        Usuario usuarioAtualizado = usuarioRepository.save(UsuarioMapper.toEntity(usuarioAtualizar, idUsuario, empresa, usuarioAlvo.getSenha()));
         return passarParaResponse(usuarioAtualizado);
     }
 

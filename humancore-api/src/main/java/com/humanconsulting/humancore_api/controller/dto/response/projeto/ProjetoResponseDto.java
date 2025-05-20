@@ -30,15 +30,15 @@ public class ProjetoResponseDto {
     @Schema(description = "URL do logo da empresa responsável pelo projeto", example = "https://example.com/imagem-da-empresa.jpg")
     private String urlImagemEmpresa;
 
-    @Schema(description = "Responsável pelo projeto", example = "10")
-    private Usuario responsavel;
+    @Schema(description = "Identificador do responsável pelo projeto", example = "1")
+    private Integer fkResponsavel;
+
+    @Schema(description = "Responsável pelo projeto", example = "Paulo")
+    private String nomeResponsavel;
 
     @Schema(description = "Progresso atual do projeto em porcentagem", example = "75.5")
     private double progresso;
 
     @Schema(description = "Indica se o projeto possui algum impedimento", example = "false")
     private boolean comImpedimento;
-
-    @Schema(description = "Empresa responsável pelo projeto", example = "5")
-    private Empresa empresa;
 }

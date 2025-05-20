@@ -44,10 +44,10 @@ public class ProjetoMapper {
                 .orcamento(projeto.getOrcamento())
                 .urlImagem(projeto.getUrlImagem())
                 .urlImagemEmpresa(projeto.getEmpresa().getUrlImagem())
-                .responsavel(projeto.getResponsavel())
+                .nomeResponsavel(projeto.getResponsavel().getNome())
+                .fkResponsavel(projeto.getResponsavel().getIdUsuario())
                 .progresso(progresso)
                 .comImpedimento(comImpedimento)
-                .empresa(projeto.getEmpresa())
                 .build();
     }
 
