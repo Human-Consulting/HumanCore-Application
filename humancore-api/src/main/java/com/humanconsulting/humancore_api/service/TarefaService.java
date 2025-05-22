@@ -136,7 +136,7 @@ public class TarefaService {
 
         tarefaRepository.toggleImpedimento(idTarefa);
 
-        if (tarefa.getComImpedimento()) {
+        if (!tarefa.getComImpedimento()) {
             emailNotifier.update(tarefa);
         }
 
