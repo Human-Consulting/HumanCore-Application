@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.config.GerenciadorTokenJwt;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
@@ -54,6 +55,7 @@ public class UsuarioService {
     public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
         String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
         novoUsuario.setSenha(senhaCriptografada);
+        novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
         novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
 
         this.usuarioRepository.save(novoUsuario);
@@ -148,6 +150,15 @@ public class UsuarioService {
         usuarioAtual.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenhaAtualizada()));
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioAtual);
         return passarParaResponse(usuarioAtualizado);
+    }
+
+    public Boolean atualizarCoresPorId(Integer idUsuario, @Valid UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
+        Usuario usuarioAtual = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+
+        usuarioAtual.setCores(usuarioAtualizarCoresDto.getCores());
+        usuarioRepository.save(usuarioAtual);
+        return true;
     }
 
     public LoginResponseDto autenticar(Usuario usuario) {

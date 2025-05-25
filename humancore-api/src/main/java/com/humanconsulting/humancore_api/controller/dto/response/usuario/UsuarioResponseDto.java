@@ -33,4 +33,7 @@ public class UsuarioResponseDto {
     @Schema(description = "Indica se o usuário tem alguma tarefa com impedimento", example = "false")
     private Boolean comImpedimento;
 
+    @Schema(description = "Cores de fundo da aplicação usuário")
+    private String cores;
+
 }

@@ -72,6 +72,7 @@ public class UsuarioMapper {
                 .projetosVinculados(projetosVinculados)
                 .tarefasVinculadas(tarefasVinculadas)
                 .token(token)
+                .cores(usuario.getCores())
                 .build();
     }
 
@@ -85,6 +86,7 @@ public class UsuarioMapper {
                 .permissao(usuario.getPermissao())
                 .qtdTarefas(qtdTarefas)
                 .comImpedimento(comImpedimento)
+                .cores(usuario.getCores())
                 .build();
     }
 }

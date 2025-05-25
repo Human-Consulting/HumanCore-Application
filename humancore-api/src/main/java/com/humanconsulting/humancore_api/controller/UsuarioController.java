@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.controller;
 
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
@@ -135,6 +136,22 @@ public class UsuarioController {
     @PatchMapping("/atualizarSenha/{idUsuario}")
     public ResponseEntity<UsuarioResponseDto> atualizarSenha(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarSenhaDto usuarioAtualizarSenhaDto) {
         return ResponseEntity.status(200).body(service.atualizarSenhaPorId(idUsuario, usuarioAtualizarSenhaDto));
+    }
+
+    @Operation(
+            summary = "Atualizar cores do usuário",
+            description = "Esse endpoint atualiza a cor de fundo da aplicação de um usuário existente.",
+            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    @PatchMapping("/atualizarCores/{idUsuario}")
+    public ResponseEntity<Boolean> atualizarCor(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
+        return ResponseEntity.status(200).body(service.atualizarCoresPorId(idUsuario, usuarioAtualizarCoresDto));
     }
 
     @Operation(

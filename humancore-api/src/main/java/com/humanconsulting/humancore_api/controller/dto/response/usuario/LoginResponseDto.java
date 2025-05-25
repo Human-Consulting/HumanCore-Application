@@ -3,12 +3,12 @@ package com.humanconsulting.humancore_api.controller.dto.response.usuario;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.model.Empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,89 +42,9 @@ public class LoginResponseDto {
     @Schema(description = "Lista de tarefas vinculadas ao usuário", implementation = TarefaResponseDto.class)
     private List<TarefaResponseDto> tarefasVinculadas;
 
+    @Schema(description = "Token de segurança do usuário")
     private String token;
 
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPermissao() {
-        return permissao;
-    }
-
-    public void setPermissao(String permissao) {
-        this.permissao = permissao;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-
-    public String getNomeEmpresa() {
-        return nomeEmpresa;
-    }
-
-    public void setNomeEmpresa(String nomeEmpresa) {
-        this.nomeEmpresa = nomeEmpresa;
-    }
-
-    public Integer getQtdTarefas() {
-        return qtdTarefas;
-    }
-
-    public void setQtdTarefas(Integer qtdTarefas) {
-        this.qtdTarefas = qtdTarefas;
-    }
-
-    public Boolean getComImpedimento() {
-        return comImpedimento;
-    }
-
-    public void setComImpedimento(Boolean comImpedimento) {
-        this.comImpedimento = comImpedimento;
-    }
-
-    public List<Integer> getProjetosVinculados() {
-        return projetosVinculados;
-    }
-
-    public void setProjetosVinculados(List<Integer> projetosVinculados) {
-        this.projetosVinculados = projetosVinculados;
-    }
-
-    public List<TarefaResponseDto> getTarefasVinculadas() {
-        return tarefasVinculadas;
-    }
-
-    public void setTarefasVinculadas(List<TarefaResponseDto> tarefasVinculadas) {
-        this.tarefasVinculadas = tarefasVinculadas;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
+    @Schema(description = "Cores de fundo da aplicação usuário")
+    private String cores;
 }

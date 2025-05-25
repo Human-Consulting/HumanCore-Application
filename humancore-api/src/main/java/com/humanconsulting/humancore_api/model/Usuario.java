@@ -26,6 +26,8 @@ public class Usuario {
 
     private String permissao;
 
+    private String cores;
+
     @JoinColumn(name = "fkEmpresa")
     @ManyToOne
     private Empresa empresa;
