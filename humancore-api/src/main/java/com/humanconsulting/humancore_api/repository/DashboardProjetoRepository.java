@@ -1,94 +1,65 @@
 package com.humanconsulting.humancore_api.repository;
 
 import com.humanconsulting.humancore_api.model.Investimento;
+import com.humanconsulting.humancore_api.model.Projeto;
+import com.humanconsulting.humancore_api.model.Tarefa;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class DashboardProjetoRepository {
-    private final JdbcClient jdbcClient;
+public interface DashboardProjetoRepository extends JpaRepository<Tarefa, Integer> {
 
-    public DashboardProjetoRepository(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
-    }
+    @Query("""
+        SELECT u.area, COUNT(t)
+        FROM Tarefa t
+        JOIN t.responsavel u
+        JOIN t.sprint s
+        WHERE s.projeto.idProjeto = :idProjeto
+        GROUP BY u.area
+        ORDER BY COUNT(t) DESC
+        """)
+    List<Object[]> buscarTarefasPorArea(@Param("idProjeto") Integer idProjeto);
 
-    public List<Object[]> buscarTarefasPorArea(Integer idProjeto) {
-        return this.jdbcClient
-                .sql("""
-                    SELECT area, COUNT(*) AS totalTarefas
-                    FROM tarefa
-                    JOIN usuario ON fkResponsavel = idUsuario
-                    JOIN sprint ON fkSprint = idSprint
-                    WHERE fkProjeto = ?
-                    GROUP BY area
-                    ORDER BY totalTarefas DESC;
-                    """)
-                .params(idProjeto)
-                .query((rs, rowNum) -> new Object[] {
-                        rs.getString("area"),
-                        rs.getInt("totalTarefas")
-                })
-                .list();
-    }
+//    @Query("""
+//        SELECT ROUND(AVG(t.progresso), 2)
+//        FROM Tarefa t
+//        JOIN t.sprint s
+//        WHERE s.projeto.idProjeto = :idProjeto
+//        """)
+//    Double mediaProgresso(@Param("idProjeto") Integer idProjeto);
 
-    public double mediaProgresso(Integer idProjeto) {
-        return this.jdbcClient
-                .sql("SELECT ROUND(AVG(progresso), 2) AS mediaProgresso " +
-                     "FROM tarefa " +
-                     "JOIN sprint ON fkSprint = idSprint " +
-                     "WHERE fkProjeto = ?;")
-                .param(idProjeto)
-                .query(Double.class)
-                .optional()
-                .orElse(0.0);
-    }
+    @Query("""
+        SELECT p.orcamento
+        FROM Projeto p
+        WHERE p.idProjeto = :idProjeto
+        """)
+    Double orcamentoTotal(@Param("idProjeto") Integer idProjeto);
 
-    public double orcamentoTotal(Integer idProjeto) {
-        return this.jdbcClient
-                .sql("SELECT orcamento " +
-                     "FROM projeto " +
-                     "WHERE idProjeto = ?;")
-                .param(idProjeto)
-                .query(Double.class)
-                .optional()
-                .orElse(0.0);
-    }
+    @Query("""
+        SELECT COUNT(s)
+        FROM Sprint s
+        WHERE s.projeto.idProjeto = :idProjeto
+        """)
+    Integer totalSprints(@Param("idProjeto") Integer idProjeto);
 
-    public Integer totalSprints(Integer idProjeto) {
-        return this.jdbcClient
-                .sql("SELECT COUNT(*) AS totalSprints " +
-                     "FROM sprint " +
-                     "WHERE fkProjeto = ?;")
-                .param(idProjeto)
-                .query(Integer.class)
-                .optional()
-                .orElse(0);
-    }
+    @Query("""
+        SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END
+        FROM Tarefa t
+        JOIN t.sprint s
+        WHERE s.projeto.idProjeto = :idProjeto AND t.comImpedimento = true
+        """)
+    boolean projetoComImpedimento(@Param("idProjeto") Integer idProjeto);
 
-    public boolean projetoComImpedimento(Integer idProjeto) {
-        return this.jdbcClient.sql(
-                        "SELECT EXISTS (" +
-                            "SELECT 1 FROM tarefa " +
-                            "JOIN sprint ON fkSprint = idSprint " +
-                            "WHERE fkProjeto = ? " +
-                            "AND comImpedimento = true" +
-                        ") AS projetoComImpedimento;"
-                ).param(idProjeto)
-                .query(Boolean.class)
-                .single();
-    }
-
-    public List<Investimento> listarFinanceiroPorEmpresa(Integer idProjeto) {
-        return this.jdbcClient.sql(
-                """
-                SELECT * FROM investimento
-                WHERE fkProjeto = ?
-                ORDER BY dtInvestimento ASC;"""
-        )
-                .param(idProjeto)
-                .query(Investimento.class)
-                .list();
-    }
+    @Query("""
+        SELECT i
+        FROM Investimento i
+        WHERE i.projeto.idProjeto = :idProjeto
+        ORDER BY i.dtInvestimento ASC
+        """)
+    List<Investimento> listarFinanceiroPorEmpresa(@Param("idProjeto") Integer idProjeto);
 }

@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.DashboardProjetoResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.model.Projeto;
@@ -92,8 +93,8 @@ public class ProjetoController {
             @ApiResponse(responseCode = "404", description = "Projeto não encontrado")
     })
     @DeleteMapping("/{idProjeto}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idProjeto) {
-        service.deletar(idProjeto);
+    public ResponseEntity<Void> deletar(@PathVariable Integer idProjeto, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+        service.deletar(idProjeto, usuarioPermissaoDto);
         return ResponseEntity.status(204).build();
     }
 
@@ -108,7 +109,7 @@ public class ProjetoController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Projeto não encontrado")
     })
-    @PutMapping("/{idProjeto}")
+    @PatchMapping("/{idProjeto}")
     public ResponseEntity<ProjetoResponseDto> atualizar(@PathVariable Integer idProjeto, @Valid @RequestBody ProjetoAtualizarRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idProjeto, request));
     }

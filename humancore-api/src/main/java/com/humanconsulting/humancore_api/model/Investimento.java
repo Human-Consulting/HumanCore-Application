@@ -1,56 +1,28 @@
 package com.humanconsulting.humancore_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Investimento {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idInvestimento;
+
+    private String descricao;
 
     private Double valor;
 
     private LocalDate dtInvestimento;
 
-    private Integer fkProjeto;
-
-    public Investimento(Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
-        this.valor = valor;
-        this.dtInvestimento = dtInvestimento;
-        this.fkProjeto = fkProjeto;
-    }
-
-    public Integer getIdInvestimento() {
-        return idInvestimento;
-    }
-
-    public void setIdInvestimento(Integer idInvestimento) {
-        this.idInvestimento = idInvestimento;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
-    public LocalDate getDtInvestimento() {
-        return dtInvestimento;
-    }
-
-    public void setDtInvestimento(LocalDate dtInvestimento) {
-        this.dtInvestimento = dtInvestimento;
-    }
-
-    public Integer getFkProjeto() {
-        return fkProjeto;
-    }
-
-    public void setFkProjeto(Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
-    }
+    @ManyToOne
+    @JoinColumn(name = "fkProjeto")
+    private Projeto projeto;
 }

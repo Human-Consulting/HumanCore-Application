@@ -1,14 +1,26 @@
 package com.humanconsulting.humancore_api.controller.dto.response.investimento;
 
+import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InvestimentoResponseDto {
+
     @Schema(description = "ID do registro financeiro")
     @Id
     private Integer idInvestimento;
+
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    private String descricao;
 
     @Schema(description = "Valor do investimento", example = "10000.00")
     private Double valor;
@@ -17,44 +29,5 @@ public class InvestimentoResponseDto {
     private LocalDate dtInvestimento;
 
     @Schema(description = "ID do projeto relacionado ao investimento", example = "1")
-    private Integer fkProjeto;
-
-    public InvestimentoResponseDto(Integer idInvestimento, Double valor, LocalDate dtInvestimento, Integer fkProjeto) {
-        this.idInvestimento = idInvestimento;
-        this.valor = valor;
-        this.dtInvestimento = dtInvestimento;
-        this.fkProjeto = fkProjeto;
-    }
-
-    public Integer getIdInvestimento() {
-        return idInvestimento;
-    }
-
-    public void setIdInvestimento(Integer idInvestimento) {
-        this.idInvestimento = idInvestimento;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
-    public LocalDate getDtInvestimento() {
-        return dtInvestimento;
-    }
-
-    public void setDtInvestimento(LocalDate dtInvestimento) {
-        this.dtInvestimento = dtInvestimento;
-    }
-
-    public Integer getFkProjeto() {
-        return fkProjeto;
-    }
-
-    public void setFkProjeto(Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
-    }
+    private Projeto projeto;
 }

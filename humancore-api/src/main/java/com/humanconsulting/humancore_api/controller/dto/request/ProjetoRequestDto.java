@@ -1,9 +1,21 @@
 package com.humanconsulting.humancore_api.controller.dto.request;
 
+import com.humanconsulting.humancore_api.model.Empresa;
+import com.humanconsulting.humancore_api.model.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProjetoRequestDto {
+    @Schema(description = "Título do projeto", example = "Centro Comercial")
+    @NotBlank
+    private String titulo;
 
     @Schema(description = "Descrição do projeto", example = "Projeto de expansão imobiliária")
     @NotNull
@@ -16,51 +28,19 @@ public class ProjetoRequestDto {
     @Schema(description = "URL da imagem associada ao projeto", example = "http://exemplo.com/imagem.jpg")
     private String urlImagem;
 
-    @Schema(description = "ID da empresa associada ao projeto", example = "1")
+    @Schema(description = "Empresa associada ao projeto", example = "1")
     @NotNull
     private Integer fkEmpresa;
 
-    @Schema(description = "ID do responsável pelo projeto", example = "3")
+    @Schema(description = "Responsável pelo projeto", example = "3")
     @NotNull
     private Integer fkResponsavel;
 
-    public @NotNull String getDescricao() {
-        return descricao;
-    }
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
 
-    public void setDescricao(@NotNull String descricao) {
-        this.descricao = descricao;
-    }
-
-    public @NotNull Double getOrcamento() {
-        return orcamento;
-    }
-
-    public void setOrcamento(@NotNull Double orcamento) {
-        this.orcamento = orcamento;
-    }
-
-    public String getUrlImagem() {
-        return urlImagem;
-    }
-
-    public void setUrlImagem(String urlImagem) {
-        this.urlImagem = urlImagem;
-    }
-
-    public @NotNull Integer getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(@NotNull Integer fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
-    }
-
-    public @NotNull Integer getFkResponsavel() {
-        return fkResponsavel;
-    }
-
-    public void setFkResponsavel(@NotNull Integer fkResponsavel) {
-        this.fkResponsavel = fkResponsavel;
-    }
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
 }

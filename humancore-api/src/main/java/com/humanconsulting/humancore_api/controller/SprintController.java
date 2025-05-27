@@ -2,7 +2,8 @@ package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.SprintResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
+import com.humanconsulting.humancore_api.controller.dto.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.service.SprintService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -93,8 +94,8 @@ public class SprintController {
             @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+        service.deletar(id, usuarioPermissaoDto);
         return ResponseEntity.status(204).build();
     }
 
@@ -109,7 +110,7 @@ public class SprintController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
     })
-    @PutMapping("/{idSprint}")
+    @PatchMapping("/{idSprint}")
     public ResponseEntity<SprintResponseDto> atualizar(@PathVariable Integer idSprint, @Valid @RequestBody SprintAtualizarRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idSprint, request));
     }

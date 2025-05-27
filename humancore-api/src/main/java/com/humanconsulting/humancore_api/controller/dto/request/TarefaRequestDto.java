@@ -2,10 +2,19 @@ package com.humanconsulting.humancore_api.controller.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TarefaRequestDto {
+    @Schema(description = "Título da tarefa", example = "Login")
+    @NotNull
+    private String titulo;
 
     @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
     @NotNull
@@ -27,43 +36,11 @@ public class TarefaRequestDto {
     @NotNull
     private Integer fkResponsavel;
 
-    public @NotNull String getDescricao() {
-        return descricao;
-    }
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
 
-    public void setDescricao(@NotNull String descricao) {
-        this.descricao = descricao;
-    }
-
-    public @NotNull LocalDate getDtInicio() {
-        return dtInicio;
-    }
-
-    public void setDtInicio(@NotNull LocalDate dtInicio) {
-        this.dtInicio = dtInicio;
-    }
-
-    public @NotNull LocalDate getDtFim() {
-        return dtFim;
-    }
-
-    public void setDtFim(@NotNull LocalDate dtFim) {
-        this.dtFim = dtFim;
-    }
-
-    public @NotNull Integer getFkSprint() {
-        return fkSprint;
-    }
-
-    public void setFkSprint(@NotNull Integer fkSprint) {
-        this.fkSprint = fkSprint;
-    }
-
-    public @NotNull Integer getFkResponsavel() {
-        return fkResponsavel;
-    }
-
-    public void setFkResponsavel(@NotNull Integer fkResponsavel) {
-        this.fkResponsavel = fkResponsavel;
-    }
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
 }

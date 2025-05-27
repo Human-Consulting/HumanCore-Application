@@ -3,7 +3,8 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
+import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.service.TarefaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("tarefas")
 @CrossOrigin("*")
-public class EntregaController {
+public class TarefaController {
 
     @Autowired
     private TarefaService service;
@@ -68,28 +69,14 @@ public class EntregaController {
             parameters = @Parameter(name = "idTarefa", description = "ID da tarefa para buscar os detalhes."),
             security = @SecurityRequirement(name = "Bearer")
     )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Tarefa encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
-    })
-    @GetMapping("/{idTarefa}")
-    public ResponseEntity<TarefaResponseDto> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(service.buscarPorId(id));
-    }
 
-    @Operation(
-            summary = "Deletar uma tarefa",
-            description = "Esse endpoint deleta uma tarefa a partir do seu ID.",
-            parameters = @Parameter(name = "idTarefa", description = "ID da tarefa que será deletada."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Tarefa deletada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
     })
     @DeleteMapping("/{idTarefa}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idTarefa) {
-        service.deletar(idTarefa);
+    public ResponseEntity<Void> deletar(@PathVariable Integer idTarefa, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+        service.deletar(idTarefa, usuarioPermissaoDto);
         return ResponseEntity.status(204).build();
     }
 
@@ -104,7 +91,7 @@ public class EntregaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
     })
-    @PutMapping("/{idTarefa}")
+    @PatchMapping("/{idTarefa}")
     public ResponseEntity<TarefaResponseDto> atualizar(@PathVariable Integer idTarefa, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
         return ResponseEntity.status(200).body(service.atualizar(idTarefa, entrega));
     }
@@ -120,7 +107,7 @@ public class EntregaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
     })
-    @PutMapping("/impedimento/{idTarefa}")
+    @PatchMapping("/impedimento/{idTarefa}")
     public ResponseEntity<TarefaResponseDto> atualizarImpedimento(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizarImpedimento(idTarefa, request));
     }

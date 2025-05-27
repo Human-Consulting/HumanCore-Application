@@ -1,99 +1,67 @@
 package com.humanconsulting.humancore_api.repository;
 
 import com.humanconsulting.humancore_api.model.Investimento;
+import com.humanconsulting.humancore_api.model.Projeto;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class DashboardEmpresaRepository {
-    private final JdbcClient jdbcClient;
+public interface DashboardEmpresaRepository extends JpaRepository<Projeto, Integer> {
 
-    public DashboardEmpresaRepository(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
-    }
+    @Query("""
+        SELECT u.area, COUNT(t)
+        FROM Tarefa t
+        JOIN t.responsavel u
+        JOIN t.sprint s
+        JOIN s.projeto p
+        WHERE u.empresa.idEmpresa = :idEmpresa
+        GROUP BY u.area
+        ORDER BY COUNT(t) DESC
+        """)
+    List<Object[]> buscarTarefasPorArea(@Param("idEmpresa") Integer idEmpresa);
 
-    public List<Object[]> buscarTarefasPorArea(Integer idEmpresa) {
-        return this.jdbcClient
-                .sql("""
-                    SELECT area, COUNT(*) AS totalTarefas
-                    FROM tarefa
-                    JOIN usuario ON fkResponsavel = idUsuario
-                    JOIN projeto ON fkSprint IN (
-                        SELECT idSprint FROM sprint WHERE fkProjeto = idProjeto
-                    )
-                    WHERE usuario.fkEmpresa = ?
-                    GROUP BY area
-                    ORDER BY totalTarefas DESC;
-                    """)
-                .params(idEmpresa)
-                .query((rs, rowNum) -> new Object[] {
-                        rs.getString("area"),
-                        rs.getInt("totalTarefas")
-                })
-                .list();
-    }
+//    @Query("""
+//        SELECT ROUND(AVG(t.progresso), 2)
+//        FROM Tarefa t
+//        JOIN t.sprint s
+//        JOIN s.projeto p
+//        WHERE p.empresa.idEmpresa = :idEmpresa
+//        """)
+//    Double mediaProgresso(@Param("idEmpresa") Integer idEmpresa);
 
-    public double mediaProgresso(Integer idEmpresa) {
-        return this.jdbcClient
-                .sql("SELECT ROUND(AVG(progresso), 2) AS mediaProgresso " +
-                     "FROM tarefa " +
-                     "JOIN sprint ON fkSprint = idSprint " +
-                     "JOIN projeto ON fkProjeto = idProjeto " +
-                     "WHERE fkEmpresa = ?;")
-                .param(idEmpresa)
-                .query(Double.class)
-                .optional()
-                .orElse(0.0);
-    }
+    @Query("""
+        SELECT SUM(p.orcamento)
+        FROM Projeto p
+        WHERE p.empresa.idEmpresa = :idEmpresa
+        """)
+    Double orcamentoTotal(@Param("idEmpresa") Integer idEmpresa);
 
-    public double orcamentoTotal(Integer idEmpresa) {
-        return this.jdbcClient
-                .sql("SELECT SUM(orcamento) AS totalOrcamento " +
-                     "FROM projeto " +
-                     "WHERE fkEmpresa = ?;")
-                .param(idEmpresa)
-                .query(Double.class)
-                .optional()
-                .orElse(0.0);
-    }
+    @Query("""
+        SELECT COUNT(p)
+        FROM Projeto p
+        WHERE p.empresa.idEmpresa = :idEmpresa
+        """)
+    Integer totalProjetos(@Param("idEmpresa") Integer idEmpresa);
 
-    public Integer totalProjetos(Integer idEmpresa) {
-        return this.jdbcClient
-                .sql("SELECT COUNT(*) AS totalSprints " +
-                     "FROM projeto " +
-                     "WHERE fkEmpresa = ?;")
-                .param(idEmpresa)
-                .query(Integer.class)
-                .optional()
-                .orElse(0);
-    }
+    @Query("""
+        SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END
+        FROM Tarefa t
+        JOIN t.sprint s
+        JOIN s.projeto p
+        WHERE p.empresa.idEmpresa = :idEmpresa AND t.comImpedimento = true
+        """)
+    boolean empresaComImpedimento(@Param("idEmpresa") Integer idEmpresa);
 
-    public boolean empresaComImpedimento(Integer idEmpresa) {
-        return this.jdbcClient.sql(
-                        "SELECT EXISTS (" +
-                            "SELECT 1 FROM tarefa " +
-                            "JOIN sprint ON fkSprint = idSprint " +
-                            "JOIN projeto ON fkProjeto = idProjeto " +
-                            "WHERE fkEmpresa = ? " +
-                            "AND comImpedimento = true" +
-                        ") AS empresaComImpedimento;"
-                ).param(idEmpresa)
-                .query(Boolean.class)
-                .single();
-    }
-
-    public List<Investimento> listarFinanceiroPorEmpresa(Integer idEmpresa) {
-        return this.jdbcClient.sql(
-                """
-                SELECT * FROM investimento
-                JOIN projeto ON idProjeto = fkProjeto
-                WHERE fkEmpresa = ?
-                ORDER BY dtInvestimento ASC;"""
-        )
-                .param(idEmpresa)
-                .query(Investimento.class)
-                .list();
-    }
+    @Query("""
+        SELECT i
+        FROM Investimento i
+        WHERE i.projeto.empresa.idEmpresa = :idEmpresa
+        ORDER BY i.dtInvestimento ASC
+        """)
+    List<Investimento> listarFinanceiroPorEmpresa(@Param("idEmpresa") Integer idEmpresa);
 }

@@ -1,11 +1,22 @@
 package com.humanconsulting.humancore_api.controller.dto.atualizar.investimento;
 
+import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AtualizarInvestimentoRequestDto {
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    @NotNull
+    private String descricao;
+
     @Schema(description = "Valor do investimento", example = "15000.75")
     @NotNull
     private Double valor;
@@ -25,44 +36,4 @@ public class AtualizarInvestimentoRequestDto {
     @Schema(description = "Permissão do editor", example = "CONSULTOR")
     @NotNull
     private String permissaoEditor;
-
-    public @NotNull Double getValor() {
-        return valor;
-    }
-
-    public void setValor(@NotNull Double valor) {
-        this.valor = valor;
-    }
-
-    public @NotNull LocalDate getDtInvestimento() {
-        return dtInvestimento;
-    }
-
-    public void setDtInvestimento(@NotNull LocalDate dtInvestimento) {
-        this.dtInvestimento = dtInvestimento;
-    }
-
-    public @NotNull Integer getFkProjeto() {
-        return fkProjeto;
-    }
-
-    public void setFkProjeto(@NotNull Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
-    }
-
-    public @NotNull Integer getIdEditor() {
-        return idEditor;
-    }
-
-    public void setIdEditor(@NotNull Integer idEditor) {
-        this.idEditor = idEditor;
-    }
-
-    public @NotNull String getPermissaoEditor() {
-        return permissaoEditor;
-    }
-
-    public void setPermissaoEditor(@NotNull String permissaoEditor) {
-        this.permissaoEditor = permissaoEditor;
-    }
 }

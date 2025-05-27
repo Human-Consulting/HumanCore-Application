@@ -4,10 +4,11 @@ import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginRe
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.model.Sprint;
+import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.service.ProjetoService;
 import com.humanconsulting.humancore_api.service.SprintService;
 import com.humanconsulting.humancore_api.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -21,35 +22,51 @@ public class EmailNotifier implements Observer{
     private final UsuarioService usuarioService;
     private final SprintService sprintService;
     private final ProjetoService projetoService;
+    private final UsuarioRepository usuarioRepository;
 
-    public EmailNotifier(JavaMailSender emailSender, UsuarioService usuarioService, SprintService sprintService, ProjetoService projetoService) {
+    public EmailNotifier(JavaMailSender emailSender, UsuarioService usuarioService, SprintService sprintService, ProjetoService projetoService, UsuarioRepository usuarioRepository) {
         this.emailSender = emailSender;
         this.usuarioService = usuarioService;
         this.sprintService = sprintService;
         this.projetoService = projetoService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
     public void update(Tarefa tarefa) {
-        Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getFkSprint());
-        Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getFkProjeto());
-        LoginResponseDto responsavelProjeto = usuarioService.buscarPorId(projetoEntrega.getFkResponsavel());
-        LoginResponseDto responsavelEntrega = usuarioService.buscarPorId(tarefa.getFkResponsavel());
+        Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getSprint().getIdSprint());
+        Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getProjeto().getIdProjeto());
+        Usuario tarefaResponsavel = usuarioRepository.findById(tarefa.getResponsavel().getIdUsuario()).get();
+        Usuario projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario()).get();
+        LoginResponseDto responsavelProjeto = usuarioService.passarParaLoginResponse(projetoResponsavel, null);
+        LoginResponseDto responsavelEntrega = usuarioService.passarParaLoginResponse(tarefaResponsavel, null);
 
         List<String> emails = new ArrayList<>();
         emails.add(responsavelProjeto.getEmail());
-        emails.add(responsavelEntrega.getEmail());
+        if (!responsavelProjeto.getEmail().equals(responsavelEntrega.getEmail())) emails.add(responsavelEntrega.getEmail());
 
         NotificacaoEmailDto notificacao = new NotificacaoEmailDto();
         notificacao.setNomeResponsavel(responsavelProjeto.getNome());
         notificacao.setEmails(emails);
-        notificacao.setMensagem(String.format(
-                "Impedimento no projeto: %s\n Impedimento registrado na Entrega: %s\n Sprint: %s\n Responsável: %s",
-                projetoEntrega.getDescricao(),
-                tarefa.getDescricao(),
-                sprintEntrega.getDescricao(),
-                responsavelEntrega.getNome()
-        ));
+        if (tarefa.getComImpedimento()) {
+            notificacao.setMensagem(String.format(
+                    "Impedimento no projeto: %s\n Impedimento registrado na Tarefa: %s\n Sprint: %s\n Responsável: %s\nComentário anexado: %s",
+                    projetoEntrega.getDescricao(),
+                    tarefa.getDescricao(),
+                    sprintEntrega.getDescricao(),
+                    responsavelEntrega.getNome(),
+                    tarefa.getComentario()
+            ));
+        } else {
+            notificacao.setMensagem(String.format(
+                    "Impedimento finalizado no projeto: %s\n Tarefa: %s\n Sprint: %s\n Responsável: %s\nComentário anexado: %s",
+                    projetoEntrega.getDescricao(),
+                    tarefa.getDescricao(),
+                    sprintEntrega.getDescricao(),
+                    responsavelEntrega.getNome(),
+                    tarefa.getComentario()
+            ));
+        }
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(emails.toArray(new String[0]));

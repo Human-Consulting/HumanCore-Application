@@ -1,11 +1,22 @@
 package com.humanconsulting.humancore_api.controller.dto.request;
 
+import com.humanconsulting.humancore_api.model.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class InvestimentoRequestDto {
+    @Schema(description = "Descrição do investimento", example = "Compra de novos recursos")
+    @NotNull
+    private String descricao;
+
     @Schema(description = "Valor do investimento", example = "5000.00")
     @NotNull
     private Double valor;
@@ -18,27 +29,11 @@ public class InvestimentoRequestDto {
     @NotNull
     private Integer fkProjeto;
 
-    public @NotNull Double getValor() {
-        return valor;
-    }
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
 
-    public void setValor(@NotNull Double valor) {
-        this.valor = valor;
-    }
-
-    public @NotNull LocalDate getDtInvestimento() {
-        return dtInvestimento;
-    }
-
-    public void setDtInvestimento(@NotNull LocalDate dtInvestimento) {
-        this.dtInvestimento = dtInvestimento;
-    }
-
-    public @NotNull Integer getFkProjeto() {
-        return fkProjeto;
-    }
-
-    public void setFkProjeto(@NotNull Integer fkProjeto) {
-        this.fkProjeto = fkProjeto;
-    }
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
 }

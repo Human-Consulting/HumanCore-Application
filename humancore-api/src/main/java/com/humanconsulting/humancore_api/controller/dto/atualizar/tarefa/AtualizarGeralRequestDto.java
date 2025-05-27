@@ -1,11 +1,23 @@
 package com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa;
 
+import com.humanconsulting.humancore_api.controller.dto.request.CheckpointRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AtualizarGeralRequestDto {
+    @Schema(description = "Título da tarefa", example = "Login")
+    @NotNull
+    private String titulo;
+
     @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
     @NotNull
     private String descricao;
@@ -18,11 +30,14 @@ public class AtualizarGeralRequestDto {
     @NotNull
     private LocalDate dtFim;
 
-    @Schema(description = "Progresso da tarefa em porcentagem", example = "75.5")
+    @Schema(description = "Indica se há impedimentos na Tarefa", example = "false")
     @NotNull
-    private Double progresso;
+    private Boolean comImpedimento;
 
-    @Schema(description = "ID do responsável pela tarefa", example = "3")
+    @Schema(description = "Comentário da tarefa", example = "Impedimento em relação a...")
+    private String comentario;
+
+    @Schema(description = "Usuário responsável pela tarefa", example = "3")
     @NotNull
     private Integer fkResponsavel;
 
@@ -31,51 +46,9 @@ public class AtualizarGeralRequestDto {
     private Integer idEditor;
 
     @Schema(description = "Permissão do editor", example = "CONSULTOR")
-    public @NotNull Integer getIdEditor() {
-        return idEditor;
-    }
+    @NotNull
+    private String permissaoEditor;
 
-    public void setIdEditor(@NotNull Integer idEditor) {
-        this.idEditor = idEditor;
-    }
-
-    public @NotNull String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(@NotNull String descricao) {
-        this.descricao = descricao;
-    }
-
-    public @NotNull LocalDate getDtInicio() {
-        return dtInicio;
-    }
-
-    public void setDtInicio(@NotNull LocalDate dtInicio) {
-        this.dtInicio = dtInicio;
-    }
-
-    public @NotNull LocalDate getDtFim() {
-        return dtFim;
-    }
-
-    public void setDtFim(@NotNull LocalDate dtFim) {
-        this.dtFim = dtFim;
-    }
-
-    public @NotNull Double getProgresso() {
-        return progresso;
-    }
-
-    public void setProgresso(@NotNull Double progresso) {
-        this.progresso = progresso;
-    }
-
-    public @NotNull Integer getFkResponsavel() {
-        return fkResponsavel;
-    }
-
-    public void setFkResponsavel(@NotNull Integer fkResponsavel) {
-        this.fkResponsavel = fkResponsavel;
-    }
+    @Schema(description = "Lista de checkpoints", example = "[{descricao: 'desenvolver código'}, {descricao: 'validar com techlead'}]")
+    private List<CheckpointRequestDto> checkpoints;
 }

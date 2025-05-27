@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.controller;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.EmpresaRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.empresa.DashboardEmpresaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.service.EmpresaService;
@@ -69,8 +70,8 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
+    public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+        service.deletar(id, usuarioPermissaoDto);
         return ResponseEntity.status(204).build();
     }
 
@@ -83,7 +84,7 @@ public class EmpresaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
-    @PutMapping("/{idEmpresa}")
+    @PatchMapping("/{idEmpresa}")
     public ResponseEntity<EmpresaResponseDto> atualizar(@PathVariable Integer idEmpresa, @Valid @RequestBody EmpresaAtualizarRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idEmpresa, request));
     }
