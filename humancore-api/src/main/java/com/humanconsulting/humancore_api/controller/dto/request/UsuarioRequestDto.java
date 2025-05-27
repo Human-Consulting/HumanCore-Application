@@ -25,6 +25,7 @@ public class UsuarioRequestDto {
     @Email
     private String email;
 
+    //! Remover senha
     @Schema(description = "Senha do usuário", example = "senha123")
     @NotBlank
     @Size(min = 6)

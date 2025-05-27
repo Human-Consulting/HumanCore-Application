@@ -58,6 +58,7 @@ public class UsuarioService {
         novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
         novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
 
+        //! Criar senha aleatória antes de salvar novoUsuario
         this.usuarioRepository.save(novoUsuario);
 
         return novoUsuario;
