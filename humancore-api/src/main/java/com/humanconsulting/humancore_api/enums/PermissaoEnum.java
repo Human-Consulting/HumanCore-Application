@@ -104,6 +104,8 @@ public enum PermissaoEnum {
             Arrays.asList(
                     //USUARIO
                     "MODIFICAR_PROPRIO",
+                    "MODIFICAR_GESTOR",
+                    "MODIFICAR_FUNC",
                     "MODIFICAR_PROPRIO_POR_DIRETOR",
                     "EDITAR_USUARIOS_EMPRESA_EXCETO_DIRETOR",
                     "EXCLUIR_USUARIOS_EMPRESA_EXCETO_DIRETOR",
