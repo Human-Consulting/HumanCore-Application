@@ -16,8 +16,10 @@ import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.observer.EmailNotifier;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.utils.SenhaGenerator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,15 +54,22 @@ public class UsuarioService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private EmailNotifier emailNotifier;
+
     public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
-        String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
-        novoUsuario.setSenha(senhaCriptografada);
         novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
         novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
+        novoUsuario.setSenha(SenhaGenerator.gerarSenha(novoUsuario.getNome(), novoUsuario.getEmpresa().getNome()));
+        String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
+        try {
+            emailNotifier.cadastro(novoUsuario);
+        } catch (Exception exception) {
+            throw new RuntimeException("Não foi possível cadastrar o usuário.");
+        }
+        novoUsuario.setSenha(senhaCriptografada);
 
-        //! Criar senha aleatória antes de salvar novoUsuario
         this.usuarioRepository.save(novoUsuario);
-
         return novoUsuario;
     }
 
@@ -199,7 +208,8 @@ public class UsuarioService {
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefasVinculada : tarefasVinculadas) {
             TarefaResponseDto novaTarefa = tarefaService.passarParaResponse(tarefasVinculada);
-            if (novaTarefa.getProgresso() < 100) tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
+            if (novaTarefa.getProgresso() < 100)
+                tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
         }
         Integer qtdTarefas = tarefasResponse.size();
         return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse, tokenUsuario);

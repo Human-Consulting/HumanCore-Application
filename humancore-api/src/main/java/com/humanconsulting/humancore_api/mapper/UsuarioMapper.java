@@ -17,7 +17,6 @@ public class UsuarioMapper {
         return Usuario.builder()
                 .nome(usuarioRequestDto.getNome())
                 .email(usuarioRequestDto.getEmail())
-                .senha(usuarioRequestDto.getSenha())
                 .cargo(usuarioRequestDto.getCargo())
                 .area(usuarioRequestDto.getArea())
                 .permissao(usuarioRequestDto.getPermissao())
