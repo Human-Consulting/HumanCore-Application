@@ -1,15 +1,10 @@
 package com.humanconsulting.humancore_api.observer;
-
 import com.humanconsulting.humancore_api.controller.dto.notificar.NotificacaoEmailDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Projeto;
 import com.humanconsulting.humancore_api.model.Sprint;
 import com.humanconsulting.humancore_api.model.Usuario;
-import com.humanconsulting.humancore_api.repository.UsuarioRepository;
-import com.humanconsulting.humancore_api.service.ProjetoService;
-import com.humanconsulting.humancore_api.service.SprintService;
-import com.humanconsulting.humancore_api.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
