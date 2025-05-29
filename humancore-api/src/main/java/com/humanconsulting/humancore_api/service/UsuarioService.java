@@ -10,6 +10,7 @@ import com.humanconsulting.humancore_api.controller.dto.response.usuario.Usuario
 import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
+import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
@@ -58,19 +59,22 @@ public class UsuarioService {
     private EmailNotifier emailNotifier;
 
     public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
-        novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
-        novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
-        novoUsuario.setSenha(SenhaGenerator.gerarSenha(novoUsuario.getNome(), novoUsuario.getEmpresa().getNome()));
-        String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
-        try {
-            emailNotifier.cadastro(novoUsuario);
-        } catch (Exception exception) {
-            throw new RuntimeException("Não foi possível cadastrar o usuário.");
-        }
-        novoUsuario.setSenha(senhaCriptografada);
+        if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isEmpty()) {
+            novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
+            novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
+            novoUsuario.setSenha(SenhaGenerator.gerarSenha(novoUsuario.getNome(), novoUsuario.getEmpresa().getNome()));
+            String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
+            try {
+                emailNotifier.cadastro(novoUsuario);
+            } catch (Exception exception) {
+                throw new RuntimeException("Não foi possível cadastrar o usuário.");
+            }
+            novoUsuario.setSenha(senhaCriptografada);
 
-        this.usuarioRepository.save(novoUsuario);
-        return novoUsuario;
+            this.usuarioRepository.save(novoUsuario);
+            return novoUsuario;
+        }
+        throw new EntidadeConflitanteException("Este email já foi registrado");
     }
 
     public LoginResponseDto buscarPorId(Integer id) {
