@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.Usuari
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioEsqueciASenhaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Usuario;

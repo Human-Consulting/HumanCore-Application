@@ -4,8 +4,11 @@ import com.humanconsulting.humancore_api.config.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioEsqueciASenhaDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioEnviarCodigoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioEsqueciASenhaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
@@ -83,6 +86,13 @@ public class UsuarioService {
         if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
         return passarParaLoginResponse(optUsuario.get(), null);
+    }
+
+    public Integer buscarPorEmail(String email) {
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
+        return optUsuario.get().getIdUsuario();
     }
 
     public List<UsuarioResponseDto> listar() {
@@ -164,6 +174,20 @@ public class UsuarioService {
         usuarioAtual.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenhaAtualizada()));
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioAtual);
         return passarParaResponse(usuarioAtualizado);
+    }
+
+    public void enviarCodigo(UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
+        emailNotifier.codigo(usuarioEnviarCodigoRequestDto);
+    }
+
+    public Boolean esqueciASenha(Integer idUsuario, @Valid UsuarioEsqueciASenhaDto usuarioEsqueciASenhaDto) {
+        Usuario usuarioAtual = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+
+        usuarioAtual.setSenha(passwordEncoder.encode(usuarioEsqueciASenhaDto.getSenhaAtualizada()));
+        Usuario usuarioAtualizado = usuarioRepository.save(usuarioAtual);
+        System.out.println("Entrei no service");
+        return true;
     }
 
     public Boolean atualizarCoresPorId(Integer idUsuario, @Valid UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
