@@ -3,6 +3,9 @@ package com.humanconsulting.humancore_api.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -31,4 +34,7 @@ public class Usuario {
     @JoinColumn(name = "fkEmpresa")
     @ManyToOne
     private Empresa empresa;
+
+    @ManyToMany(mappedBy = "usuarios")
+    private Set<Sala> salas = new HashSet<>();
 }

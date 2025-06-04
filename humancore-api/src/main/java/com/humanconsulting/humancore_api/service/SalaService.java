@@ -67,4 +67,6 @@ public class SalaService {
     public SalaResponseDto passarParaResponse(Sala sala) {
         return SalaMapper.toDto(sala);
     }
+
+
 }
