@@ -22,9 +22,9 @@ import java.util.Optional;
 
 @Service
 public class MensagemService {
-    @Autowired private MensagemRepository mensagemRepository;
-    @Autowired private UsuarioRepository usuarioRepository;
-    @Autowired private SalaRepository salaRepository;
+    @Autowired MensagemRepository mensagemRepository;
+    @Autowired UsuarioRepository usuarioRepository;
+    @Autowired SalaRepository salaRepository;
 
     public MensagemResponseDto cadastrar(MensagemRequestDto mensagemRequestDto) {
 //        PermissaoValidator.validarPermissao(mensagemRequestDto.getPermissaoEditor(), "ADICIONAR_MENSAGEM");

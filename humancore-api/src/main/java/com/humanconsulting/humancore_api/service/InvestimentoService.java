@@ -24,11 +24,11 @@ import java.util.Optional;
 @Service
 public class InvestimentoService {
 
-    @Autowired private InvestimentoRepository investimentoRepository;
+    @Autowired InvestimentoRepository investimentoRepository;
 
-    @Autowired private ProjetoRepository projetoRepository;
+    @Autowired ProjetoRepository projetoRepository;
 
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired UsuarioRepository usuarioRepository;
 
     public InvestimentoResponseDto cadastrar(InvestimentoRequestDto financeiroRequestDto) {
         PermissaoValidator.validarPermissao(financeiroRequestDto.getPermissaoEditor(), "ADICIONAR_INVESTIMENTO");
