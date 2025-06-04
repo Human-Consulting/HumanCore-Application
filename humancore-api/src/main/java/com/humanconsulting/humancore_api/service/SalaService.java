@@ -21,8 +21,8 @@ import java.util.Optional;
 
 @Service
 public class SalaService {
-    @Autowired private SalaRepository salaRepository;
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired SalaRepository salaRepository;
+    @Autowired UsuarioRepository usuarioRepository;
 
     public SalaResponseDto cadastrar(SalaRequestDto salaRequestDto) {
 //        PermissaoValidator.validarPermissao(salaRequestDto.getPermissaoEditor(), "ADICIONAR_SALA");

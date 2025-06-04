@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 @Service
 public class EmpresaService {
 
-    @Autowired private EmpresaRepository empresaRepository;
+    @Autowired EmpresaRepository empresaRepository;
 
-    @Autowired private CheckpointRepository checkpointRepository;
+    @Autowired CheckpointRepository checkpointRepository;
 
-    @Autowired private DashboardEmpresaRepository dashRepository;
+    @Autowired DashboardEmpresaRepository dashRepository;
 
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired UsuarioRepository usuarioRepository;
 
     public EmpresaResponseDto cadastrar(EmpresaRequestDto empresaRequestDto) {
         PermissaoValidator.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
