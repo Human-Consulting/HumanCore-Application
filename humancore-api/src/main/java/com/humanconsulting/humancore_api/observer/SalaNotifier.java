@@ -16,7 +16,7 @@ public class SalaNotifier implements SalaObserver {
     @Autowired private UsuarioRepository usuarioRepository;
 
     @Override
-    public void update(Tarefa tarefa, Sprint sprint, Projeto projeto, Usuario tarefaResponsavel, Usuario projetoResponsavel, LoginResponseDto responsavelProjeto, LoginResponseDto responsavelEntrega) {
+    public void update(Tarefa tarefa, Projeto projeto, Usuario tarefaResponsavel, LoginResponseDto responsavelEntrega) {
         if (projeto == null || tarefaResponsavel == null) throw new EntidadeNaoEncontradaException("Projeto e/ou Tarefa não encontrado.");
 
         Sala sala = salaRepository.findByProjeto(projeto);
