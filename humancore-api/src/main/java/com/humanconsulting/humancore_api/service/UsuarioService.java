@@ -90,7 +90,7 @@ public class UsuarioService {
 
     public Integer buscarPorEmail(String email) {
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-
+        System.out.println(optUsuario.isEmpty());
         if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
         return optUsuario.get().getIdUsuario();
     }
@@ -154,7 +154,6 @@ public class UsuarioService {
 
     public UsuarioResponseDto atualizarSenhaPorId(Integer idUsuario, @Valid UsuarioAtualizarSenhaDto usuarioAtualizar) {
         if (!usuarioAtualizar.getIdEditor().equals(idUsuario)) {
-            System.out.println("Apenas o dono da senha pode editá-la");
             throw new AcessoNegadoException("Apenas o dono da senha pode editá-la");
         }
 
@@ -162,12 +161,10 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
         if (!passwordEncoder.matches(usuarioAtualizar.getSenhaAtual(), usuarioAtual.getSenha())) {
-            System.out.println("Senha atual errada");
             throw new AcessoNegadoException("Senha atual errada");
         }
 
         if (passwordEncoder.matches(usuarioAtualizar.getSenhaAtualizada(), usuarioAtual.getSenha())) {
-            System.out.println("Nova senha deve ser diferente da atual");
             throw new AcessoNegadoException("Nova senha deve ser diferente da atual");
         }
 
@@ -185,8 +182,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
         usuarioAtual.setSenha(passwordEncoder.encode(usuarioEsqueciASenhaDto.getSenhaAtualizada()));
-        Usuario usuarioAtualizado = usuarioRepository.save(usuarioAtual);
-        System.out.println("Entrei no service");
+        usuarioRepository.save(usuarioAtual);
         return true;
     }
 

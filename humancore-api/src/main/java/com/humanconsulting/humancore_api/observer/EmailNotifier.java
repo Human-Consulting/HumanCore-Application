@@ -140,8 +140,8 @@ public class EmailNotifier implements Observer {
                                   >
                                     <div style="max-width: 600px; margin: auto; background-color: #fff">
                                       <div style="text-align: center; background-color: #333; padding: 14px">
-                                        <a style="text-decoration: none; outline: none; color: white" href="[https://www.humanconsulting.com.br/]" target="_blank">
-                                          HUMAN CONSULTING
+                                        <a style='text-decoration: none; outline: none; color: white;' href='https://www.humanconsulting.com.br/' target='_blank'>
+                                            HUMAN CONSULTING
                                         </a>
                                       </div>
                                       <div style="padding: 24px">
@@ -222,7 +222,6 @@ public class EmailNotifier implements Observer {
             helper.setSubject(assunto);
 
             helper.setText(conteudoHtml, true);
-
             emailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

@@ -154,7 +154,6 @@ public class UsuarioController {
     })
     @PatchMapping("/esqueciASenha/{idUsuario}")
     public ResponseEntity<Boolean> atualizarSenha(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioEsqueciASenhaDto usuarioAtualizarSenhaDto) {
-        System.out.println("Entrei no controller: " + usuarioAtualizarSenhaDto.getSenhaAtualizada());
         return ResponseEntity.status(200).body(service.esqueciASenha(idUsuario, usuarioAtualizarSenhaDto));
     }
 
@@ -186,6 +185,7 @@ public class UsuarioController {
     })
     @GetMapping("/emailExistente/{email}")
     public ResponseEntity<Integer> buscarPorEmail(@PathVariable String email) {
+        System.out.println(email);
         return ResponseEntity.status(200).body(service.buscarPorEmail(email));
     }
 
