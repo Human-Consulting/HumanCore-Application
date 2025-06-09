@@ -35,6 +35,6 @@ public class Usuario {
     @ManyToOne
     private Empresa empresa;
 
-    @ManyToMany(mappedBy = "usuarios")
+    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
     private Set<Sala> salas = new HashSet<>();
 }

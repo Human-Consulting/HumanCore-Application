@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaExceptio
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.SalaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,8 @@ public class SalaNotifier implements SalaObserver {
     @Autowired private UsuarioRepository usuarioRepository;
 
     @Override
-    public void update(Tarefa tarefa, Projeto projeto, Usuario tarefaResponsavel, LoginResponseDto responsavelEntrega) {
+    @Transactional
+    public void update(Tarefa tarefa, Projeto projeto, Usuario tarefaResponsavel) {
         if (projeto == null || tarefaResponsavel == null) throw new EntidadeNaoEncontradaException("Projeto e/ou Tarefa não encontrado.");
 
         Sala sala = salaRepository.findByProjeto(projeto);
@@ -25,7 +27,6 @@ public class SalaNotifier implements SalaObserver {
         if (!sala.getUsuarios().contains(tarefaResponsavel)) {
             sala.getUsuarios().add(tarefaResponsavel);
             salaRepository.save(sala);
-            System.out.println("Usuário " + tarefaResponsavel.getNome() + " adicionado à sala do projeto " + projeto.getTitulo());
         }
     }
 }

@@ -15,12 +15,14 @@ import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.CheckpointRepository;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +51,10 @@ public class TarefaService {
 
     @Autowired private SprintService sprintService;
 
+    @Autowired private SalaNotifier salaNotifier;
 
+
+    @Transactional
     public TarefaResponseDto cadastrar(TarefaRequestDto tarefaRequestDto) {
         PermissaoValidator.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
 
@@ -62,6 +67,11 @@ public class TarefaService {
 
         Usuario usuario = usuarioRepository.findById(tarefaRequestDto.getFkResponsavel()).get();
         Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto, sprint, usuario));
+
+        if (tarefa.getResponsavel() != null) {
+            salaNotifier.update(tarefa, tarefa.getSprint().getProjeto(), usuario);
+        }
+
         return passarParaResponse(tarefa);
     }
 
@@ -102,6 +112,7 @@ public class TarefaService {
         tarefaRepository.deleteById(id);
     }
 
+    @Transactional
     public TarefaResponseDto atualizar(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
         Tarefa tarefa = buscarPorId(idTarefa);
 
@@ -126,6 +137,10 @@ public class TarefaService {
         if (progresso == 100) tarefaAtualizada.setComImpedimento(false);
 
         tarefaRepository.save(tarefaAtualizada);
+
+        if (tarefa.getResponsavel() != null) {
+            salaNotifier.update(tarefa, tarefa.getSprint().getProjeto(), usuario);
+        }
 
         checkpointService.sincronizarCheckpointsDaTarefa(idTarefa, requestUpdate.getCheckpoints());
 

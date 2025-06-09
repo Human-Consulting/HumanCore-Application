@@ -7,5 +7,5 @@ import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 
 public interface SalaObserver {
-    void update(Tarefa tarefa, Projeto projetoEntrega, Usuario tarefaResponsavel, LoginResponseDto responsavelEntrega);
+    void update(Tarefa tarefa, Projeto projetoEntrega, Usuario tarefaResponsavel);
 }
