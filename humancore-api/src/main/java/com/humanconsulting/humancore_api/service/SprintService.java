@@ -47,11 +47,8 @@ public class SprintService {
 
     public Sprint buscarPorId(Integer id) {
         Optional<Sprint> optSprint = sprintRepository.findById(id);
-        Sprint sprint = optSprint.get();
-
         if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("Sprint não encontrada.");
-
-        return sprint;
+        return optSprint.get();
     }
 
     public List<Sprint> listar() {
