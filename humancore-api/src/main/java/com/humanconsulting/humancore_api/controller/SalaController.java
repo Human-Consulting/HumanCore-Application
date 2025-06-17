@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sala.SalaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.SalaRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
+import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.sala.SalaResponseDto;
 import com.humanconsulting.humancore_api.service.SalaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,6 +47,19 @@ public class SalaController {
         return ResponseEntity.status(200).body(service.listar());
     }
 
+    @Operation(summary = "Listar todas as salas a qual um usuário pertence",
+            description = "Esse endpoint retorna uma lista com todas as salas cadastradas contendo o id do usuário",
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salas encontradas com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Sala não encontrada")
+    })
+    @GetMapping("/porUsuario/{idUsuario}")
+    public ResponseEntity<List<ChatResponseDto>> listarPorIdUsuario(@PathVariable Integer idUsuario) {
+        return ResponseEntity.status(200).body(service.getChatsDoUsuario(idUsuario));
+    }
+
     @Operation(summary = "Buscar sala por ID",
             description = "Esse endpoint retorna os detalhes de uma sala específica com base no ID fornecido",
             security = @SecurityRequirement(name = "Bearer")
@@ -68,8 +82,8 @@ public class SalaController {
             @ApiResponse(responseCode = "404", description = "Sala não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
-        service.deletar(id, usuarioPermissaoDto);
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+        service.deletar(id);
         return ResponseEntity.status(204).build();
     }
 
@@ -83,7 +97,7 @@ public class SalaController {
             @ApiResponse(responseCode = "404", description = "Sala não encontrada")
     })
     @PatchMapping("/{idSala}")
-    public ResponseEntity<SalaResponseDto> atualizar(@PathVariable Integer idSala, @Valid @RequestBody SalaAtualizarRequestDto request) {
+    public ResponseEntity<SalaResponseDto> atualizar(@PathVariable Integer idSala, @Valid @RequestBody SalaRequestDto request) {
         return ResponseEntity.status(200).body(service.atualizar(idSala, request));
     }
 }

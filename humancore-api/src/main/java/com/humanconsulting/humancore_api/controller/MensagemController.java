@@ -3,8 +3,11 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.mensagem.MensagemAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.MensagemRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
+import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.controller.dto.response.mensagem.MensagemResponseDto;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.service.MensagemService;
+import com.humanconsulting.humancore_api.service.WebSocketMensagemPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,8 +23,8 @@ import java.util.List;
 @RequestMapping("mensagens")
 @CrossOrigin("*")
 public class MensagemController {
-    @Autowired
-    private MensagemService service;
+    @Autowired private MensagemService service;
+    @Autowired private SalaNotifier salaNotifier;
 
     @Operation(summary = "Cadastrar uma nova mensagem",
             description = "Esse endpoint cria uma nova mensagem no sistema",
@@ -32,8 +35,8 @@ public class MensagemController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
-    public ResponseEntity<MensagemResponseDto> cadastrarMensagem(@Valid @RequestBody MensagemRequestDto mensagemRequestDto) {
-        return ResponseEntity.status(201).body(service.cadastrar(mensagemRequestDto));
+    public ResponseEntity<ChatMensagemUnificadaDto> cadastrarMensagem(@Valid @RequestBody MensagemRequestDto mensagemRequestDto) {
+        return ResponseEntity.status(201).body(salaNotifier.enviarMensagem(mensagemRequestDto));
     }
 
     @Operation(summary = "Listar todas as mensagens",

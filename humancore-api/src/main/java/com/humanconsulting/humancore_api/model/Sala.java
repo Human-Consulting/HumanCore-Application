@@ -19,9 +19,17 @@ public class Sala {
 
     private String nome;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String urlImagem;
+
     @OneToOne
     @JoinColumn(name = "fkProjeto", unique = true)
     private Projeto projeto;
+
+    @OneToOne
+    @JoinColumn(name = "fkEmpresa", unique = true)
+    private Empresa empresa;
 
     @ManyToMany
     @JoinTable(

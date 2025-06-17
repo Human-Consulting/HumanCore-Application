@@ -21,6 +21,7 @@ import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.utils.SenhaGenerator;
@@ -61,6 +62,9 @@ public class UsuarioService {
     @Autowired
     private EmailNotifier emailNotifier;
 
+    @Autowired
+    private SalaNotifier salaNotifier;
+
     public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
         if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isEmpty()) {
             novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
@@ -69,12 +73,16 @@ public class UsuarioService {
             String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
             try {
                 emailNotifier.cadastro(novoUsuario);
+
             } catch (Exception exception) {
                 throw new RuntimeException("Não foi possível cadastrar o usuário.");
             }
             novoUsuario.setSenha(senhaCriptografada);
 
-            this.usuarioRepository.save(novoUsuario);
+            Usuario usuarioCadastrado = usuarioRepository.save(novoUsuario);
+
+            salaNotifier.adicionarUsuarioEmSalaEmpresa(usuarioCadastrado);
+
             return novoUsuario;
         }
         throw new EntidadeConflitanteException("Este email já foi registrado");

@@ -12,7 +12,7 @@ import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
 import com.humanconsulting.humancore_api.model.*;
-import com.humanconsulting.humancore_api.observer.ProjetoNotifier;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.*;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
@@ -41,7 +41,7 @@ public class ProjetoService {
 
     @Autowired private DashboardProjetoRepository dashboardProjetoRepository;
 
-    @Autowired private ProjetoNotifier projetoNotifier;
+    @Autowired private SalaNotifier salaNotifier;
 
     public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
         PermissaoValidator.validarPermissao(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
@@ -50,7 +50,7 @@ public class ProjetoService {
 
         Projeto projeto = projetoRepository.save(ProjetoMapper.toEntity(projetoRequestDto, empresaRepository.findById(projetoRequestDto.getFkEmpresa()).get(), usuarioRepository.findById(projetoRequestDto.getFkResponsavel()).get()));
 
-        projetoNotifier.onProjetoCriado(projeto);
+        salaNotifier.onProjetoCriado(projeto, usuarioRepository.findById(projetoRequestDto.getIdEditor()).get());
 
         return passarParaResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto());
     }

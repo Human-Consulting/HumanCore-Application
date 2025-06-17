@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,7 @@ public class Usuario {
     @ManyToOne
     private Empresa empresa;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
     private Set<Sala> salas = new HashSet<>();
 }

@@ -54,7 +54,8 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/usuarios/codigoEsqueciASenha"),
             new AntPathRequestMatcher("/usuarios/emailExistente/*"),
             new AntPathRequestMatcher("/usuarios", "POST"),
-            new AntPathRequestMatcher("/error/**")
+            new AntPathRequestMatcher("/error/**"),
+            new AntPathRequestMatcher("/ws-chat/**"),
     };
 
     @Bean
@@ -102,7 +103,11 @@ public class SecurityConfiguracao {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuracao = new CorsConfiguration();
-        configuracao.applyPermitDefaultValues();
+        configuracao.setAllowedOriginPatterns(List.of("*")); // aceita qualquer origem
+        configuracao.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuracao.setAllowedHeaders(List.of("*"));
+        configuracao.setAllowCredentials(true);
+        configuracao.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
         configuracao.setAllowedMethods(
                 Arrays.asList(
                         HttpMethod.GET.name(),

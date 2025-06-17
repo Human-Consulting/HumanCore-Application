@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.repository;
 
 import com.humanconsulting.humancore_api.model.Mensagem;
+import com.humanconsulting.humancore_api.model.MensagemInfo;
 import com.humanconsulting.humancore_api.model.Sala;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MensagemRepository extends JpaRepository<Mensagem, Integer> {
+public interface MensagemInfoRepository extends JpaRepository<MensagemInfo, Integer> {
 
-    List<Mensagem> findBySalaOrderByHorarioAsc(Sala sala);
+    List<MensagemInfo> findBySalaOrderByHorarioAsc(Sala sala);
 }

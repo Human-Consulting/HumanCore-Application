@@ -69,7 +69,7 @@ public class TarefaService {
         Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto, sprint, usuario));
 
         if (tarefa.getResponsavel() != null) {
-            salaNotifier.update(tarefa, tarefa.getSprint().getProjeto(), usuario);
+            salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
         }
 
         return passarParaResponse(tarefa);
@@ -139,7 +139,7 @@ public class TarefaService {
         tarefaRepository.save(tarefaAtualizada);
 
         if (tarefa.getResponsavel() != null) {
-            salaNotifier.update(tarefa, tarefa.getSprint().getProjeto(), usuario);
+            salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
         }
 
         checkpointService.sincronizarCheckpointsDaTarefa(idTarefa, requestUpdate.getCheckpoints());
