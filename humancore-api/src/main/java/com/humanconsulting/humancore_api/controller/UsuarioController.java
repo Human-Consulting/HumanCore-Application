@@ -3,9 +3,12 @@ package com.humanconsulting.humancore_api.controller;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioEsqueciASenhaDto;
 import com.humanconsulting.humancore_api.controller.dto.request.LoginRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioEnviarCodigoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioEsqueciASenhaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenDto;
 import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
@@ -139,6 +142,22 @@ public class UsuarioController {
     }
 
     @Operation(
+            summary = "Atualizar senha de um usuário, caso tenha esquecido a senha",
+            description = "Esse endpoint atualiza a senha de um usuário existente.",
+            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    @PatchMapping("/esqueciASenha/{idUsuario}")
+    public ResponseEntity<Boolean> atualizarSenha(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioEsqueciASenhaDto usuarioAtualizarSenhaDto) {
+        return ResponseEntity.status(200).body(service.esqueciASenha(idUsuario, usuarioAtualizarSenhaDto));
+    }
+
+    @Operation(
             summary = "Atualizar cores do usuário",
             description = "Esse endpoint atualiza a cor de fundo da aplicação de um usuário existente.",
             parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
@@ -155,6 +174,22 @@ public class UsuarioController {
     }
 
     @Operation(
+            summary = "Buscar id do usuário por email.",
+            description = "Esse endpoint retorna o id de um usuário específico pelo seu email.",
+            parameters = @Parameter(name = "email", description = "Email do usuário a ser buscado."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
+    })
+    @GetMapping("/emailExistente/{email}")
+    public ResponseEntity<Integer> buscarPorEmail(@PathVariable String email) {
+        System.out.println(email);
+        return ResponseEntity.status(200).body(service.buscarPorEmail(email));
+    }
+
+    @Operation(
             summary = "Buscar usuário por ID.",
             description = "Esse endpoint retorna um usuário específico pelo seu ID.",
             parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser buscado."),
@@ -164,8 +199,15 @@ public class UsuarioController {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
     })
+
     @GetMapping("/{idUsuario}")
     public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
         return ResponseEntity.status(200).body(service.buscarPorId(idUsuario));
+    }
+
+    @PostMapping("/codigoEsqueciASenha")
+    public ResponseEntity<Void> enviarCodigoEsqueciASenha(@RequestBody UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
+        service.enviarCodigo(usuarioEnviarCodigoRequestDto);
+        return ResponseEntity.status(204).build();
     }
 }

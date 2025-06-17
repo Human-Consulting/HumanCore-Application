@@ -1,7 +1,11 @@
 package com.humanconsulting.humancore_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,4 +35,8 @@ public class Usuario {
     @JoinColumn(name = "fkEmpresa")
     @ManyToOne
     private Empresa empresa;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
+    private Set<Sala> salas = new HashSet<>();
 }

@@ -6,23 +6,23 @@ import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.controller.dto.response.checkpoint.CheckpointResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
 import com.humanconsulting.humancore_api.mapper.TarefaMapper;
-import com.humanconsulting.humancore_api.model.Checkpoint;
-import com.humanconsulting.humancore_api.model.Sprint;
-import com.humanconsulting.humancore_api.model.Tarefa;
-import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.CheckpointRepository;
 import com.humanconsulting.humancore_api.repository.SprintRepository;
 import com.humanconsulting.humancore_api.repository.TarefaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +45,16 @@ public class TarefaService {
 
     @Autowired private EmailNotifier emailNotifier;
 
+    @Autowired private UsuarioService usuarioService;
+
+    @Autowired private ProjetoService projetoService;
+
+    @Autowired private SprintService sprintService;
+
+    @Autowired private SalaNotifier salaNotifier;
+
+
+    @Transactional
     public TarefaResponseDto cadastrar(TarefaRequestDto tarefaRequestDto) {
         PermissaoValidator.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
 
@@ -57,6 +67,11 @@ public class TarefaService {
 
         Usuario usuario = usuarioRepository.findById(tarefaRequestDto.getFkResponsavel()).get();
         Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto, sprint, usuario));
+
+        if (tarefa.getResponsavel() != null) {
+            salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
+        }
+
         return passarParaResponse(tarefa);
     }
 
@@ -97,6 +112,7 @@ public class TarefaService {
         tarefaRepository.deleteById(id);
     }
 
+    @Transactional
     public TarefaResponseDto atualizar(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
         Tarefa tarefa = buscarPorId(idTarefa);
 
@@ -122,6 +138,10 @@ public class TarefaService {
 
         tarefaRepository.save(tarefaAtualizada);
 
+        if (tarefa.getResponsavel() != null) {
+            salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
+        }
+
         checkpointService.sincronizarCheckpointsDaTarefa(idTarefa, requestUpdate.getCheckpoints());
 
         return passarParaResponse(tarefaAtualizada);
@@ -131,14 +151,19 @@ public class TarefaService {
         Tarefa tarefa = buscarPorId(idTarefa);
         Integer fkResponsavel = tarefa.getResponsavel().getIdUsuario();
 
+        Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getSprint().getIdSprint());
+        Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getProjeto().getIdProjeto());
+        Usuario tarefaResponsavel = usuarioRepository.findById(tarefa.getResponsavel().getIdUsuario()).get();
+        Usuario projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario()).get();
+        LoginResponseDto responsavelProjeto = usuarioService.passarParaLoginResponse(projetoResponsavel, null);
+        LoginResponseDto responsavelEntrega = usuarioService.passarParaLoginResponse(tarefaResponsavel, null);
+
         if (!request.getIdEditor().equals(fkResponsavel))
             throw new AcessoNegadoException("Usuário não é responsável pela tarefa");
 
         tarefaRepository.toggleImpedimento(idTarefa);
 
-        if (!tarefa.getComImpedimento()) {
-            emailNotifier.update(tarefa);
-        }
+        emailNotifier.update(tarefa, sprintEntrega, projetoEntrega, tarefaResponsavel, projetoResponsavel, responsavelProjeto, responsavelEntrega);
 
         return passarParaResponse(tarefa);
     }

@@ -1,10 +1,10 @@
 package com.humanconsulting.humancore_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,4 +18,24 @@ public class Sala {
     private Integer idSala;
 
     private String nome;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String urlImagem;
+
+    @OneToOne
+    @JoinColumn(name = "fkProjeto", unique = true)
+    private Projeto projeto;
+
+    @OneToOne
+    @JoinColumn(name = "fkEmpresa", unique = true)
+    private Empresa empresa;
+
+    @ManyToMany
+    @JoinTable(
+            name = "sala_usuario",
+            joinColumns = @JoinColumn(name = "idSala"),
+            inverseJoinColumns = @JoinColumn(name = "idUsuario")
+    )
+    private Set<Usuario> usuarios = new HashSet<>();
 }

@@ -1,14 +1,18 @@
 package com.humanconsulting.humancore_api.service;
 
 import com.humanconsulting.humancore_api.controller.dto.atualizar.mensagem.MensagemAtualizarRequestDto;
+import com.humanconsulting.humancore_api.controller.dto.request.MensagemInfoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.MensagemRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
+import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.controller.dto.response.mensagem.MensagemResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.MensagemMapper;
 import com.humanconsulting.humancore_api.model.Mensagem;
+import com.humanconsulting.humancore_api.model.MensagemInfo;
 import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.repository.MensagemInfoRepository;
 import com.humanconsulting.humancore_api.repository.MensagemRepository;
 import com.humanconsulting.humancore_api.repository.SalaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
@@ -22,15 +26,19 @@ import java.util.Optional;
 
 @Service
 public class MensagemService {
-    @Autowired MensagemRepository mensagemRepository;
-    @Autowired UsuarioRepository usuarioRepository;
-    @Autowired SalaRepository salaRepository;
+    @Autowired private MensagemRepository mensagemRepository;
+    @Autowired private MensagemInfoRepository mensagemInfoRepository;
+    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired private SalaRepository salaRepository;
 
-    public MensagemResponseDto cadastrar(MensagemRequestDto mensagemRequestDto) {
-//        PermissaoValidator.validarPermissao(mensagemRequestDto.getPermissaoEditor(), "ADICIONAR_MENSAGEM");
-
+    public ChatMensagemUnificadaDto cadastrarMensagem(MensagemRequestDto mensagemRequestDto) {
         Mensagem mensagemCadastrada = mensagemRepository.save(MensagemMapper.toEntity(mensagemRequestDto, usuarioRepository.findById(mensagemRequestDto.getFkUsuario()).get(), salaRepository.findById(mensagemRequestDto.getFkSala()).get()));
-        return passarParaResponse(mensagemCadastrada);
+        return MensagemMapper.toMensagemUnificadaResponse(mensagemCadastrada);
+    }
+
+    public ChatMensagemUnificadaDto cadastrarMensagemInfo(MensagemInfoRequestDto mensagemInfoRequestDto) {
+        MensagemInfo mensagemInfo = mensagemInfoRepository.save(MensagemMapper.toEntity(mensagemInfoRequestDto, salaRepository.findById(mensagemInfoRequestDto.getFkSala()).get()));
+        return MensagemMapper.toMensagemUnificadaResponse(mensagemInfo);
     }
 
     public Mensagem buscarPorId(Integer id) {

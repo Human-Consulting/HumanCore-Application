@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -14,11 +16,19 @@ public class SalaRequestDto {
     @NotNull
     private String nome;
 
-    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
-    @NotNull
-    private Integer idEditor;
+    @Schema(description = "Foto da capa", example = "image")
+    private String urlImagem;
 
-    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @Schema(description = "Empresa vinculada", example = "1")
+    private Integer fkEmpresa;
+
+    @Schema(description = "Projeto vinculado", example = "1")
+    private Integer fkProjeto;
+
+    @Schema(description = "Lista de participantes", example = "[1, 2, 3]")
     @NotNull
-    private String permissaoEditor;
+    private List<Integer> participantes;
+
+    @Schema(description = "Usuário que criou a sala, será cadastrado", example = "1")
+    private Integer idEditor;
 }

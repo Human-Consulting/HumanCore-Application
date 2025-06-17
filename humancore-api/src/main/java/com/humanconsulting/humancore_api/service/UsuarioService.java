@@ -4,20 +4,27 @@ import com.humanconsulting.humancore_api.config.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
+import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioEsqueciASenhaDto;
+import com.humanconsulting.humancore_api.controller.dto.request.UsuarioEnviarCodigoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioEsqueciASenhaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.token.UsuarioTokenMapper;
 import com.humanconsulting.humancore_api.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
+import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.UsuarioMapper;
 import com.humanconsulting.humancore_api.model.Empresa;
 import com.humanconsulting.humancore_api.model.Tarefa;
 import com.humanconsulting.humancore_api.model.Usuario;
+import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.utils.SenhaGenerator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,16 +59,33 @@ public class UsuarioService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private EmailNotifier emailNotifier;
+
+    @Autowired
+    private SalaNotifier salaNotifier;
+
     public Usuario cadastrar(Usuario novoUsuario, Integer fkEmpresa) {
-        String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
-        novoUsuario.setSenha(senhaCriptografada);
-        novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
-        novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
+        if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isEmpty()) {
+            novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
+            novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa).get());
+            novoUsuario.setSenha(SenhaGenerator.gerarSenha(novoUsuario.getNome(), novoUsuario.getEmpresa().getNome()));
+            String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
+            try {
+                emailNotifier.cadastro(novoUsuario);
 
-        //! Criar senha aleatória antes de salvar novoUsuario
-        this.usuarioRepository.save(novoUsuario);
+            } catch (Exception exception) {
+                throw new RuntimeException("Não foi possível cadastrar o usuário.");
+            }
+            novoUsuario.setSenha(senhaCriptografada);
 
-        return novoUsuario;
+            Usuario usuarioCadastrado = usuarioRepository.save(novoUsuario);
+
+            salaNotifier.adicionarUsuarioEmSalaEmpresa(usuarioCadastrado);
+
+            return novoUsuario;
+        }
+        throw new EntidadeConflitanteException("Este email já foi registrado");
     }
 
     public LoginResponseDto buscarPorId(Integer id) {
@@ -70,6 +94,13 @@ public class UsuarioService {
         if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
         return passarParaLoginResponse(optUsuario.get(), null);
+    }
+
+    public Integer buscarPorEmail(String email) {
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+        System.out.println(optUsuario.isEmpty());
+        if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
+        return optUsuario.get().getIdUsuario();
     }
 
     public List<UsuarioResponseDto> listar() {
@@ -131,7 +162,6 @@ public class UsuarioService {
 
     public UsuarioResponseDto atualizarSenhaPorId(Integer idUsuario, @Valid UsuarioAtualizarSenhaDto usuarioAtualizar) {
         if (!usuarioAtualizar.getIdEditor().equals(idUsuario)) {
-            System.out.println("Apenas o dono da senha pode editá-la");
             throw new AcessoNegadoException("Apenas o dono da senha pode editá-la");
         }
 
@@ -139,18 +169,29 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
         if (!passwordEncoder.matches(usuarioAtualizar.getSenhaAtual(), usuarioAtual.getSenha())) {
-            System.out.println("Senha atual errada");
             throw new AcessoNegadoException("Senha atual errada");
         }
 
         if (passwordEncoder.matches(usuarioAtualizar.getSenhaAtualizada(), usuarioAtual.getSenha())) {
-            System.out.println("Nova senha deve ser diferente da atual");
             throw new AcessoNegadoException("Nova senha deve ser diferente da atual");
         }
 
         usuarioAtual.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenhaAtualizada()));
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioAtual);
         return passarParaResponse(usuarioAtualizado);
+    }
+
+    public void enviarCodigo(UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
+        emailNotifier.codigo(usuarioEnviarCodigoRequestDto);
+    }
+
+    public Boolean esqueciASenha(Integer idUsuario, @Valid UsuarioEsqueciASenhaDto usuarioEsqueciASenhaDto) {
+        Usuario usuarioAtual = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+
+        usuarioAtual.setSenha(passwordEncoder.encode(usuarioEsqueciASenhaDto.getSenhaAtualizada()));
+        usuarioRepository.save(usuarioAtual);
+        return true;
     }
 
     public Boolean atualizarCoresPorId(Integer idUsuario, @Valid UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
@@ -199,7 +240,8 @@ public class UsuarioService {
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefasVinculada : tarefasVinculadas) {
             TarefaResponseDto novaTarefa = tarefaService.passarParaResponse(tarefasVinculada);
-            if (novaTarefa.getProgresso() < 100) tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
+            if (novaTarefa.getProgresso() < 100)
+                tarefasResponse.add(tarefaService.passarParaResponse(tarefasVinculada));
         }
         Integer qtdTarefas = tarefasResponse.size();
         return UsuarioMapper.toLoginDto(usuario, nomeEmpresa, qtdTarefas, comImpedimento, projetosVinculados, tarefasResponse, tokenUsuario);

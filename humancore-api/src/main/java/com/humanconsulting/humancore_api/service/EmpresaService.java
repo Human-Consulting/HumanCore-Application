@@ -11,6 +11,8 @@ import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.mapper.EmpresaMapper;
 import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
 import com.humanconsulting.humancore_api.model.*;
+import com.humanconsulting.humancore_api.observer.ProjetoNotifier;
+import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.CheckpointRepository;
 import com.humanconsulting.humancore_api.repository.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.repository.EmpresaRepository;
@@ -36,11 +38,15 @@ public class EmpresaService {
 
     @Autowired UsuarioRepository usuarioRepository;
 
+    @Autowired private SalaNotifier salaNotifier;
+
     public EmpresaResponseDto cadastrar(EmpresaRequestDto empresaRequestDto) {
         PermissaoValidator.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
 
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
         Empresa empresaCadastrada = empresaRepository.save(EmpresaMapper.toEntity(empresaRequestDto));
+
+        salaNotifier.onEmpresaCriada(empresaCadastrada, usuarioRepository.findById(empresaRequestDto.getIdEditor()).get());
         return passarParaResponse(empresaCadastrada);
     }
 

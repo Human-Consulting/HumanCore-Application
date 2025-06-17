@@ -14,8 +14,8 @@ urlImagem LONGTEXT
 CREATE TABLE usuario (
 idUsuario INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(30),
-email VARCHAR(50),
-senha VARCHAR(200),
+email VARCHAR(30),
+senha VARCHAR(30),
 cargo VARCHAR(30),
 area VARCHAR(30),
 permissao VARCHAR(30),
@@ -31,7 +31,7 @@ fkEmpresa INT, FOREIGN KEY (fkEmpresa) REFERENCES empresa (idEmpresa) ON DELETE 
 fkResponsavel INT, FOREIGN KEY (fkResponsavel) REFERENCES usuario (idUsuario) ON DELETE CASCADE
 );
 
-CREATE TABLE sprint (
+CREATE TABLE sprint ( -- Progresso e comImpedimento vai depender das informações de suas entregas
 idSprint INT PRIMARY KEY AUTO_INCREMENT,
 descricao VARCHAR(250),
 dtInicio date,
