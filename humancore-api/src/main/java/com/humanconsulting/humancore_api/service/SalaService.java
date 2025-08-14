@@ -1,10 +1,7 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.sala.SalaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.MensagemInfoRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.SalaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatMensagemDto;
 import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatUsuarioDto;
@@ -18,7 +15,6 @@ import com.humanconsulting.humancore_api.model.Sala;
 import com.humanconsulting.humancore_api.model.Usuario;
 import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.repository.*;
-import com.humanconsulting.humancore_api.security.PermissaoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

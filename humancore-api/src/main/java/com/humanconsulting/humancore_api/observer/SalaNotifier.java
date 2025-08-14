@@ -23,24 +23,33 @@ import java.util.Set;
 @Component
 public class SalaNotifier implements SalaObserver {
 
-    @Autowired private SalaRepository salaRepository;
-    @Autowired private UsuarioRepository usuarioRepository;
-    @Autowired private List<ProjetoObserver> observers;
-    @Autowired private MensagemService mensagemService;
-    @Autowired private SalaService salaService;
-    @Autowired private WebSocketMensagemPublisher publisher;
+    @Autowired
+    private SalaRepository salaRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private List<ProjetoObserver> observers;
+    @Autowired
+    private MensagemService mensagemService;
+    @Autowired
+    private SalaService salaService;
+    @Autowired
+    private WebSocketMensagemPublisher publisher;
 
     @Override
     @Transactional
     public void adicionarUsuarioEmSalaProjeto(Tarefa tarefa, Projeto projeto, Usuario tarefaResponsavel) {
-        if (projeto == null || tarefaResponsavel == null) throw new EntidadeNaoEncontradaException("Projeto e/ou Tarefa não encontrado.");
+        System.out.println("Cheguei no adicionarUsuarioEmSalaProjeto");
+        if (projeto == null || tarefaResponsavel == null)
+            throw new EntidadeNaoEncontradaException("Projeto e/ou Tarefa não encontrado.");
+        System.out.println("Projeto e/ou Tarefa encontrado.");
 
         Sala sala = salaRepository.findByProjeto(projeto);
-        if (sala == null) throw new EntidadeNaoEncontradaException("Sala não encontrada.");
-
-        if (!sala.getUsuarios().contains(tarefaResponsavel)) {
-            sala.getUsuarios().add(tarefaResponsavel);
-            salaRepository.save(sala);
+        if (sala != null) {
+            if (!sala.getUsuarios().contains(tarefaResponsavel)) {
+                sala.getUsuarios().add(tarefaResponsavel);
+                salaRepository.save(sala);
+            }
         }
     }
 
@@ -88,7 +97,8 @@ public class SalaNotifier implements SalaObserver {
         Sala salaCriada = salaRepository.save(novaSala);
         enviarMensagemInfo("Conversa criada.", salaCriada.getIdSala());
         for (Usuario participante : participantesIniciais) {
-            if (participante.getIdUsuario() != editor.getIdUsuario()) enviarMensagemInfo(editor.getNome() + " adicionou " + participante.getNome() + " à sala", salaCriada.getIdSala());
+            if (participante.getIdUsuario() != editor.getIdUsuario())
+                enviarMensagemInfo(editor.getNome() + " adicionou " + participante.getNome() + " à sala", salaCriada.getIdSala());
         }
     }
 
