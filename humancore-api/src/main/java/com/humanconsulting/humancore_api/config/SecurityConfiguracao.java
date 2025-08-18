@@ -61,22 +61,18 @@ public class SecurityConfiguracao {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .cors(Customizer.withDefaults())
-                .csrf(CsrfConfigurer<HttpSecurity>::disable)
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(URLS_PERMITIDAS)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(URLS_PERMITIDAS).permitAll()
+                        .requestMatchers("/ws-chat/**").permitAll()  // adiciona aqui
+                        .anyRequest().authenticated()
                 )
-                .exceptionHandling(handling -> handling
-                        .authenticationEntryPoint(autenticacaoJwtEntryPoint))
-                .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(autenticacaoJwtEntryPoint))
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthenticationFilterBean(), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
@@ -106,7 +102,8 @@ public class SecurityConfiguracao {
         configuracao.setAllowedOriginPatterns(List.of("*")); // aceita qualquer origem
         configuracao.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuracao.setAllowedHeaders(List.of("*"));
-        configuracao.setAllowCredentials(true);
+//        configuracao.setAllowCredentials(true);
+        configuracao.setAllowCredentials(false);
         configuracao.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
         configuracao.setAllowedMethods(
                 Arrays.asList(

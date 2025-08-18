@@ -7,7 +7,6 @@ import com.humanconsulting.humancore_api.controller.dto.response.chat.ChatMensag
 import com.humanconsulting.humancore_api.controller.dto.response.mensagem.MensagemResponseDto;
 import com.humanconsulting.humancore_api.observer.SalaNotifier;
 import com.humanconsulting.humancore_api.service.MensagemService;
-import com.humanconsulting.humancore_api.service.WebSocketMensagemPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

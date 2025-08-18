@@ -9,9 +9,9 @@ import com.humanconsulting.humancore_api.repository.SalaRepository;
 import com.humanconsulting.humancore_api.repository.UsuarioRepository;
 import com.humanconsulting.humancore_api.service.MensagemService;
 import com.humanconsulting.humancore_api.service.SalaService;
-import com.humanconsulting.humancore_api.service.WebSocketMensagemPublisher;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ public class SalaNotifier implements SalaObserver {
     @Autowired
     private SalaService salaService;
     @Autowired
-    private WebSocketMensagemPublisher publisher;
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     @Transactional
@@ -134,13 +134,17 @@ public class SalaNotifier implements SalaObserver {
 
     public ChatMensagemUnificadaDto enviarMensagem(MensagemRequestDto mensagemRequestDto) {
         ChatMensagemUnificadaDto msg = mensagemService.cadastrarMensagem(mensagemRequestDto);
-        //publisher.enviarParaSala(mensagemRequestDto.getFkSala(), msg);
+        notificarInfo(mensagemRequestDto.getFkSala(), msg);
         return msg;
     }
 
     public ChatMensagemUnificadaDto enviarMensagemInfo(String conteudo, Integer idSala) {
         ChatMensagemUnificadaDto msg = mensagemService.cadastrarMensagemInfo(new MensagemInfoRequestDto(conteudo, LocalDateTime.now(), idSala));
-        //publisher.enviarParaSala(idSala, msg);
+        notificarInfo(idSala, msg);
         return msg;
+    }
+
+    public void notificarInfo(Integer idSala, ChatMensagemUnificadaDto mensagemUnificada) {
+        messagingTemplate.convertAndSend("/topic/" + idSala, mensagemUnificada);
     }
 }
