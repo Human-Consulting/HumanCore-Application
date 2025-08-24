@@ -1,6 +1,14 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.response.sprint.SprintResponseDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.sprint.SprintResponseDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.velho.model.Checkpoint;
+import com.humanconsulting.humancore_api.velho.model.Projeto;
+import com.humanconsulting.humancore_api.velho.model.Sprint;
+import com.humanconsulting.humancore_api.velho.model.Tarefa;
+import com.humanconsulting.humancore_api.velho.repository.*;
+import com.humanconsulting.humancore_api.velho.service.SprintService;
+import com.humanconsulting.humancore_api.velho.service.TarefaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,10 +21,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.Collections;
 
-import com.humanconsulting.humancore_api.model.*;
-import com.humanconsulting.humancore_api.repository.*;
-import com.humanconsulting.humancore_api.mapper.SprintMapper;
-import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
+import com.humanconsulting.humancore_api.velho.mapper.SprintMapper;
+import com.humanconsulting.humancore_api.velho.utils.ProgressoCalculator;
 
 @ExtendWith(MockitoExtension.class)
 class SprintServiceTest {
@@ -45,7 +51,7 @@ class SprintServiceTest {
         when(tarefaRepository.existsImpedimentoBySprint(1)).thenReturn(true);
         Tarefa tarefa = mock(Tarefa.class);
         when(tarefaRepository.findByProjetoAndSprint(1, 1)).thenReturn(Collections.singletonList(tarefa));
-        when(tarefaService.passarParaResponse(tarefa)).thenReturn(mock(com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto.class));
+        when(tarefaService.passarParaResponse(tarefa)).thenReturn(mock(TarefaResponseDto.class));
         Checkpoint checkpoint = mock(Checkpoint.class);
         when(checkpointRepository.findAllByTarefa_Sprint_IdSprint(1)).thenReturn(Collections.singletonList(checkpoint));
         try (MockedStatic<ProgressoCalculator> progressoCalculatorMock = mockStatic(ProgressoCalculator.class)) {

@@ -1,13 +1,14 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
-import com.humanconsulting.humancore_api.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
-import com.humanconsulting.humancore_api.controller.dto.response.usuario.UsuarioResponseDto;
-import com.humanconsulting.humancore_api.exception.AcessoNegadoException;
-import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
-import com.humanconsulting.humancore_api.model.Empresa;
-import com.humanconsulting.humancore_api.model.Usuario;
-import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.usuario.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.velho.exception.AcessoNegadoException;
+import com.humanconsulting.humancore_api.velho.exception.EntidadeNaoEncontradaException;
+import com.humanconsulting.humancore_api.velho.model.Empresa;
+import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.velho.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.service.UsuarioService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

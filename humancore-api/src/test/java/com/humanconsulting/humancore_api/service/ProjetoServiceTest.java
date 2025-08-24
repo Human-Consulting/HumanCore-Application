@@ -1,23 +1,20 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.request.ProjetoRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.investimento.InvestimentoResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.projeto.DashboardProjetoResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.projeto.ProjetoResponseDto;
-import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
-import com.humanconsulting.humancore_api.mapper.InvestimentoMapper;
-import com.humanconsulting.humancore_api.mapper.ProjetoMapper;
-import com.humanconsulting.humancore_api.model.*;
-import com.humanconsulting.humancore_api.repository.*;
-import com.humanconsulting.humancore_api.security.PermissaoValidator;
-import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.investimento.InvestimentoResponseDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.projeto.DashboardProjetoResponseDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.projeto.ProjetoResponseDto;
+import com.humanconsulting.humancore_api.velho.mapper.InvestimentoMapper;
+import com.humanconsulting.humancore_api.velho.mapper.ProjetoMapper;
+import com.humanconsulting.humancore_api.velho.model.*;
+import com.humanconsulting.humancore_api.velho.repository.*;
+import com.humanconsulting.humancore_api.velho.service.ProjetoService;
+import com.humanconsulting.humancore_api.velho.utils.ProgressoCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -31,14 +28,20 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProjetoServiceTest {
-    @Mock ProjetoRepository projetoRepository;
-    @Mock UsuarioRepository usuarioRepository;
-    @Mock EmpresaRepository empresaRepository;
-    @Mock SprintRepository sprintRepository;
-    @Mock TarefaRepository tarefaRepository;
+    @Mock
+    ProjetoRepository projetoRepository;
+    @Mock
+    UsuarioRepository usuarioRepository;
+    @Mock
+    EmpresaRepository empresaRepository;
+    @Mock
+    SprintRepository sprintRepository;
+    @Mock
+    TarefaRepository tarefaRepository;
     @Mock CheckpointRepository checkpointRepository;
     @Mock DashboardProjetoRepository dashboardProjetoRepository;
-    @InjectMocks ProjetoService projetoService;
+    @InjectMocks
+    ProjetoService projetoService;
 
     @BeforeEach
     void setUp() {

@@ -1,13 +1,12 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.token.UsuarioDetalhesDto;
-import com.humanconsulting.humancore_api.model.Usuario;
-import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.controller.dto.token.UsuarioDetalhesDto;
+import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.velho.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.service.AutenticacaoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 

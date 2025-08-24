@@ -1,12 +1,12 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.request.CheckpointRequestDto;
-import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
-import com.humanconsulting.humancore_api.model.Checkpoint;
-import com.humanconsulting.humancore_api.model.Tarefa;
-import com.humanconsulting.humancore_api.repository.CheckpointRepository;
-import com.humanconsulting.humancore_api.repository.TarefaRepository;
-import org.junit.jupiter.api.BeforeAll;
+import com.humanconsulting.humancore_api.velho.controller.dto.request.CheckpointRequestDto;
+import com.humanconsulting.humancore_api.velho.mapper.CheckpointMapper;
+import com.humanconsulting.humancore_api.velho.model.Checkpoint;
+import com.humanconsulting.humancore_api.velho.model.Tarefa;
+import com.humanconsulting.humancore_api.velho.repository.CheckpointRepository;
+import com.humanconsulting.humancore_api.velho.repository.TarefaRepository;
+import com.humanconsulting.humancore_api.velho.service.CheckpointService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

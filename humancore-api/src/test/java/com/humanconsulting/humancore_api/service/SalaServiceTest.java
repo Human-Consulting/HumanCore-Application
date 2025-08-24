@@ -1,11 +1,11 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.response.sala.SalaResponseDto;
-import com.humanconsulting.humancore_api.mapper.SalaMapper;
-import com.humanconsulting.humancore_api.model.Sala;
-import com.humanconsulting.humancore_api.repository.MensagemRepository;
-import com.humanconsulting.humancore_api.repository.SalaRepository;
-import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.sala.SalaResponseDto;
+import com.humanconsulting.humancore_api.velho.mapper.SalaMapper;
+import com.humanconsulting.humancore_api.velho.model.Sala;
+import com.humanconsulting.humancore_api.velho.repository.SalaRepository;
+import com.humanconsulting.humancore_api.velho.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.service.SalaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

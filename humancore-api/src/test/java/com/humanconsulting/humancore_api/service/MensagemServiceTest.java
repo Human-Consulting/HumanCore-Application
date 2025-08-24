@@ -1,13 +1,15 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.controller.dto.response.mensagem.MensagemResponseDto;
-import com.humanconsulting.humancore_api.mapper.MensagemMapper;
-import com.humanconsulting.humancore_api.model.Mensagem;
-import com.humanconsulting.humancore_api.repository.*;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.mensagem.MensagemResponseDto;
+import com.humanconsulting.humancore_api.velho.mapper.MensagemMapper;
+import com.humanconsulting.humancore_api.velho.model.Mensagem;
+import com.humanconsulting.humancore_api.velho.repository.MensagemRepository;
+import com.humanconsulting.humancore_api.velho.repository.SalaRepository;
+import com.humanconsulting.humancore_api.velho.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.service.MensagemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;

@@ -1,6 +1,17 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.velho.exception.AcessoNegadoException;
+import com.humanconsulting.humancore_api.velho.exception.EntidadeSemRetornoException;
+import com.humanconsulting.humancore_api.velho.model.Checkpoint;
+import com.humanconsulting.humancore_api.velho.model.Tarefa;
+import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.velho.observer.EmailNotifier;
+import com.humanconsulting.humancore_api.velho.repository.CheckpointRepository;
+import com.humanconsulting.humancore_api.velho.repository.SprintRepository;
+import com.humanconsulting.humancore_api.velho.repository.TarefaRepository;
+import com.humanconsulting.humancore_api.velho.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.service.CheckpointService;
+import com.humanconsulting.humancore_api.velho.service.TarefaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,29 +26,28 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.List;
 
-import com.humanconsulting.humancore_api.controller.dto.request.TarefaRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
-import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.controller.dto.response.checkpoint.CheckpointResponseDto;
-import com.humanconsulting.humancore_api.exception.*;
-import com.humanconsulting.humancore_api.mapper.TarefaMapper;
-import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
-import com.humanconsulting.humancore_api.model.*;
-import com.humanconsulting.humancore_api.repository.*;
-import com.humanconsulting.humancore_api.security.PermissaoValidator;
-import com.humanconsulting.humancore_api.utils.ProgressoCalculator;
+import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.tarefa.AtualizarStatusRequestDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.velho.controller.dto.response.checkpoint.CheckpointResponseDto;
+import com.humanconsulting.humancore_api.velho.mapper.TarefaMapper;
+import com.humanconsulting.humancore_api.velho.mapper.CheckpointMapper;
+import com.humanconsulting.humancore_api.velho.utils.ProgressoCalculator;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaServiceTest {
-    @Mock CheckpointService checkpointService;
-    @Mock TarefaRepository tarefaRepository;
-    @Mock SprintRepository sprintRepository;
-    @Mock UsuarioRepository usuarioRepository;
-    @Mock CheckpointRepository checkpointRepository;
+    @Mock
+    CheckpointService checkpointService;
+    @Mock
+    TarefaRepository tarefaRepository;
+    @Mock
+    SprintRepository sprintRepository;
+    @Mock
+    UsuarioRepository usuarioRepository;
+    @Mock
+    CheckpointRepository checkpointRepository;
     @Mock EmailNotifier emailNotifier;
-    @InjectMocks TarefaService tarefaService;
+    @InjectMocks
+    TarefaService tarefaService;
 
     @Test
     void cadastrar() {

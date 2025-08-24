@@ -1,13 +1,12 @@
 package com.humanconsulting.humancore_api.service;
 
-import com.humanconsulting.humancore_api.repository.InvestimentoRepository;
-import com.humanconsulting.humancore_api.repository.ProjetoRepository;
-import com.humanconsulting.humancore_api.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.repository.InvestimentoRepository;
+import com.humanconsulting.humancore_api.velho.repository.ProjetoRepository;
+import com.humanconsulting.humancore_api.velho.repository.UsuarioRepository;
+import com.humanconsulting.humancore_api.velho.service.InvestimentoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class InvestimentoServiceTest {
