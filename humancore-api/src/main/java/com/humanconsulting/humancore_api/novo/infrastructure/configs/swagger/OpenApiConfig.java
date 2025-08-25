@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Projeto Human Consulting",
+                title = "ProjetoEntity Human Consulting",
                 description = "Sistema de consultoria de gestão empresarial",
                 contact = @Contact(
                         name = "Human Consulting",

@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalaAtualizarRequestDto {
-    @Schema(description = "Nome da sala", example = "Sala 1")
+    @Schema(description = "Nome da sala", example = "SalaEntity 1")
     @NotNull
     private String nome;
 

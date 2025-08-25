@@ -12,17 +12,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalaRequestDto {
-    @Schema(description = "Nome da sala", example = "Sala 1")
+    @Schema(description = "Nome da sala", example = "SalaEntity 1")
     @NotNull
     private String nome;
 
     @Schema(description = "Foto da capa", example = "image")
     private String urlImagem;
 
-    @Schema(description = "Empresa vinculada", example = "1")
+    @Schema(description = "EmpresaEntity vinculada", example = "1")
     private Integer fkEmpresa;
 
-    @Schema(description = "Projeto vinculado", example = "1")
+    @Schema(description = "ProjetoEntity vinculado", example = "1")
     private Integer fkProjeto;
 
     @Schema(description = "Lista de participantes", example = "[1, 2, 3]")

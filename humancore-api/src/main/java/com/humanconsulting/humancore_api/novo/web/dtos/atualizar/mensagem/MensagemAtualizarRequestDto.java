@@ -24,7 +24,7 @@ public class MensagemAtualizarRequestDto {
     @NotNull
     private Integer fkUsuario;
 
-    @Schema(description = "Sala associada à mensagem", example = "1")
+    @Schema(description = "SalaEntity associada à mensagem", example = "1")
     @NotNull
     private Integer fkSala;
 

@@ -24,7 +24,7 @@ public class MensagemRequestDto {
     @Schema(description = "Usuário associado ao projeto", example = "1")
     private Integer fkUsuario;
 
-    @Schema(description = "Sala associada à mensagem", example = "1")
+    @Schema(description = "SalaEntity associada à mensagem", example = "1")
     @NotNull
     private Integer fkSala;
 

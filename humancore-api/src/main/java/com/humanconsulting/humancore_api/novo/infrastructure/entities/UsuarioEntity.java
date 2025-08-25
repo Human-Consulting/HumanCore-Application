@@ -34,9 +34,9 @@ public class UsuarioEntity {
 
     @JoinColumn(name = "fkEmpresa")
     @ManyToOne
-    private Empresa empresa;
+    private EmpresaEntity empresa;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
-    private Set<Sala> salas = new HashSet<>();
+    private Set<SalaEntity> salas = new HashSet<>();
 }

@@ -16,19 +16,19 @@ public class SprintRequestDto {
     @NotNull
     private String titulo;
 
-    @Schema(description = "Descrição da Sprint", example = "Sprint de desenvolvimento de funcionalidades para a versão 1.0")
+    @Schema(description = "Descrição da SprintEntity", example = "SprintEntity de desenvolvimento de funcionalidades para a versão 1.0")
     @NotNull
     private String descricao;
 
-    @Schema(description = "Data de início da Sprint", example = "2025-05-01")
+    @Schema(description = "Data de início da SprintEntity", example = "2025-05-01")
     @NotNull
     private LocalDate dtInicio;
 
-    @Schema(description = "Data de término da Sprint", example = "2025-05-15")
+    @Schema(description = "Data de término da SprintEntity", example = "2025-05-15")
     @NotNull
     private LocalDate dtFim;
 
-    @Schema(description = "Projeto ao qual a Sprint pertence", example = "1001")
+    @Schema(description = "ProjetoEntity ao qual a SprintEntity pertence", example = "1001")
     @NotNull
     private Integer fkProjeto;
 

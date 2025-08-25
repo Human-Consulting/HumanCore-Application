@@ -25,15 +25,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query("SELECT u.nome FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa AND u.permissao = 'DIRETOR'")
     Optional<String> findDiretorByEmpresaId(@Param("idEmpresa") Integer idEmpresa);
 
-    @Query("SELECT COUNT(t.idTarefa) FROM Tarefa t WHERE t.responsavel.idUsuario = :idUsuario")
+    @Query("SELECT COUNT(t.idTarefa) FROM TarefaEntity t WHERE t.responsavel.idUsuario = :idUsuario")
     Integer countTarefasByUsuario(@Param("idUsuario") Integer idUsuario);
 
-    @Query("SELECT COUNT(t.idTarefa) > 0 FROM Tarefa t WHERE t.responsavel.idUsuario = :idUsuario AND t.comImpedimento = true")
+    @Query("SELECT COUNT(t.idTarefa) > 0 FROM TarefaEntity t WHERE t.responsavel.idUsuario = :idUsuario AND t.comImpedimento = true")
     Boolean hasTarefaComImpedimento(@Param("idUsuario") Integer idUsuario);
 
-    @Query("SELECT DISTINCT s.projeto.id FROM Tarefa t JOIN t.sprint s WHERE t.responsavel.idUsuario = :idUsuario")
+    @Query("SELECT DISTINCT s.projeto.id FROM TarefaEntity t JOIN t.sprint s WHERE t.responsavel.idUsuario = :idUsuario")
     List<Integer> findProjetosVinculados(@Param("idUsuario") Integer idUsuario);
 
-    @Query("SELECT t FROM Tarefa t WHERE t.responsavel.idUsuario = :idUsuario")
+    @Query("SELECT t FROM TarefaEntity t WHERE t.responsavel.idUsuario = :idUsuario")
     List<Tarefa> findTarefasVinculadas(@Param("idUsuario") Integer idUsuario);
 }

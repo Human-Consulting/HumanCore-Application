@@ -27,7 +27,7 @@ public class SalaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Sala cadastrada com sucesso"),
+            @ApiResponse(responseCode = "201", description = "SalaEntity cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
@@ -51,7 +51,7 @@ public class SalaController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Salas encontradas com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Sala não encontrada")
+            @ApiResponse(responseCode = "404", description = "SalaEntity não encontrada")
     })
     @GetMapping("/porUsuario/{idUsuario}")
     public ResponseEntity<List<ChatResponseDto>> listarPorIdUsuario(@PathVariable Integer idUsuario) {
@@ -63,8 +63,8 @@ public class SalaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sala encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Sala não encontrada")
+            @ApiResponse(responseCode = "200", description = "SalaEntity encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "SalaEntity não encontrada")
     })
     @GetMapping("/{idSala}")
     public ResponseEntity<SalaResponseDto> buscarPorId(@PathVariable Integer idSala) {
@@ -76,8 +76,8 @@ public class SalaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Sala deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Sala não encontrada")
+            @ApiResponse(responseCode = "204", description = "SalaEntity deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "SalaEntity não encontrada")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
@@ -90,9 +90,9 @@ public class SalaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sala atualizada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "SalaEntity atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Sala não encontrada")
+            @ApiResponse(responseCode = "404", description = "SalaEntity não encontrada")
     })
     @PatchMapping("/{idSala}")
     public ResponseEntity<SalaResponseDto> atualizar(@PathVariable Integer idSala, @Valid @RequestBody SalaRequestDto request) {

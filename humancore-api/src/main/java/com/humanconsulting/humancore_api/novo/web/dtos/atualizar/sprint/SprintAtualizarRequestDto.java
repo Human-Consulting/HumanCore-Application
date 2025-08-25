@@ -16,7 +16,7 @@ public class SprintAtualizarRequestDto {
     @NotNull
     private String titulo;
 
-    @Schema(description = "Descrição da sprint", example = "Sprint de desenvolvimento da nova funcionalidade de autenticação")
+    @Schema(description = "Descrição da sprint", example = "SprintEntity de desenvolvimento da nova funcionalidade de autenticação")
     @NotNull
     private String descricao;
 

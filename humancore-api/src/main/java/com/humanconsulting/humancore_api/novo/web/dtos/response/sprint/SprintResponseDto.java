@@ -15,30 +15,30 @@ import java.util.List;
 @NoArgsConstructor
 public class SprintResponseDto {
 
-    @Schema(description = "ID da Sprint", example = "1")
+    @Schema(description = "ID da SprintEntity", example = "1")
     private Integer idSprint;
 
     @Schema(description = "Título da sprint", example = "Autenticação")
     private String titulo;
 
-    @Schema(description = "Descrição da Sprint", example = "Sprint de desenvolvimento da API")
+    @Schema(description = "Descrição da SprintEntity", example = "SprintEntity de desenvolvimento da API")
     private String descricao;
 
-    @Schema(description = "Data de início da Sprint", example = "2025-04-01")
+    @Schema(description = "Data de início da SprintEntity", example = "2025-04-01")
     private LocalDate dtInicio;
 
-    @Schema(description = "Data de término da Sprint", example = "2025-04-15")
+    @Schema(description = "Data de término da SprintEntity", example = "2025-04-15")
     private LocalDate dtFim;
 
-    @Schema(description = "Progresso da Sprint em percentual", example = "75.5")
+    @Schema(description = "Progresso da SprintEntity em percentual", example = "75.5")
     private Double progresso;
 
-    @Schema(description = "Indica se há impedimentos na Sprint", example = "true")
+    @Schema(description = "Indica se há impedimentos na SprintEntity", example = "true")
     private Boolean comImpedimento;
 
-    @Schema(description = "Projeto associado à Sprint", example = "101")
+    @Schema(description = "ProjetoEntity associado à SprintEntity", example = "101")
     private Projeto projeto;
 
-    @Schema(description = "Lista de tarefas associadas à Sprint", implementation = TarefaResponseDto.class)
+    @Schema(description = "Lista de tarefas associadas à SprintEntity", implementation = TarefaResponseDto.class)
     private List<TarefaResponseDto> tarefas;
 }

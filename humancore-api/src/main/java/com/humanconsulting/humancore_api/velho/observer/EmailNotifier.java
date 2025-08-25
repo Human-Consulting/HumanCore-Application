@@ -42,7 +42,7 @@ public class EmailNotifier implements Observer {
                                 </div>
                                 <div style='padding: 24px;'>
                                   <h2 style='font-size: 20px; margin-bottom: 20px; text-align: center;'>%s</h2>
-                                  <p><strong>Projeto:</strong> %s</p>
+                                  <p><strong>ProjetoEntity:</strong> %s</p>
                                   <p><strong>Sprint:</strong> %s</p>
                                   <p><strong>Tarefa:</strong> %s</p>
                                   <p><strong>Responsável:</strong> %s</p>
@@ -64,7 +64,7 @@ public class EmailNotifier implements Observer {
                 tarefa.getComentario(),
                 String.join(", ", emails)
         ));
-        enviarEmail(emails, "Impedimento no Projeto: " + projetoEntrega.getDescricao(), notificacao.getMensagem());
+        enviarEmail(emails, "Impedimento no ProjetoEntity: " + projetoEntrega.getDescricao(), notificacao.getMensagem());
     }
 
     @Override

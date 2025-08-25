@@ -30,7 +30,7 @@ public class EmpresaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso"),
+            @ApiResponse(responseCode = "201", description = "EmpresaEntity cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
@@ -53,8 +53,8 @@ public class EmpresaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empresa encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+            @ApiResponse(responseCode = "200", description = "EmpresaEntity encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "EmpresaEntity não encontrada")
     })
     @GetMapping("/{idEmpresa}")
     public ResponseEntity<DashboardEmpresaResponseDto> buscarPorId(@PathVariable Integer idEmpresa) {
@@ -66,8 +66,8 @@ public class EmpresaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Empresa deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+            @ApiResponse(responseCode = "204", description = "EmpresaEntity deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "EmpresaEntity não encontrada")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
@@ -80,9 +80,9 @@ public class EmpresaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "EmpresaEntity atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+            @ApiResponse(responseCode = "404", description = "EmpresaEntity não encontrada")
     })
     @PatchMapping("/{idEmpresa}")
     public ResponseEntity<EmpresaResponseDto> atualizar(@PathVariable Integer idEmpresa, @Valid @RequestBody EmpresaAtualizarRequestDto request) {

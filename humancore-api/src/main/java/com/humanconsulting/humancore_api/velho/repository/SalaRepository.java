@@ -19,7 +19,7 @@ public interface SalaRepository extends JpaRepository<Sala, Integer> {
     Sala findByEmpresa(Empresa empresa);
 
     @Query("""
-    SELECT DISTINCT s FROM Sala s
+    SELECT DISTINCT s FROM SalaEntity s
     JOIN s.usuarios u
     LEFT JOIN FETCH s.usuarios su
     LEFT JOIN FETCH s.projeto p
@@ -27,6 +27,6 @@ public interface SalaRepository extends JpaRepository<Sala, Integer> {
 """)
     List<Sala> findSalasComUsuariosPorUsuario(@Param("idUsuario") Integer idUsuario);
 
-    @Query("SELECT s FROM Sala s LEFT JOIN FETCH s.usuarios WHERE s.idSala = :idSala")
+    @Query("SELECT s FROM SalaEntity s LEFT JOIN FETCH s.usuarios WHERE s.idSala = :idSala")
     Optional<Sala> buscarComUsuarios(@Param("idSala") Integer idSala);
 }

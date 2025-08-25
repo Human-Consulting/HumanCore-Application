@@ -26,7 +26,7 @@ public interface DashboardEmpresaRepository extends JpaRepository<Projeto, Integ
 
 //    @Query("""
 //        SELECT ROUND(AVG(t.progresso), 2)
-//        FROM Tarefa t
+//        FROM TarefaEntity t
 //        JOIN t.sprint s
 //        JOIN s.projeto p
 //        WHERE p.empresa.idEmpresa = :idEmpresa

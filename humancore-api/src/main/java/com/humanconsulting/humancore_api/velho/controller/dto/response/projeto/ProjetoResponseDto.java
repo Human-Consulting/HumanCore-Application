@@ -15,7 +15,7 @@ public class ProjetoResponseDto {
     @Schema(description = "Título do projeto", example = "Centro Comercial")
     private String titulo;
 
-    @Schema(description = "Descrição do projeto", example = "Projeto de construção de um novo edifício comercial")
+    @Schema(description = "Descrição do projeto", example = "ProjetoEntity de construção de um novo edifício comercial")
     private String descricao;
 
     @Schema(description = "Valor do orçamento do projeto", example = "5000000.00")

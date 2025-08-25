@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     boolean existsByCnpj(String cnpj);
 
-    @Query("SELECT e.urlImagem FROM Empresa e WHERE e.id = :idEmpresa")
+    @Query("SELECT e.urlImagem FROM EmpresaEntity e WHERE e.id = :idEmpresa")
     String findUrlImagemById(Integer idEmpresa);
 }

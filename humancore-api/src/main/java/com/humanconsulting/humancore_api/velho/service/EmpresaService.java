@@ -68,7 +68,7 @@ public class EmpresaService {
         PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_EMPRESA");
 
         Optional<Empresa> optEmpresa = empresaRepository.findById(id);
-        if (optEmpresa.isEmpty()) throw new EntidadeNaoEncontradaException("Empresa não encontrada.");
+        if (optEmpresa.isEmpty()) throw new EntidadeNaoEncontradaException("EmpresaEntity não encontrada.");
         empresaRepository.deleteById(id);
     }
 

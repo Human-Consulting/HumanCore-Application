@@ -76,7 +76,7 @@ public class ProjetoNotifier implements ProjetoObserver {
 //
 //    @Override
 //    public void onUsuarioCriado(UsuarioEntity usuario) {
-//        Sala sala = new
+//        SalaEntity sala = new
 //        SalaRequestDto salaRequestDto = new SalaRequestDto();
 //        salaService.atualizar();
 //    }

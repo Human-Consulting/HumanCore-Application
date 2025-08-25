@@ -31,7 +31,7 @@ public class InvestimentoController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Investimento cadastrado com sucesso"),
+            @ApiResponse(responseCode = "201", description = "InvestimentoEntity cadastrado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
@@ -73,8 +73,8 @@ public class InvestimentoController {
     )
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Investimento deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
+            @ApiResponse(responseCode = "204", description = "InvestimentoEntity deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "InvestimentoEntity não encontrado")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
@@ -89,9 +89,9 @@ public class InvestimentoController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Investimento atualizado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "InvestimentoEntity atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Investimento não encontrado")
+            @ApiResponse(responseCode = "404", description = "InvestimentoEntity não encontrado")
     })
     @PatchMapping("/{idFinanceiro}")
     public ResponseEntity<InvestimentoResponseDto> atualizar(@PathVariable Integer idFinanceiro, @Valid @RequestBody AtualizarInvestimentoRequestDto request) {

@@ -137,7 +137,7 @@ class UsuarioServiceTest {
         var usuario = mock(Usuario.class);
         var empresa = mock(Empresa.class);
         when(usuario.getEmpresa()).thenReturn(empresa);
-        when(empresa.getNome()).thenReturn("Empresa X");
+        when(empresa.getNome()).thenReturn("EmpresaEntity X");
         when(usuario.getIdUsuario()).thenReturn(1);
         when(usuarioRepository.hasTarefaComImpedimento(1)).thenReturn(false);
         when(usuarioRepository.findProjetosVinculados(1)).thenReturn(List.of(10));

@@ -15,7 +15,7 @@ public class ProjetoAtualizarRequestDto {
     @NotBlank
     private String titulo;
 
-    @Schema(description = "Descrição detalhada do projeto", example = "Projeto de expansão do centro comercial")
+    @Schema(description = "Descrição detalhada do projeto", example = "ProjetoEntity de expansão do centro comercial")
     @NotBlank
     private String descricao;
 

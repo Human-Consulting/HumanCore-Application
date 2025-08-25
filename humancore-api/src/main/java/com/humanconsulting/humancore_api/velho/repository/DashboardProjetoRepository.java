@@ -25,7 +25,7 @@ public interface DashboardProjetoRepository extends JpaRepository<Tarefa, Intege
 
 //    @Query("""
 //        SELECT ROUND(AVG(t.progresso), 2)
-//        FROM Tarefa t
+//        FROM TarefaEntity t
 //        JOIN t.sprint s
 //        WHERE s.projeto.idProjeto = :idProjeto
 //        """)

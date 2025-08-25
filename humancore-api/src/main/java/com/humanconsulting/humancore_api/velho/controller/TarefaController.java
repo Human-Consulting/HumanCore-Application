@@ -52,9 +52,9 @@ public class TarefaController {
     }
 
     @Operation(
-            summary = "Listar tarefas por ID da Sprint",
+            summary = "Listar tarefas por ID da SprintEntity",
             description = "Esse endpoint retorna uma lista de tarefas de uma sprint específica.",
-            parameters = @Parameter(name = "idSprint", description = "ID da Sprint para buscar as tarefas."),
+            parameters = @Parameter(name = "idSprint", description = "ID da SprintEntity para buscar as tarefas."),
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso")
@@ -71,8 +71,8 @@ public class TarefaController {
     )
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Tarefa deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
+            @ApiResponse(responseCode = "204", description = "TarefaEntity deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "TarefaEntity não encontrada")
     })
     @DeleteMapping("/{idTarefa}")
     public ResponseEntity<Void> deletar(@PathVariable Integer idTarefa, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
@@ -87,9 +87,9 @@ public class TarefaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Tarefa atualizada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "TarefaEntity atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
+            @ApiResponse(responseCode = "404", description = "TarefaEntity não encontrada")
     })
     @PatchMapping("/{idTarefa}")
     public ResponseEntity<TarefaResponseDto> atualizar(@PathVariable Integer idTarefa, @Valid @RequestBody AtualizarGeralRequestDto entrega) {
@@ -103,9 +103,9 @@ public class TarefaController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Tarefa atualizada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "TarefaEntity atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
+            @ApiResponse(responseCode = "404", description = "TarefaEntity não encontrada")
     })
     @PatchMapping("/impedimento/{idTarefa}")
     public ResponseEntity<TarefaResponseDto> atualizarImpedimento(@PathVariable Integer idTarefa, @RequestBody AtualizarStatusRequestDto request) {

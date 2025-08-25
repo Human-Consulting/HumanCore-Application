@@ -16,34 +16,34 @@ import java.util.List;
 @NoArgsConstructor
 public class TarefaResponseDto {
 
-    @Schema(description = "ID da Tarefa", example = "1")
+    @Schema(description = "ID da TarefaEntity", example = "1")
     private Integer idTarefa;
 
     @Schema(description = "Título da tarefa", example = "Login")
     private String titulo;
 
-    @Schema(description = "Descrição da Tarefa", example = "Desenvolver API para gestão de tarefas")
+    @Schema(description = "Descrição da TarefaEntity", example = "Desenvolver API para gestão de tarefas")
     private String descricao;
 
-    @Schema(description = "Data de início da Tarefa", example = "2025-04-01")
+    @Schema(description = "Data de início da TarefaEntity", example = "2025-04-01")
     private LocalDate dtInicio;
 
-    @Schema(description = "Data de término da Tarefa", example = "2025-04-10")
+    @Schema(description = "Data de término da TarefaEntity", example = "2025-04-10")
     private LocalDate dtFim;
 
-    @Schema(description = "Progresso da Tarefa em percentual", example = "50.0")
+    @Schema(description = "Progresso da TarefaEntity em percentual", example = "50.0")
     private Double progresso;
 
-    @Schema(description = "Indica se há impedimentos na Tarefa", example = "false")
+    @Schema(description = "Indica se há impedimentos na TarefaEntity", example = "false")
     private Boolean comImpedimento;
 
-    @Schema(description = "Sprint associada à Tarefa", example = "2")
+    @Schema(description = "SprintEntity associada à TarefaEntity", example = "2")
     private Sprint sprint;
 
-    @Schema(description = "Usuário responsável pela Tarefa", example = "101")
+    @Schema(description = "Usuário responsável pela TarefaEntity", example = "101")
     private Usuario responsavel;
 
-    @Schema(description = "Comentário da Tarefa", example = "Impedimento referente a...")
+    @Schema(description = "Comentário da TarefaEntity", example = "Impedimento referente a...")
     private String comentario;
 
     @Schema(description = "Checkpoints da tarefa", example = "[{id: 1, descricao: 'Subtarefa', finalizado: true}]")

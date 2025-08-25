@@ -20,7 +20,7 @@ public class MensagemInfoRequestDto {
     @Schema(description = "Horário da mensagem", example = "2025-05-24 20:20")
     private LocalDateTime horario;
 
-    @Schema(description = "Sala associada à mensagem", example = "1")
+    @Schema(description = "SalaEntity associada à mensagem", example = "1")
     @NotNull
     private Integer fkSala;
 

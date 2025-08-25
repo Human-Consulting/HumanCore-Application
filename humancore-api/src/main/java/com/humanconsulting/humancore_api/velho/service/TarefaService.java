@@ -79,7 +79,7 @@ public class TarefaService {
     public Tarefa buscarPorId(Integer id) {
         Optional<Tarefa> optTarefa = tarefaRepository.findById(id);
 
-        if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("Tarefa não encontada");
+        if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("TarefaEntity não encontada");
 
         return optTarefa.get();
     }
@@ -108,7 +108,7 @@ public class TarefaService {
         PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_TAREFA");
 
         Optional<Tarefa> optTarefa = tarefaRepository.findById(id);
-        if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("Tarefa não encontrada.");
+        if (optTarefa.isEmpty()) throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada.");
 
         tarefaRepository.deleteById(id);
     }

@@ -13,10 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DashboardEmpresaResponseDto {
-    @Schema(description = "ID da Empresa", example = "1")
+    @Schema(description = "ID da EmpresaEntity", example = "1")
     private Integer idEmpresa;
 
-    @Schema(description = "Nome completo do Responsável pela Empresa", example = "Carlos Silva")
+    @Schema(description = "Nome completo do Responsável pela EmpresaEntity", example = "Carlos Silva")
     private String nomeResponsavel;
 
     @Schema(description = "Indica se a empresa possui algum projeto com impedimentos", example = "false")
@@ -28,7 +28,7 @@ public class DashboardEmpresaResponseDto {
     @Schema(description = "Orçamento total da empresa", example = "1000000.0")
     private Double orcamento;
 
-    @Schema(description = "Áreas associadas à empresa", example = "[\"TI\", \"Investimento\"]")
+    @Schema(description = "Áreas associadas à empresa", example = "[\"TI\", \"InvestimentoEntity\"]")
     private List<Area> areas;
 
     @Schema(description = "Lista de dados financeiros da empresa", implementation = InvestimentoResponseDto.class)

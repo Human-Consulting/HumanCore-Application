@@ -13,6 +13,6 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
 
     List<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa);
 
-    @Query("SELECT p.urlImagem FROM Projeto p WHERE p.id = :idProjeto")
+    @Query("SELECT p.urlImagem FROM ProjetoEntity p WHERE p.id = :idProjeto")
     String findUrlImagemById(Integer idProjeto);
 }

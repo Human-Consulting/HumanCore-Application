@@ -15,7 +15,7 @@ public class ProjetoRequestDto {
     @NotBlank
     private String titulo;
 
-    @Schema(description = "Descrição do projeto", example = "Projeto de expansão imobiliária")
+    @Schema(description = "Descrição do projeto", example = "ProjetoEntity de expansão imobiliária")
     @NotNull
     private String descricao;
 
@@ -26,7 +26,7 @@ public class ProjetoRequestDto {
     @Schema(description = "URL da imagem associada ao projeto", example = "http://exemplo.com/imagem.jpg")
     private String urlImagem;
 
-    @Schema(description = "Empresa associada ao projeto", example = "1")
+    @Schema(description = "EmpresaEntity associada ao projeto", example = "1")
     @NotNull
     private Integer fkEmpresa;
 

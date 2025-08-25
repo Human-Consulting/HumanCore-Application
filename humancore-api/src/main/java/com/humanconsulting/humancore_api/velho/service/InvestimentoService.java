@@ -41,7 +41,7 @@ public class InvestimentoService {
     public Investimento buscarPorId(Integer id) {
         Optional<Investimento> optInvestimento = investimentoRepository.findById(id);
 
-        if (optInvestimento.isEmpty()) throw new EntidadeNaoEncontradaException("Investimento não encontada");
+        if (optInvestimento.isEmpty()) throw new EntidadeNaoEncontradaException("InvestimentoEntity não encontada");
 
         return optInvestimento.get();
     }

@@ -9,16 +9,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmpresaResponseDto {
-    @Schema(description = "ID da Empresa", example = "1")
+    @Schema(description = "ID da EmpresaEntity", example = "1")
     private Integer idEmpresa;
 
-    @Schema(description = "Nome da Empresa", example = "Human Consulting Ltda.")
+    @Schema(description = "Nome da EmpresaEntity", example = "Human Consulting Ltda.")
     private String nome;
 
-    @Schema(description = "CNPJ da Empresa", example = "12.345.678/0001-90")
+    @Schema(description = "CNPJ da EmpresaEntity", example = "12.345.678/0001-90")
     private String cnpj;
 
-    @Schema(description = "Nome do Diretor da Empresa", example = "Carlos Silva")
+    @Schema(description = "Nome do Diretor da EmpresaEntity", example = "Carlos Silva")
     private String nomeDiretor;
 
     @Schema(description = "Indica se a empresa possui impedimentos", example = "false")

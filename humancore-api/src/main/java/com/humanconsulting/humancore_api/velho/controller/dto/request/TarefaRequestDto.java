@@ -28,7 +28,7 @@ public class TarefaRequestDto {
     @NotNull
     private LocalDate dtFim;
 
-    @Schema(description = "ID da Sprint associada à tarefa", example = "2001")
+    @Schema(description = "ID da SprintEntity associada à tarefa", example = "2001")
     @NotNull
     private Integer fkSprint;
 

@@ -30,7 +30,7 @@ public class MensagemController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Mensagem cadastrada com sucesso"),
+            @ApiResponse(responseCode = "201", description = "MensagemEntity cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
@@ -53,8 +53,8 @@ public class MensagemController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Mensagem encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Mensagem não encontrada")
+            @ApiResponse(responseCode = "200", description = "MensagemEntity encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "MensagemEntity não encontrada")
     })
     @GetMapping("/{idMensagem}")
     public ResponseEntity<MensagemResponseDto> buscarPorId(@PathVariable Integer idMensagem) {
@@ -66,8 +66,8 @@ public class MensagemController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Mensagem deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Mensagem não encontrada")
+            @ApiResponse(responseCode = "204", description = "MensagemEntity deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "MensagemEntity não encontrada")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
@@ -80,9 +80,9 @@ public class MensagemController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Mensagem atualizada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "MensagemEntity atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Mensagem não encontrada")
+            @ApiResponse(responseCode = "404", description = "MensagemEntity não encontrada")
     })
     @PatchMapping("/{idMensagem}")
     public ResponseEntity<MensagemResponseDto> atualizar(@PathVariable Integer idMensagem, @Valid @RequestBody MensagemAtualizarRequestDto request) {

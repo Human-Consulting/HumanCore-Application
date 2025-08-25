@@ -110,13 +110,13 @@ public class SalaService {
 
     public void deletar(Integer id) {
         Optional<Sala> optSala = salaRepository.findById(id);
-        if (optSala.isEmpty()) throw new EntidadeNaoEncontradaException("Sala não encontrada.");
+        if (optSala.isEmpty()) throw new EntidadeNaoEncontradaException("SalaEntity não encontrada.");
         salaRepository.deleteById(id);
     }
 
     public SalaResponseDto atualizar(Integer idSala, SalaRequestDto request) {
         Sala salaOriginal = salaRepository.buscarComUsuarios(idSala)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Sala não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("SalaEntity não encontrada."));
 
         Set<Usuario> novosParticipantes = new HashSet<>();
         for (Integer participanteId : request.getParticipantes()) {

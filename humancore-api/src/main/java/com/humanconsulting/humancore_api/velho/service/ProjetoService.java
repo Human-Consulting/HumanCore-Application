@@ -48,7 +48,7 @@ public class ProjetoService {
     public ProjetoResponseDto cadastrar(ProjetoRequestDto projetoRequestDto) {
         PermissaoValidator.validarPermissao(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
 
-        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("Projeto já cadastrado");
+        if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) throw new EntidadeConflitanteException("ProjetoEntity já cadastrado");
 
         Projeto projeto = projetoRepository.save(ProjetoMapper.toEntity(projetoRequestDto, empresaRepository.findById(projetoRequestDto.getFkEmpresa()).get(), usuarioRepository.findById(projetoRequestDto.getFkResponsavel()).get()));
 

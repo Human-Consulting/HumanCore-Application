@@ -1,6 +1,9 @@
 package com.humanconsulting.humancore_api.novo.domain.repositories;
 
+import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+
+import java.util.List;
 
 public interface UsuarioRepository {
 
@@ -10,17 +13,17 @@ public interface UsuarioRepository {
 
     Usuario findById(Integer id);
 
-    Usuario findAll();
+    List<Usuario> findAll();
 
-    Usuario deleteById(Integer id);
+    void deleteById(Integer id);
 
-    Usuario findByFkEmpresa(Integer id);
+    List<Usuario> findByFkEmpresa(Integer id);
 
-    Usuario countTarefasByUsuario(Integer id);
+    Integer countTarefasByUsuario(Integer id);
 
-    Usuario hasTarefasComImpedimento(Integer id);
+    boolean hasTarefasComImpedimento(Integer id);
 
-    Usuario findProjetosVinculados(Integer id);
+    List<Integer> findProjetosVinculados(Integer id);
 
-    Usuario findTarefasVinculadas(Integer id);
+    List<Tarefa> findTarefasVinculadas(Integer id);
 }

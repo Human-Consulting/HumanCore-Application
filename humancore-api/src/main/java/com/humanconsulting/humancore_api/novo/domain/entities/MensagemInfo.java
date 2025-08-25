@@ -1,26 +1,28 @@
 package com.humanconsulting.humancore_api.novo.domain.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class MensagemInfo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMensagemInfo;
-
     private String conteudo;
-
     private LocalDateTime horario;
-
-    @ManyToOne
-    @JoinColumn(name = "fkSala")
     private Sala sala;
+
+    public MensagemInfo() {}
+
+    public MensagemInfo(Integer idMensagemInfo, String conteudo, LocalDateTime horario, Sala sala) {
+        this.idMensagemInfo = idMensagemInfo;
+        this.conteudo = conteudo;
+        this.horario = horario;
+        this.sala = sala;
+    }
+
+    public Integer getIdMensagemInfo() { return idMensagemInfo; }
+    public void setIdMensagemInfo(Integer idMensagemInfo) { this.idMensagemInfo = idMensagemInfo; }
+    public String getConteudo() { return conteudo; }
+    public void setConteudo(String conteudo) { this.conteudo = conteudo; }
+    public LocalDateTime getHorario() { return horario; }
+    public void setHorario(LocalDateTime horario) { this.horario = horario; }
+    public Sala getSala() { return sala; }
+    public void setSala(Sala sala) { this.sala = sala; }
 }

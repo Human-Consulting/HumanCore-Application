@@ -58,7 +58,7 @@ public class MensagemService {
 //        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_MENSAGEM");
 
         Optional<Mensagem> optMensagem = mensagemRepository.findById(id);
-        if (optMensagem.isEmpty()) throw new EntidadeNaoEncontradaException("Mensagem não encontrada.");
+        if (optMensagem.isEmpty()) throw new EntidadeNaoEncontradaException("MensagemEntity não encontrada.");
         mensagemRepository.deleteById(id);
     }
 

@@ -27,12 +27,12 @@ public class SprintController {
     private SprintService service;
 
     @Operation(
-            summary = "Cadastrar uma nova Sprint",
+            summary = "Cadastrar uma nova SprintEntity",
             description = "Esse endpoint cria uma nova sprint.",
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Sprint cadastrada com sucesso"),
+            @ApiResponse(responseCode = "201", description = "SprintEntity cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
@@ -53,14 +53,14 @@ public class SprintController {
     }
 
     @Operation(
-            summary = "Buscar Sprint por ID",
+            summary = "Buscar SprintEntity por ID",
             description = "Esse endpoint retorna as informações detalhadas de uma sprint através do seu ID.",
             parameters = @Parameter(name = "id", description = "ID da sprint a ser buscada."),
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sprint encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
+            @ApiResponse(responseCode = "200", description = "SprintEntity encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "SprintEntity não encontrada")
     })
     @GetMapping("/{id}")
     public ResponseEntity<Sprint> buscarPorId(@PathVariable Integer id) {
@@ -69,7 +69,7 @@ public class SprintController {
     }
 
     @Operation(
-            summary = "Buscar Sprints por Projeto",
+            summary = "Buscar Sprints por ProjetoEntity",
             description = "Esse endpoint retorna as sprints associadas a um projeto específico.",
             parameters = @Parameter(name = "idProjeto", description = "ID do projeto para buscar as sprints."),
             security = @SecurityRequirement(name = "Bearer")
@@ -84,14 +84,14 @@ public class SprintController {
     }
 
     @Operation(
-            summary = "Deletar Sprint",
+            summary = "Deletar SprintEntity",
             description = "Esse endpoint deleta uma sprint baseada no seu ID.",
             parameters = @Parameter(name = "id", description = "ID da sprint a ser deletada."),
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Sprint deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
+            @ApiResponse(responseCode = "204", description = "SprintEntity deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "SprintEntity não encontrada")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
@@ -100,15 +100,15 @@ public class SprintController {
     }
 
     @Operation(
-            summary = "Atualizar uma Sprint",
+            summary = "Atualizar uma SprintEntity",
             description = "Esse endpoint atualiza as informações de uma sprint.",
             parameters = @Parameter(name = "idSprint", description = "ID da sprint a ser atualizada."),
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sprint atualizada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "SprintEntity atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Sprint não encontrada")
+            @ApiResponse(responseCode = "404", description = "SprintEntity não encontrada")
     })
     @PatchMapping("/{idSprint}")
     public ResponseEntity<SprintResponseDto> atualizar(@PathVariable Integer idSprint, @Valid @RequestBody SprintAtualizarRequestDto request) {

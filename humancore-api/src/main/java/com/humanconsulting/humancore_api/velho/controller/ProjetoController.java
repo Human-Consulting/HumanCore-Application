@@ -32,7 +32,7 @@ public class ProjetoController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Projeto cadastrado com sucesso"),
+            @ApiResponse(responseCode = "201", description = "ProjetoEntity cadastrado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
     })
     @PostMapping
@@ -58,8 +58,8 @@ public class ProjetoController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Projeto encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Projeto não encontrado")
+            @ApiResponse(responseCode = "200", description = "ProjetoEntity encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "ProjetoEntity não encontrado")
     })
     @GetMapping("/{idProjeto}")
     public ResponseEntity<DashboardProjetoResponseDto> buscarPorId(@PathVariable Integer idProjeto) {
@@ -88,8 +88,8 @@ public class ProjetoController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Projeto deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Projeto não encontrado")
+            @ApiResponse(responseCode = "204", description = "ProjetoEntity deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "ProjetoEntity não encontrado")
     })
     @DeleteMapping("/{idProjeto}")
     public ResponseEntity<Void> deletar(@PathVariable Integer idProjeto, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
@@ -104,9 +104,9 @@ public class ProjetoController {
             security = @SecurityRequirement(name = "Bearer")
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Projeto atualizado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "ProjetoEntity atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Projeto não encontrado")
+            @ApiResponse(responseCode = "404", description = "ProjetoEntity não encontrado")
     })
     @PatchMapping("/{idProjeto}")
     public ResponseEntity<ProjetoResponseDto> atualizar(@PathVariable Integer idProjeto, @Valid @RequestBody ProjetoAtualizarRequestDto request) {

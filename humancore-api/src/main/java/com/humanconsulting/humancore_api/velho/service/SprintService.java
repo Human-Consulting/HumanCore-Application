@@ -51,7 +51,7 @@ public class SprintService {
 
     public Sprint buscarPorId(Integer id) {
         Optional<Sprint> optSprint = sprintRepository.findById(id);
-        if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("Sprint não encontrada.");
+        if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("SprintEntity não encontrada.");
         return optSprint.get();
     }
 
@@ -65,7 +65,7 @@ public class SprintService {
         PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_SPRINT");
 
         Optional<Sprint> optSprint = sprintRepository.findById(id);
-        if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("Sprint não encontrada.");
+        if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("SprintEntity não encontrada.");
         sprintRepository.deleteById(id);
     }
 

@@ -80,7 +80,7 @@ public enum PermissaoEnum {
                     "EDITAR_USUARIOS_EMPRESA",
                     "EXCLUIR_USUARIOS_EMPRESA",
                     "ADICIONAR_USUARIOS_EMPRESA",
-                    //Empresa
+                    //EmpresaEntity
                     "ADICIONAR_EMPRESA",
                     "MODIFICAR_EMPRESA",
                     "EXCLUIR_EMPRESA",
@@ -108,7 +108,7 @@ public enum PermissaoEnum {
                     "EDITAR_USUARIOS_EMPRESA_EXCETO_DIRETOR",
                     "EXCLUIR_USUARIOS_EMPRESA_EXCETO_DIRETOR",
                     "ADICIONAR_USUARIOS_EMPRESA_EXCETO_DIRETOR",
-                    //Empresa
+                    //EmpresaEntity
                     "ADICIONAR_EMPRESA",
                     "MODIFICAR_EMPRESA",
                     "EXCLUIR_EMPRESA",

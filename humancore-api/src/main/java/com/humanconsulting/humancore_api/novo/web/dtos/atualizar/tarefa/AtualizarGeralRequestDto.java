@@ -30,7 +30,7 @@ public class AtualizarGeralRequestDto {
     @NotNull
     private LocalDate dtFim;
 
-    @Schema(description = "Indica se há impedimentos na Tarefa", example = "false")
+    @Schema(description = "Indica se há impedimentos na TarefaEntity", example = "false")
     @NotNull
     private Boolean comImpedimento;
 
