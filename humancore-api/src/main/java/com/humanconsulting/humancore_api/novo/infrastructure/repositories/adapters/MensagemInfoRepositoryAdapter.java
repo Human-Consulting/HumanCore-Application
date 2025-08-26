@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.MensagemInfo;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sala;
 import com.humanconsulting.humancore_api.novo.infrastructure.entities.MensagemInfoEntity;
 import com.humanconsulting.humancore_api.novo.infrastructure.mappers.MensagemInfoMapper;
+import com.humanconsulting.humancore_api.novo.infrastructure.mappers.SalaMapper;
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaMensagemInfoRepository;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class MensagemInfoRepositoryAdapter implements MensagemInfoRepository {
 
     @Override
     public List<MensagemInfo> findBySalaOrderByHorarioAsc(Sala sala) {
-        return jpaMensagemInfoRepository.findBySalaOrderByHorarioAsc(sala)
+        return jpaMensagemInfoRepository.findBySalaOrderByHorarioAsc(SalaMapper.toEntity(sala))
                 .stream()
                 .map(MensagemInfoMapper::toDomain)
                 .collect(Collectors.toList());

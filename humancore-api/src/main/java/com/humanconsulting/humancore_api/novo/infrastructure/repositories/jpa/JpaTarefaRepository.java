@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa;
 
-import com.humanconsulting.humancore_api.velho.model.Tarefa;
+import com.humanconsulting.humancore_api.novo.infrastructure.entities.TarefaEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JpaTarefaRepository extends JpaRepository<Tarefa, Integer> {
+public interface JpaTarefaRepository extends JpaRepository<TarefaEntity, Integer> {
     @Query("SELECT t FROM TarefaEntity t WHERE t.sprint.projeto.idProjeto = :idProjeto AND t.sprint.idSprint = :idSprint")
-    List<Tarefa> findByProjetoAndSprint(@Param("idProjeto") Integer idProjeto, @Param("idSprint") Integer idSprint);
+    List<TarefaEntity> findByProjetoAndSprint(@Param("idProjeto") Integer idProjeto, @Param("idSprint") Integer idSprint);
 
-    List<Tarefa> findBySprint_IdSprint(Integer idSprint);
+    List<TarefaEntity> findBySprint_IdSprint(Integer idSprint);
 
 //    @Query("SELECT COALESCE(AVG(t.progresso), 0) FROM TarefaEntity t WHERE t.sprint.idSprint = :idSprint")
 //    Double mediaProgressoSprint(@Param("idSprint") Integer idSprint);

@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Sala;
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.infrastructure.entities.SalaEntity;
+import com.humanconsulting.humancore_api.novo.infrastructure.mappers.EmpresaMapper;
 import com.humanconsulting.humancore_api.novo.infrastructure.mappers.ProjetoMapper;
 import com.humanconsulting.humancore_api.novo.infrastructure.mappers.SalaMapper;
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaSalaRepository;
@@ -27,7 +28,7 @@ public class SalaRepositoryAdapter implements SalaRepository {
 
     @Override
     public Sala findByEmpresa(Empresa empresa) {
-        return SalaMapper.toDomain(jpaSalaRepository.findByEmpresa(empresa));
+        return SalaMapper.toDomain(jpaSalaRepository.findByEmpresa(EmpresaMapper.toEntity(empresa)));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class SalaRepositoryAdapter implements SalaRepository {
     }
 
     @Override
-    public Optional<Sala> buscarComUsuarios(Integer idSala) {
+    public Optional buscarComUsuarios(Integer idSala) {
         return jpaSalaRepository.buscarComUsuarios(idSala)
                 .map(SalaMapper::toDomain);
     }

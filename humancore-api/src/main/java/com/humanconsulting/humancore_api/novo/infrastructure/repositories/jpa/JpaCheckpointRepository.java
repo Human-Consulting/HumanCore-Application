@@ -1,20 +1,20 @@
 package com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa;
 
-import com.humanconsulting.humancore_api.velho.model.Checkpoint;
+import com.humanconsulting.humancore_api.novo.infrastructure.entities.CheckpointEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface JpaCheckpointRepository extends JpaRepository<Checkpoint, Integer> {
+public interface JpaCheckpointRepository extends JpaRepository<CheckpointEntity, Integer> {
     //? Todos os projetos por TarefaEntity
-    List<Checkpoint> findAllByTarefa_IdTarefa(Integer idTarefa);
+    List<CheckpointEntity> findAllByTarefa_IdTarefa(Integer idTarefa);
 
     //? Todos os projetos por SprintEntity
-    List<Checkpoint> findAllByTarefa_Sprint_IdSprint(Integer idSprint);
+    List<CheckpointEntity> findAllByTarefa_Sprint_IdSprint(Integer idSprint);
 
     //? Todos os projetos por ProjetoEntity
-    List<Checkpoint> findAllByTarefa_Sprint_Projeto_IdProjeto(Integer idProjeto);
+    List<CheckpointEntity> findAllByTarefa_Sprint_Projeto_IdProjeto(Integer idProjeto);
 
     //? Todos os projetos por EmpresaEntity
-    List<Checkpoint> findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(Integer idEmpresa);
+    List<CheckpointEntity> findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(Integer idEmpresa);
 }
