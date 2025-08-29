@@ -33,10 +33,10 @@ public class SalaNotifier implements SalaObserver {
     @Override
     @Transactional
     public void adicionarUsuarioEmSalaProjeto(Tarefa tarefa, Projeto projeto, Usuario tarefaResponsavel) {
-        if (projeto == null || tarefaResponsavel == null) throw new EntidadeNaoEncontradaException("Projeto e/ou Tarefa não encontrado.");
+        if (projeto == null || tarefaResponsavel == null) System.out.println("Projeto e/ou Tarefa não encontrado.");
 
         Sala sala = salaRepository.findByProjeto(projeto);
-        if (sala == null) throw new EntidadeNaoEncontradaException("Sala não encontrada.");
+        if (sala == null) System.out.println("Sala não encontrada.");
 
         if (!sala.getUsuarios().contains(tarefaResponsavel)) {
             sala.getUsuarios().add(tarefaResponsavel);
@@ -47,10 +47,10 @@ public class SalaNotifier implements SalaObserver {
     @Override
     @Transactional
     public void adicionarUsuarioEmSalaEmpresa(Usuario usuario) {
-        if (usuario.getEmpresa() == null) throw new EntidadeNaoEncontradaException("Empresa não encontrada.");
+        if (usuario.getEmpresa() == null) System.out.println("Empresa não encontrada.");
 
         Sala sala = salaRepository.findByEmpresa(usuario.getEmpresa());
-        if (sala == null) throw new EntidadeNaoEncontradaException("Sala não encontrada.");
+        if (sala == null) System.out.println("Sala não encontrada.");
 
         if (!sala.getUsuarios().contains(usuario)) {
             sala.getUsuarios().add(usuario);
