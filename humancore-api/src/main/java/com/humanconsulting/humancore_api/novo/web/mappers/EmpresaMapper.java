@@ -1,31 +1,31 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.empresa.EmpresaAtualizarRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.EmpresaRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.empresa.DashboardEmpresaResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.empresa.EmpresaResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.investimento.InvestimentoResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Area;
-import com.humanconsulting.humancore_api.velho.model.Empresa;
+import com.humanconsulting.humancore_api.novo.domain.entities.Area;
+import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.empresa.EmpresaAtualizarRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.EmpresaRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.DashboardEmpresaResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.EmpresaResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 
 import java.util.List;
 
 public class EmpresaMapper {
     public static Empresa toEntity(EmpresaRequestDto empresaRequestDto) {
-        return Empresa.builder()
-                .cnpj(empresaRequestDto.getCnpj())
-                .nome(empresaRequestDto.getNome())
-                .urlImagem(empresaRequestDto.getUrlImagem())
-                .build();
+        Empresa empresa = new Empresa();
+        empresa.setCnpj(empresaRequestDto.getCnpj());
+        empresa.setNome(empresaRequestDto.getNome());
+        empresa.setUrlImagem(empresaRequestDto.getUrlImagem());
+        return empresa;
     }
 
     public static Empresa toEntity(EmpresaAtualizarRequestDto empresaRequestDto, Integer idEmpresa) {
-        return Empresa.builder()
-                .idEmpresa(idEmpresa)
-                .cnpj(empresaRequestDto.getCnpj())
-                .nome(empresaRequestDto.getNome())
-                .urlImagem(empresaRequestDto.getUrlImagem())
-                .build();
+        Empresa empresa = new Empresa();
+        empresa.setIdEmpresa(idEmpresa);
+        empresa.setCnpj(empresaRequestDto.getCnpj());
+        empresa.setNome(empresaRequestDto.getNome());
+        empresa.setUrlImagem(empresaRequestDto.getUrlImagem());
+        return empresa;
     }
 
     public static EmpresaResponseDto toDto(Empresa empresa, String nomeDiretor, Boolean comImpedimento, Double progresso, Double orcamento) {
@@ -42,7 +42,6 @@ public class EmpresaMapper {
     }
 
     public static DashboardEmpresaResponseDto toDashboard(Empresa empresa, String nomeDiretor, Double progresso, List<Area> areas, Double orcamento, Integer projetos, Boolean comImpedimento, List<InvestimentoResponseDto> financeiroResponseDtos) {
-
         return DashboardEmpresaResponseDto.builder()
                 .idEmpresa(empresa.getIdEmpresa())
                 .nomeResponsavel(nomeDiretor)

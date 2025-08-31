@@ -1,8 +1,8 @@
 package com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa;
 
 import com.humanconsulting.humancore_api.novo.web.dtos.response.checkpoint.CheckpointResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Sprint;
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

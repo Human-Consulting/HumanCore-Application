@@ -1,39 +1,39 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.projeto.ProjetoAtualizarRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.ProjetoRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.investimento.InvestimentoResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.projeto.DashboardProjetoResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.projeto.ProjetoResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Area;
-import com.humanconsulting.humancore_api.velho.model.Empresa;
-import com.humanconsulting.humancore_api.velho.model.Projeto;
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.domain.entities.Area;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.projeto.ProjetoAtualizarRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.ProjetoRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.DashboardProjetoResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.ProjetoResponseDto;
 
 import java.util.List;
 
 public class ProjetoMapper {
     public static Projeto toEntity(ProjetoRequestDto projetoRequestDto, Empresa empresa, Usuario usuario) {
-        return Projeto.builder()
-                .titulo(projetoRequestDto.getTitulo())
-                .descricao(projetoRequestDto.getDescricao())
-                .orcamento(projetoRequestDto.getOrcamento())
-                .urlImagem(projetoRequestDto.getUrlImagem())
-                .empresa(empresa)
-                .responsavel(usuario)
-                .build();
+        Projeto projeto = new Projeto();
+        projeto.setTitulo(projetoRequestDto.getTitulo());
+        projeto.setDescricao(projetoRequestDto.getDescricao());
+        projeto.setOrcamento(projetoRequestDto.getOrcamento());
+        projeto.setUrlImagem(projetoRequestDto.getUrlImagem());
+        projeto.setEmpresa(empresa);
+        projeto.setResponsavel(usuario);
+        return projeto;
     }
 
     public static Projeto toEntity(ProjetoAtualizarRequestDto projetoAtualizarRequestDto, Integer idProjeto, Usuario usuario, Empresa empresa) {
-        return Projeto.builder()
-                .idProjeto(idProjeto)
-                .titulo(projetoAtualizarRequestDto.getTitulo())
-                .descricao(projetoAtualizarRequestDto.getDescricao())
-                .orcamento(projetoAtualizarRequestDto.getOrcamento())
-                .urlImagem(projetoAtualizarRequestDto.getUrlImagem())
-                .empresa(empresa)
-                .responsavel(usuario)
-                .build();
+        Projeto projeto = new Projeto();
+        projeto.setIdProjeto(idProjeto);
+        projeto.setTitulo(projetoAtualizarRequestDto.getTitulo());
+        projeto.setDescricao(projetoAtualizarRequestDto.getDescricao());
+        projeto.setOrcamento(projetoAtualizarRequestDto.getOrcamento());
+        projeto.setUrlImagem(projetoAtualizarRequestDto.getUrlImagem());
+        projeto.setEmpresa(empresa);
+        projeto.setResponsavel(usuario);
+        return projeto;
     }
 
     public static ProjetoResponseDto toDto(Projeto projeto, double progresso, boolean comImpedimento) {

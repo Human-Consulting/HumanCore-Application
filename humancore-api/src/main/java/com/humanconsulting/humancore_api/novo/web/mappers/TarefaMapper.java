@@ -1,41 +1,41 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.tarefa.AtualizarGeralRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.TarefaRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.checkpoint.CheckpointResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Sprint;
-import com.humanconsulting.humancore_api.velho.model.Tarefa;
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.tarefa.AtualizarGeralRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.TarefaRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.checkpoint.CheckpointResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 
 import java.util.List;
 
 public class TarefaMapper {
     public static Tarefa toEntity(TarefaRequestDto tarefaRequestDto, Sprint sprint, Usuario responsavel) {
-        return Tarefa.builder()
-                .titulo(tarefaRequestDto.getTitulo())
-                .descricao(tarefaRequestDto.getDescricao())
-                .dtInicio(tarefaRequestDto.getDtInicio())
-                .dtFim(tarefaRequestDto.getDtFim())
-                .comImpedimento(false)
-                .comentario(null)
-                .sprint(sprint)
-                .responsavel(responsavel)
-                .build();
+        Tarefa tarefa = new Tarefa();
+        tarefa.setTitulo(tarefaRequestDto.getTitulo());
+        tarefa.setDescricao(tarefaRequestDto.getDescricao());
+        tarefa.setDtInicio(tarefaRequestDto.getDtInicio());
+        tarefa.setDtFim(tarefaRequestDto.getDtFim());
+        tarefa.setComImpedimento(false);
+        tarefa.setComentario(null);
+        tarefa.setSprint(sprint);
+        tarefa.setResponsavel(responsavel);
+        return tarefa;
     }
 
     public static Tarefa toEntity(AtualizarGeralRequestDto atualizarTarefaRequestDto, Integer idTarefa, Sprint sprint, Usuario usuario) {
-        return Tarefa.builder()
-                .idTarefa(idTarefa)
-                .titulo(atualizarTarefaRequestDto.getTitulo())
-                .descricao(atualizarTarefaRequestDto.getDescricao())
-                .dtInicio(atualizarTarefaRequestDto.getDtInicio())
-                .dtFim(atualizarTarefaRequestDto.getDtFim())
-                .comImpedimento(atualizarTarefaRequestDto.getComImpedimento())
-                .comentario(atualizarTarefaRequestDto.getComentario())
-                .sprint(sprint)
-                .responsavel(usuario)
-                .build();
+        Tarefa tarefa = new Tarefa();
+        tarefa.setIdTarefa(idTarefa);
+        tarefa.setTitulo(atualizarTarefaRequestDto.getTitulo());
+        tarefa.setDescricao(atualizarTarefaRequestDto.getDescricao());
+        tarefa.setDtInicio(atualizarTarefaRequestDto.getDtInicio());
+        tarefa.setDtFim(atualizarTarefaRequestDto.getDtFim());
+        tarefa.setComImpedimento(atualizarTarefaRequestDto.getComImpedimento());
+        tarefa.setComentario(atualizarTarefaRequestDto.getComentario());
+        tarefa.setSprint(sprint);
+        tarefa.setResponsavel(usuario);
+        return tarefa;
     }
 
     public static TarefaResponseDto toDto(Tarefa tarefa, List<CheckpointResponseDto> checkpoints, Double progresso) {

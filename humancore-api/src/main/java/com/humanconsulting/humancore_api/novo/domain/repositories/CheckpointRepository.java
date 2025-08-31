@@ -9,5 +9,6 @@ public interface CheckpointRepository {
     List<Checkpoint> findAllByTarefa_Sprint_Projeto_IdProjeto(Integer idProjeto);
     List<Checkpoint> findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(Integer idEmpresa);
     Checkpoint save(Checkpoint checkpoint);
+    Checkpoint delete(Checkpoint checkpoint);
 }
 

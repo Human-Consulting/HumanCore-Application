@@ -1,30 +1,30 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.investimento.AtualizarInvestimentoRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.InvestimentoRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.investimento.InvestimentoResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Investimento;
-import com.humanconsulting.humancore_api.velho.model.Projeto;
+import com.humanconsulting.humancore_api.novo.domain.entities.Investimento;
+import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.investimento.AtualizarInvestimentoRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.InvestimentoRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 
 public class InvestimentoMapper {
 
     public static Investimento toEntity(InvestimentoRequestDto financeiroRequestDto, Projeto projeto) {
-        return Investimento.builder()
-                .descricao(financeiroRequestDto.getDescricao())
-                .valor(financeiroRequestDto.getValor())
-                .dtInvestimento(financeiroRequestDto.getDtInvestimento())
-                .projeto(projeto)
-                .build();
+        Investimento investimento = new Investimento();
+        investimento.setDescricao(financeiroRequestDto.getDescricao());
+        investimento.setValor(financeiroRequestDto.getValor());
+        investimento.setDtInvestimento(financeiroRequestDto.getDtInvestimento());
+        investimento.setProjeto(projeto);
+        return investimento;
     }
 
     public static Investimento toEntity(AtualizarInvestimentoRequestDto atualizarRequest, Integer idInvestimento, Projeto projeto) {
-        return Investimento.builder()
-                .idInvestimento(idInvestimento)
-                .descricao(atualizarRequest.getDescricao())
-                .valor(atualizarRequest.getValor())
-                .dtInvestimento(atualizarRequest.getDtInvestimento())
-                .projeto(projeto)
-                .build();
+        Investimento investimento = new Investimento();
+        investimento.setIdInvestimento(idInvestimento);
+        investimento.setDescricao(atualizarRequest.getDescricao());
+        investimento.setValor(atualizarRequest.getValor());
+        investimento.setDtInvestimento(atualizarRequest.getDtInvestimento());
+        investimento.setProjeto(projeto);
+        return investimento;
     }
 
     public static InvestimentoResponseDto toDto(Investimento financeiro) {

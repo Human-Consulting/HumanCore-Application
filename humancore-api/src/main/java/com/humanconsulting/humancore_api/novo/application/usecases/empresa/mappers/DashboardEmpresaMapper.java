@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.empresa.mapp
 import com.humanconsulting.humancore_api.novo.domain.entities.Area;
 import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.DashboardEmpresaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.EmpresaMapper;
 

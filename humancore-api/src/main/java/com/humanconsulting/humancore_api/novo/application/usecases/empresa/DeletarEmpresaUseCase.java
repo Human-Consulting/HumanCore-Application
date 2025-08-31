@@ -19,4 +19,3 @@ public class DeletarEmpresaUseCase {
         empresaRepository.deleteById(id);
     }
 }
-

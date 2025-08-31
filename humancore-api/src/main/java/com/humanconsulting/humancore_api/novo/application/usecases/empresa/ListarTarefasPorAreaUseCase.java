@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.empresa;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Area;
+import com.humanconsulting.humancore_api.novo.domain.repositories.DashboardEmpresaRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

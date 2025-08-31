@@ -4,14 +4,15 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsuarioRepository {
 
-    Usuario findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
     Usuario save(Usuario usuario);
 
-    Usuario findById(Integer id);
+    Optional<Usuario> findById(Integer id);
 
     List<Usuario> findAll();
 
@@ -26,4 +27,6 @@ public interface UsuarioRepository {
     List<Integer> findProjetosVinculados(Integer id);
 
     List<Tarefa> findTarefasVinculadas(Integer id);
+
+    Optional<String> findDiretorByEmpresaId(Integer idEmpresa);
 }

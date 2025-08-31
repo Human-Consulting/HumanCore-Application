@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.novo.web.dtos.token;
 
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,41 +1,41 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.mensagem.MensagemAtualizarRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.MensagemInfoRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.MensagemRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.chat.ChatMensagemUnificadaDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.mensagem.MensagemResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Mensagem;
-import com.humanconsulting.humancore_api.velho.model.MensagemInfo;
-import com.humanconsulting.humancore_api.velho.model.Sala;
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Mensagem;
+import com.humanconsulting.humancore_api.novo.domain.entities.MensagemInfo;
+import com.humanconsulting.humancore_api.novo.domain.entities.Sala;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.mensagem.MensagemAtualizarRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.MensagemInfoRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.MensagemRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.chat.ChatMensagemUnificadaDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.mensagem.MensagemResponseDto;
 
 public class MensagemMapper {
     public static Mensagem toEntity(MensagemRequestDto mensagemRequestDto, Usuario usuario, Sala sala) {
-        return Mensagem.builder()
-                .conteudo(mensagemRequestDto.getConteudo())
-                .horario(mensagemRequestDto.getHorario())
-                .usuario(usuario)
-                .sala(sala)
-                .build();
+        Mensagem mensagem = new Mensagem();
+        mensagem.setConteudo(mensagemRequestDto.getConteudo());
+        mensagem.setHorario(mensagemRequestDto.getHorario());
+        mensagem.setUsuario(usuario);
+        mensagem.setSala(sala);
+        return mensagem;
     }
 
     public static MensagemInfo toEntity(MensagemInfoRequestDto mensagemInfoRequestDto, Sala sala) {
-        return MensagemInfo.builder()
-                .conteudo(mensagemInfoRequestDto.getConteudo())
-                .horario(mensagemInfoRequestDto.getHorario())
-                .sala(sala)
-                .build();
+        MensagemInfo mensagemInfo = new MensagemInfo();
+        mensagemInfo.setConteudo(mensagemInfoRequestDto.getConteudo());
+        mensagemInfo.setHorario(mensagemInfoRequestDto.getHorario());
+        mensagemInfo.setSala(sala);
+        return mensagemInfo;
     }
 
     public static Mensagem toEntity(MensagemAtualizarRequestDto mensagemAtualizarRequestDto, Integer idMensagem, Usuario usuario, Sala sala) {
-        return Mensagem.builder()
-                .idMensagem(idMensagem)
-                .conteudo(mensagemAtualizarRequestDto.getConteudo())
-                .horario(mensagemAtualizarRequestDto.getHorario())
-                .usuario(usuario)
-                .sala(sala)
-                .build();
+        Mensagem mensagem = new Mensagem();
+        mensagem.setIdMensagem(idMensagem);
+        mensagem.setConteudo(mensagemAtualizarRequestDto.getConteudo());
+        mensagem.setHorario(mensagemAtualizarRequestDto.getHorario());
+        mensagem.setUsuario(usuario);
+        mensagem.setSala(sala);
+        return mensagem;
     }
 
     public static MensagemResponseDto toDto(Mensagem mensagem) {

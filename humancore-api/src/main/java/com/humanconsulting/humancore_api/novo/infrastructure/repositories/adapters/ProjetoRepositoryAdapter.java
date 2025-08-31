@@ -7,6 +7,7 @@ import com.humanconsulting.humancore_api.novo.infrastructure.mappers.ProjetoMapp
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaProjetoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProjetoRepositoryAdapter implements ProjetoRepository {
     private final JpaProjetoRepository jpaProjetoRepository;
@@ -42,7 +43,7 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
     }
 
     @Override
-    public Projeto findById(Integer id) {
+    public Optional<Projeto> findById(Integer id) {
         return jpaProjetoRepository.findById(id)
                 .map(ProjetoMapper::toDomain)
                 .orElse(null);

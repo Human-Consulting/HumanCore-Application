@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.usuario.mappers;
 
+import com.humanconsulting.humancore_api.novo.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
@@ -12,11 +13,11 @@ import java.util.List;
 
 public class UsuarioLoginResponseMapper {
     private final UsuarioRepository usuarioRepository;
-    private final TarefaService tarefaService; // Isso vai virar um use case a ser importado aqui
+    private final TarefaResponseMapper tarefaResponseMapper;
 
-    public UsuarioLoginResponseMapper(UsuarioRepository usuarioRepository, TarefaService tarefaService) {
+    public UsuarioLoginResponseMapper(UsuarioRepository usuarioRepository, TarefaResponseMapper tarefaResponseMapper) {
         this.usuarioRepository = usuarioRepository;
-        this.tarefaService = tarefaService;
+        this.tarefaResponseMapper = tarefaResponseMapper;
     }
 
     public LoginResponseDto toLoginResponse(Usuario usuario, String tokenUsuario) {
@@ -26,7 +27,7 @@ public class UsuarioLoginResponseMapper {
         List<Tarefa> tarefasVinculadas = usuarioRepository.findTarefasVinculadas(usuario.getIdUsuario());
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefa : tarefasVinculadas) {
-            TarefaResponseDto novaTarefa = tarefaService.passarParaResponse(tarefa);
+            TarefaResponseDto novaTarefa = tarefaResponseMapper.toResponse(tarefa);
             if (novaTarefa.getProgresso() < 100)
                 tarefasResponse.add(novaTarefa);
         }

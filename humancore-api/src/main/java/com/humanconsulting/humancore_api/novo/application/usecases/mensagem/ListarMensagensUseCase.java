@@ -16,11 +16,10 @@ public class ListarMensagensUseCase {
     }
 
     public List<ChatMensagemUnificadaDto> execute(Integer idSala) {
-        List<Mensagem> mensagens = mensagemRepository.findBySalaOrderByHorarioAsc(idSala);
+        List<Mensagem> mensagens = mensagemRepository.findById(idSala);
         if (mensagens.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma mensagem encontrada para a sala.");
         return mensagens.stream()
                 .map(MensagemMapper::toMensagemUnificadaResponse)
                 .collect(Collectors.toList());
     }
 }
-

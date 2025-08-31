@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.domain.entities;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class Usuario {
@@ -50,4 +51,7 @@ public class Usuario {
     public void setEmpresa(Empresa empresa) { this.empresa = empresa; }
     public Set<Sala> getSalas() { return salas; }
     public void setSalas(Set<Sala> salas) { this.salas = salas; }
+
+    public void setEmpresa(Optional<Empresa> byId) {
+    }
 }

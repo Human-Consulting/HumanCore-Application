@@ -11,8 +11,11 @@ public class BuscarEmpresaPorIdUseCase {
     }
 
     public Empresa execute(Integer id) {
-        return empresaRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("EmpresaEntity não encontrada."));
+        Empresa empresa = empresaRepository.findById(id);
+        if (empresa == null) {
+            throw new EntidadeNaoEncontradaException("EmpresaEntity não encontrada.");
+        }
+        return empresa;
     }
 }
 

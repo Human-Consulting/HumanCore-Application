@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Area;
 import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
+import com.humanconsulting.humancore_api.novo.domain.repositories.DashboardProjetoRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.DashboardProjetoResponseDto;

@@ -18,7 +18,7 @@ public class CadastrarInvestimentoUseCase {
 
     public InvestimentoResponseDto execute(InvestimentoRequestDto financeiroRequestDto) {
         PermissaoValidator.validarPermissao(financeiroRequestDto.getPermissaoEditor(), "ADICIONAR_INVESTIMENTO");
-        Projeto projeto = projetoRepository.findById(financeiroRequestDto.getFkProjeto()).get();
+        Projeto projeto = projetoRepository.findById(financeiroRequestDto.getFkProjeto());
         var investimento = investimentoRepository.save(InvestimentoMapper.toEntity(financeiroRequestDto, projeto));
         return InvestimentoMapper.toDto(investimento);
     }

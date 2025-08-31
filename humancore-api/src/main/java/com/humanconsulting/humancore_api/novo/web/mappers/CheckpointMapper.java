@@ -1,17 +1,17 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.request.CheckpointRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.checkpoint.CheckpointResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Checkpoint;
-import com.humanconsulting.humancore_api.velho.model.Tarefa;
+import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
+import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.CheckpointRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.checkpoint.CheckpointResponseDto;
 
 public class CheckpointMapper {
     public static Checkpoint toEntity(CheckpointRequestDto checkpointRequestDto, Tarefa tarefa) {
-        return Checkpoint.builder()
-                .descricao(checkpointRequestDto.getDescricao())
-                .finalizado(checkpointRequestDto.getFinalizado())
-                .tarefa(tarefa)
-                .build();
+        Checkpoint checkpoint = new Checkpoint();
+        checkpoint.setDescricao(checkpointRequestDto.getDescricao());
+        checkpoint.setFinalizado(checkpointRequestDto.getFinalizado());
+        checkpoint.setTarefa(tarefa);
+        return checkpoint;
     }
 
     public static CheckpointResponseDto toDto(Checkpoint checkpoint) {

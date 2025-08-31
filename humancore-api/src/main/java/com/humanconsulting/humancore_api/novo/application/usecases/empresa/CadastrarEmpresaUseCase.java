@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaReposit
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.EmpresaRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.EmpresaResponseDto;
+import com.humanconsulting.humancore_api.novo.web.mappers.EmpresaMapper;
 
 public class CadastrarEmpresaUseCase {
     private final EmpresaRepository empresaRepository;
@@ -27,7 +28,7 @@ public class CadastrarEmpresaUseCase {
         PermissaoValidator.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
         Empresa empresaCadastrada = empresaRepository.save(
-            EmpresaResponseMapper.toEntity(empresaRequestDto)
+            EmpresaMapper.toEntity(empresaRequestDto)
         );
         salaNotifier.onEmpresaCriada(empresaCadastrada, usuarioRepository.findById(empresaRequestDto.getIdEditor()).get());
         return empresaResponseMapper.toResponse(empresaCadastrada);

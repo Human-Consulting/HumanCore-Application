@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.tarefa;
 
+import com.humanconsulting.humancore_api.novo.application.usecases.checkpoint.SincronizarCheckpointsDaTarefaUseCase;
 import com.humanconsulting.humancore_api.novo.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
@@ -21,7 +22,7 @@ public class AtualizarTarefaUseCase {
     private final CheckpointRepository checkpointRepository;
     private final SalaNotifier salaNotifier;
     private final TarefaResponseMapper tarefaResponseMapper;
-    private final CheckpointService checkpointService;
+    private final SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa;
 
     public AtualizarTarefaUseCase(
             TarefaRepository tarefaRepository,
@@ -29,19 +30,21 @@ public class AtualizarTarefaUseCase {
             CheckpointRepository checkpointRepository,
             SalaNotifier salaNotifier,
             TarefaResponseMapper tarefaResponseMapper,
-            CheckpointService checkpointService
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa
     ) {
         this.tarefaRepository = tarefaRepository;
         this.usuarioRepository = usuarioRepository;
         this.checkpointRepository = checkpointRepository;
         this.salaNotifier = salaNotifier;
         this.tarefaResponseMapper = tarefaResponseMapper;
-        this.checkpointService = checkpointService;
+        this.sincronizarCheckpointsDaTarefa = sincronizarCheckpointsDaTarefa;
     }
 
     public TarefaResponseDto execute(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
-        Tarefa tarefa = tarefaRepository.findById(idTarefa)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("TarefaEntity não encontrada"));
+        Tarefa tarefa = tarefaRepository.findById(idTarefa);
+        if (tarefa == null) {
+            throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada");
+        }
         Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(requestUpdate.getIdEditor());
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
         PermissaoValidator.validarPermissao(requestUpdate.getPermissaoEditor(), "MODIFICAR_TAREFA");
@@ -54,8 +57,7 @@ public class AtualizarTarefaUseCase {
         if (tarefa.getResponsavel() != null) {
             salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
         }
-        checkpointService.sincronizarCheckpointsDaTarefa(idTarefa, requestUpdate.getCheckpoints());
+        sincronizarCheckpointsDaTarefa.execute(idTarefa, requestUpdate.getCheckpoints());
         return tarefaResponseMapper.toResponse(tarefaAtualizada);
     }
 }
-

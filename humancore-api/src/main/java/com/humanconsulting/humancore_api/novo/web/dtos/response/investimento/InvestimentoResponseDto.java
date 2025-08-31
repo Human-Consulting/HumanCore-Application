@@ -1,6 +1,6 @@
 package com.humanconsulting.humancore_api.novo.web.dtos.response.investimento;
 
-import com.humanconsulting.humancore_api.velho.model.Projeto;
+import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
 import lombok.*;

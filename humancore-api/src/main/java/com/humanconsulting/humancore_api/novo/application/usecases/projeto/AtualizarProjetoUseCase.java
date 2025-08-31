@@ -7,6 +7,7 @@ import com.humanconsulting.humancore_api.novo.domain.repositories.ProjetoReposit
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.ProjetoResponseDto;
+import com.humanconsulting.humancore_api.novo.web.mappers.ProjetoMapper;
 
 public class AtualizarProjetoUseCase {
     private final ProjetoRepository projetoRepository;
@@ -28,7 +29,7 @@ public class AtualizarProjetoUseCase {
         Usuario usuarioEditor = usuarioRepository.findById(projetoAtualizarRequestDto.getIdEditor()).orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado."));
         PermissaoValidator.validarPermissao(projetoAtualizarRequestDto.getPermissaoEditor(), "MODIFICAR_PROJETO");
         Usuario usuarioResponsavel = usuarioRepository.findById(projetoAtualizarRequestDto.getFkResponsavel()).get();
-        Projeto projetoAtualizado = projetoRepository.save(com.humanconsulting.humancore_api.velho.mapper.ProjetoMapper.toEntity(projetoAtualizarRequestDto, idProjeto, usuarioResponsavel, projeto.getEmpresa()));
+        Projeto projetoAtualizado = projetoRepository.save(ProjetoMapper.toEntity(projetoAtualizarRequestDto, idProjeto, usuarioResponsavel, projeto.getEmpresa()));
         return projetoResponseMapper.toResponse(projetoAtualizado, projetoAtualizado.getResponsavel().getIdUsuario(), projetoAtualizado.getIdProjeto());
     }
 }

@@ -8,7 +8,7 @@ public interface MensagemRepository {
     List<Mensagem> findBySalaOrderByHorarioAsc(Sala sala);
 
     Mensagem save(Mensagem mensagem);
-    Mensagem findById(Integer id);
+    List<Mensagem> findById(Integer id);
     List<Mensagem> findAll();
     void deleteById(Integer id);
 }

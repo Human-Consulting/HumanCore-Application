@@ -34,7 +34,7 @@ public class MensagemRepositoryAdapter implements MensagemRepository {
     }
 
     @Override
-    public Mensagem findById(Integer id) {
+    public List<Mensagem> findById(Integer id) {
         return jpaMensagemRepository.findById(id)
                 .map(MensagemMapper::toDomain)
                 .orElse(null);

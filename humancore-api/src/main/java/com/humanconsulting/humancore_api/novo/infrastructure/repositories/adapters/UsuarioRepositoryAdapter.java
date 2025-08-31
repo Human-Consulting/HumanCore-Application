@@ -9,6 +9,7 @@ import com.humanconsulting.humancore_api.novo.infrastructure.mappers.UsuarioMapp
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaUsuarioRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
@@ -19,10 +20,9 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
-    public Usuario findByEmail(String email) {
+    public Optional<Usuario> findByEmail(String email) {
         return jpaUsuarioRepository.findByEmail(email)
-                .map(UsuarioMapper::toDomain)
-                .orElse(null);
+                .map(UsuarioMapper::toDomain);
     }
 
     @Override
@@ -33,10 +33,9 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
-    public Usuario findById(Integer id) {
+    public Optional<Usuario> findById(Integer id) {
         return jpaUsuarioRepository.findById(id)
-                .map(UsuarioMapper::toDomain)
-                .orElse(null);
+                .map(UsuarioMapper::toDomain);
     }
 
     @Override
@@ -81,5 +80,10 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
                 .stream()
                 .map(TarefaMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<String> findDiretorByEmpresaId(Integer idEmpresa) {
+        return jpaUsuarioRepository.findDiretorByEmpresaId(idEmpresa);
     }
 }

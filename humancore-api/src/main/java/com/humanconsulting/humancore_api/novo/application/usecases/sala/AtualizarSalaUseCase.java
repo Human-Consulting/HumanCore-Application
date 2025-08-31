@@ -11,6 +11,7 @@ import com.humanconsulting.humancore_api.novo.domain.repositories.SalaRepository
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.SalaRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.sala.SalaResponseDto;
+import com.humanconsulting.humancore_api.novo.web.mappers.SalaMapper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class AtualizarSalaUseCase {
                 ? empresaRepository.findById(request.getFkEmpresa()).orElse(null)
                 : null;
 
-        Sala salaAtualizada = com.humanconsulting.humancore_api.velho.mapper.SalaMapper.toEntity(request, idSala, novosParticipantes, empresa, projeto);
+        Sala salaAtualizada = SalaMapper.toEntity(request, idSala, novosParticipantes, empresa, projeto);
         salaRepository.save(salaAtualizada);
         salaNotifier.notificarAtualizacoesSala(salaOriginal, salaAtualizada, usuarioRepository.findById(request.getIdEditor()).orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário editor não encontrado.")));
         return salaResponseMapper.toResponse(salaAtualizada);

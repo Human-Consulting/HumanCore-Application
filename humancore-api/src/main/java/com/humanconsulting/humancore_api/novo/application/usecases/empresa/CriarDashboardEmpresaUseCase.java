@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.empresa;
 import com.humanconsulting.humancore_api.novo.application.usecases.empresa.mappers.DashboardEmpresaMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
+import com.humanconsulting.humancore_api.novo.domain.repositories.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.DashboardEmpresaResponseDto;
 

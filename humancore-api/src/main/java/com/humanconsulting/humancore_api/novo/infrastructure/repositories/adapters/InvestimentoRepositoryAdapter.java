@@ -7,6 +7,7 @@ import com.humanconsulting.humancore_api.novo.infrastructure.mappers.Investiment
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaInvestimentoRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InvestimentoRepositoryAdapter implements InvestimentoRepository {
@@ -32,7 +33,7 @@ public class InvestimentoRepositoryAdapter implements InvestimentoRepository {
     }
 
     @Override
-    public Investimento findById(Integer id) {
+    public Optional<Investimento> findById(Integer id) {
         return jpaInvestimentoRepository.findById(id)
                 .map(InvestimentoMapper::toDomain)
                 .orElse(null);

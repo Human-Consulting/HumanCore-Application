@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.empresa;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Investimento;
+import com.humanconsulting.humancore_api.novo.domain.repositories.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.InvestimentoMapper;
 

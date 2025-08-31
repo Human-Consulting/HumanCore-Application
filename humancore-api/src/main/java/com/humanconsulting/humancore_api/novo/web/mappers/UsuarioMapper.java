@@ -1,53 +1,53 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.UsuarioRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.usuario.LoginResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.usuario.UsuarioResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Empresa;
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.usuario.UsuarioAtualizarDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.usuario.UsuarioAtualizarSenhaDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.UsuarioRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.usuario.LoginResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.usuario.UsuarioResponseDto;
 
 import java.util.List;
 
 public class UsuarioMapper {
 
     public static Usuario toEntity(UsuarioRequestDto usuarioRequestDto) {
-        return Usuario.builder()
-                .nome(usuarioRequestDto.getNome())
-                .email(usuarioRequestDto.getEmail())
-                .cargo(usuarioRequestDto.getCargo())
-                .area(usuarioRequestDto.getArea())
-                .permissao(usuarioRequestDto.getPermissao())
-                .empresa(null)
-                .build();
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioRequestDto.getNome());
+        usuario.setEmail(usuarioRequestDto.getEmail());
+        usuario.setCargo(usuarioRequestDto.getCargo());
+        usuario.setArea(usuarioRequestDto.getArea());
+        usuario.setPermissao(usuarioRequestDto.getPermissao());
+        usuario.setEmpresa(null);
+        return usuario;
     }
 
     public static Usuario toEntity(UsuarioAtualizarDto usuarioAtualizarDto, Integer idUsuario, Empresa empresa, String senha) {
-        return Usuario.builder()
-                .idUsuario(idUsuario)
-                .nome(usuarioAtualizarDto.getNome())
-                .email(usuarioAtualizarDto.getEmail())
-                .senha(senha)
-                .cargo(usuarioAtualizarDto.getCargo())
-                .area(usuarioAtualizarDto.getArea())
-                .permissao(usuarioAtualizarDto.getPermissao())
-                .empresa(empresa)
-                .build();
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(idUsuario);
+        usuario.setNome(usuarioAtualizarDto.getNome());
+        usuario.setEmail(usuarioAtualizarDto.getEmail());
+        usuario.setSenha(senha);
+        usuario.setCargo(usuarioAtualizarDto.getCargo());
+        usuario.setArea(usuarioAtualizarDto.getArea());
+        usuario.setPermissao(usuarioAtualizarDto.getPermissao());
+        usuario.setEmpresa(empresa);
+        return usuario;
     }
 
     public static Usuario toEntity(Usuario usuario, UsuarioAtualizarSenhaDto usuarioAtualizarDto, Integer idUsuario, Empresa empresa) {
-        return Usuario.builder()
-                .idUsuario(idUsuario)
-                .nome(usuario.getNome())
-                .email(usuario.getEmail())
-                .senha(usuarioAtualizarDto.getSenhaAtual())
-                .cargo(usuario.getCargo())
-                .area(usuario.getArea())
-                .permissao(usuario.getPermissao())
-                .empresa(empresa)
-                .build();
+        Usuario novoUsuario = new Usuario();
+        novoUsuario.setIdUsuario(idUsuario);
+        novoUsuario.setNome(usuario.getNome());
+        novoUsuario.setEmail(usuario.getEmail());
+        novoUsuario.setSenha(usuarioAtualizarDto.getSenhaAtual());
+        novoUsuario.setCargo(usuario.getCargo());
+        novoUsuario.setArea(usuario.getArea());
+        novoUsuario.setPermissao(usuario.getPermissao());
+        novoUsuario.setEmpresa(empresa);
+        return novoUsuario;
     }
 
     public static LoginResponseDto toLoginDto(

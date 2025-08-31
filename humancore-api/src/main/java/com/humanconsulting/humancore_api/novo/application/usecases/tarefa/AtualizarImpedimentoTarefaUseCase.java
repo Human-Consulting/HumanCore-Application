@@ -1,6 +1,9 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.tarefa;
 
+import com.humanconsulting.humancore_api.novo.application.usecases.projeto.BuscarProjetoPorIdUseCase;
+import com.humanconsulting.humancore_api.novo.application.usecases.sprint.BuscarSprintPorIdUseCase;
 import com.humanconsulting.humancore_api.novo.application.usecases.tarefa.mappers.TarefaResponseMapper;
+import com.humanconsulting.humancore_api.novo.application.usecases.usuario.mappers.UsuarioLoginResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
@@ -15,39 +18,47 @@ public class AtualizarImpedimentoTarefaUseCase {
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
     private final EmailNotifier emailNotifier;
-    private final ProjetoService projetoService;
-    private final SprintService sprintService;
-    private final UsuarioService usuarioService;
+    private final BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase;
+    private final BuscarSprintPorIdUseCase buscarSprintPorIdUseCase;
+    private final UsuarioLoginResponseMapper usuarioMapper;
     private final TarefaResponseMapper tarefaResponseMapper;
 
     public AtualizarImpedimentoTarefaUseCase(
             TarefaRepository tarefaRepository,
             UsuarioRepository usuarioRepository,
             EmailNotifier emailNotifier,
-            ProjetoService projetoService,
-            SprintService sprintService,
-            UsuarioService usuarioService,
+            BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase,
+            BuscarSprintPorIdUseCase buscarSprintPorIdUseCase,
+            UsuarioLoginResponseMapper usuarioMapper,
             TarefaResponseMapper tarefaResponseMapper
     ) {
         this.tarefaRepository = tarefaRepository;
         this.usuarioRepository = usuarioRepository;
         this.emailNotifier = emailNotifier;
-        this.projetoService = projetoService;
-        this.sprintService = sprintService;
-        this.usuarioService = usuarioService;
+        this.buscarProjetoPorIdUseCase = buscarProjetoPorIdUseCase;
+        this.buscarSprintPorIdUseCase = buscarSprintPorIdUseCase;
+        this.usuarioMapper = usuarioMapper;
         this.tarefaResponseMapper = tarefaResponseMapper;
     }
 
     public TarefaResponseDto execute(Integer idTarefa, AtualizarStatusRequestDto request) {
-        Tarefa tarefa = tarefaRepository.findById(idTarefa)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("TarefaEntity não encontrada"));
+        Tarefa tarefa = tarefaRepository.findById(idTarefa);
+        if (tarefa == null) {
+            throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada");
+        }
         Integer fkResponsavel = tarefa.getResponsavel().getIdUsuario();
-        Sprint sprintEntrega = sprintService.buscarPorId(tarefa.getSprint().getIdSprint());
-        Projeto projetoEntrega = projetoService.buscarPorId(sprintEntrega.getProjeto().getIdProjeto());
-        Usuario tarefaResponsavel = usuarioRepository.findById(tarefa.getResponsavel().getIdUsuario()).get();
-        Usuario projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario()).get();
-        LoginResponseDto responsavelProjeto = usuarioService.passarParaLoginResponse(projetoResponsavel, null);
-        LoginResponseDto responsavelEntrega = usuarioService.passarParaLoginResponse(tarefaResponsavel, null);
+        Sprint sprintEntrega = buscarSprintPorIdUseCase.execute(tarefa.getSprint().getIdSprint());
+        Projeto projetoEntrega = buscarProjetoPorIdUseCase.execute(sprintEntrega.getProjeto().getIdProjeto());
+        Usuario tarefaResponsavel = usuarioRepository.findById(tarefa.getResponsavel().getIdUsuario());
+        if (tarefaResponsavel == null) {
+            throw new EntidadeNaoEncontradaException("Usuário responsável pela tarefa não encontrado");
+        }
+        Usuario projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario());
+        if (projetoResponsavel == null) {
+            throw new EntidadeNaoEncontradaException("Usuário responsável pelo projeto não encontrado");
+        }
+        LoginResponseDto responsavelProjeto = usuarioMapper.toLoginResponse(projetoResponsavel, null);
+        LoginResponseDto responsavelEntrega = usuarioMapper.toLoginResponse(tarefaResponsavel, null);
         if (!request.getIdEditor().equals(fkResponsavel))
             throw new AcessoNegadoException("Usuário não é responsável pela tarefa");
         tarefaRepository.toggleImpedimento(idTarefa);
@@ -55,4 +66,3 @@ public class AtualizarImpedimentoTarefaUseCase {
         return tarefaResponseMapper.toResponse(tarefa);
     }
 }
-

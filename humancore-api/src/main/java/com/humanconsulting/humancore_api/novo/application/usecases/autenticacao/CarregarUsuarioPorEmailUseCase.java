@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.token.UsuarioDetalhesDto;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import java.util.Optional;
 
 public class CarregarUsuarioPorEmailUseCase {

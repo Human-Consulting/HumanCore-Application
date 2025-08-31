@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.websocketmensagem;
 
 import com.corundumstudio.socketio.SocketIOServer;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.chat.ChatMensagemUnificadaDto;
 
 public class EnviarMensagemParaSalaUseCase {
 

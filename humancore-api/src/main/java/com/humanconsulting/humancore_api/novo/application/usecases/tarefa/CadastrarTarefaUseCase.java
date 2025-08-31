@@ -9,6 +9,7 @@ import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaReposito
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.novo.web.mappers.TarefaMapper;
 
 public class CadastrarTarefaUseCase {
     private final TarefaRepository tarefaRepository;

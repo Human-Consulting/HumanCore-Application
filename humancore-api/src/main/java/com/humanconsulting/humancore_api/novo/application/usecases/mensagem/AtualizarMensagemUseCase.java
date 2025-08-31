@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Mensagem;
 import com.humanconsulting.humancore_api.novo.domain.repositories.MensagemRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.mensagem.MensagemAtualizarRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.MensagemRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.MensagemMapper;
@@ -21,12 +22,19 @@ public class AtualizarMensagemUseCase {
         this.buscarMensagemPorIdUseCase = buscarMensagemPorIdUseCase;
     }
 
-    public ChatMensagemUnificadaDto execute(Integer idMensagem, MensagemRequestDto mensagemRequestDto) {
+    public ChatMensagemUnificadaDto execute(Integer idMensagem, MensagemAtualizarRequestDto mensagemRequestDto) {
         Mensagem mensagemOriginal = buscarMensagemPorIdUseCase.execute(idMensagem);
-        var usuario = usuarioRepository.findById(mensagemRequestDto.getFkUsuario()).orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado."));
-        var sala = salaRepository.findById(mensagemRequestDto.getFkSala()).orElseThrow(() -> new EntidadeNaoEncontradaException("Sala não encontrada."));
-        Mensagem mensagemAtualizada = mensagemRepository.save(MensagemMapper.toEntity(mensagemRequestDto, usuario, sala, idMensagem));
+        var usuarioOpt = usuarioRepository.findById(mensagemRequestDto.getFkUsuario());
+        if (usuarioOpt == null || usuarioOpt.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
+        }
+        var usuario = usuarioOpt.get();
+        var salaOpt = salaRepository.findById(mensagemRequestDto.getFkSala());
+        if (salaOpt == null || salaOpt.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Sala não encontrada.");
+        }
+        var sala = salaOpt.get();
+        Mensagem mensagemAtualizada = mensagemRepository.save(MensagemMapper.toEntity(mensagemRequestDto, idMensagem, usuario, sala));
         return MensagemMapper.toMensagemUnificadaResponse(mensagemAtualizada);
     }
 }
-

@@ -7,6 +7,7 @@ import com.humanconsulting.humancore_api.novo.infrastructure.mappers.EmpresaMapp
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaEmpresaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmpresaRepositoryAdapter implements EmpresaRepository {
     private final JpaEmpresaRepository jpaEmpresaRepository;
@@ -33,7 +34,7 @@ public class EmpresaRepositoryAdapter implements EmpresaRepository {
     }
 
     @Override
-    public Empresa findById(Integer id) {
+    public Optional<Empresa> findById(Integer id) {
         return jpaEmpresaRepository.findById(id)
                 .map(EmpresaMapper::toDomain)
                 .orElse(null);

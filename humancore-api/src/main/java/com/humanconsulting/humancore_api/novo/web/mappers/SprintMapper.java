@@ -1,34 +1,34 @@
 package com.humanconsulting.humancore_api.novo.web.mappers;
 
-import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.sprint.SprintAtualizarRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.request.SprintRequestDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.sprint.SprintResponseDto;
-import com.humanconsulting.humancore_api.velho.controller.dto.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.velho.model.Projeto;
-import com.humanconsulting.humancore_api.velho.model.Sprint;
+import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.sprint.SprintAtualizarRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.SprintRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.sprint.SprintResponseDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 
 import java.util.List;
 
 public class SprintMapper {
     public static Sprint toEntity(SprintRequestDto sprintRequestDto, Projeto projeto) {
-        return Sprint.builder()
-                .titulo(sprintRequestDto.getTitulo())
-                .descricao(sprintRequestDto.getDescricao())
-                .dtInicio(sprintRequestDto.getDtInicio())
-                .dtFim(sprintRequestDto.getDtFim())
-                .projeto(projeto)
-                .build();
+        Sprint sprint = new Sprint();
+        sprint.setTitulo(sprintRequestDto.getTitulo());
+        sprint.setDescricao(sprintRequestDto.getDescricao());
+        sprint.setDtInicio(sprintRequestDto.getDtInicio());
+        sprint.setDtFim(sprintRequestDto.getDtFim());
+        sprint.setProjeto(projeto);
+        return sprint;
     }
 
     public static Sprint toEntity(SprintAtualizarRequestDto sprintAtualizarRequestDto, Integer idSprint, Projeto projeto) {
-        return Sprint.builder()
-                .idSprint(idSprint)
-                .titulo(sprintAtualizarRequestDto.getTitulo())
-                .descricao(sprintAtualizarRequestDto.getDescricao())
-                .dtInicio(sprintAtualizarRequestDto.getDtInicio())
-                .dtFim(sprintAtualizarRequestDto.getDtFim())
-                .projeto(projeto)
-                .build();
+        Sprint sprint = new Sprint();
+        sprint.setIdSprint(idSprint);
+        sprint.setTitulo(sprintAtualizarRequestDto.getTitulo());
+        sprint.setDescricao(sprintAtualizarRequestDto.getDescricao());
+        sprint.setDtInicio(sprintAtualizarRequestDto.getDtInicio());
+        sprint.setDtFim(sprintAtualizarRequestDto.getDtFim());
+        sprint.setProjeto(projeto);
+        return sprint;
     }
 
     public static SprintResponseDto toDto(Sprint sprint, double progresso, boolean comImpedimento, List<TarefaResponseDto> entregas) {

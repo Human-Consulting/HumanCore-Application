@@ -3,8 +3,9 @@ package com.humanconsulting.humancore_api.novo.web.dtos.token;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.usuario.UsuarioResponseDto;
-import com.humanconsulting.humancore_api.velho.mapper.UsuarioMapper;
-import com.humanconsulting.humancore_api.velho.model.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.web.mappers.UsuarioMapper;
+
 
 public class UsuarioTokenMapper {
 
