@@ -3,13 +3,11 @@ package com.humanconsulting.humancore_api.service;
 import com.humanconsulting.humancore_api.controller.dto.atualizar.sprint.*;
 import com.humanconsulting.humancore_api.controller.dto.request.SprintRequestDto;
 import com.humanconsulting.humancore_api.controller.dto.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.controller.dto.response.checkpoint.CheckpointResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.controller.dto.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.exception.EntidadeSemRetornoException;
-import com.humanconsulting.humancore_api.mapper.CheckpointMapper;
 import com.humanconsulting.humancore_api.mapper.SprintMapper;
 import com.humanconsulting.humancore_api.model.*;
 import com.humanconsulting.humancore_api.repository.*;
@@ -91,7 +89,7 @@ public class SprintService {
 
     public SprintResponseDto passarParaResponse(Sprint sprint, Integer idSprint) {
         boolean comImpedimento = tarefaRepository.existsImpedimentoBySprint(idSprint);
-        List<Tarefa> tarefas = tarefaRepository.findByProjetoAndSprint(sprint.getProjeto().getIdProjeto(), sprint.getIdSprint());
+        List<Tarefa> tarefas = tarefaRepository.findByProjetoAndSprintOrderByDtFimAsc(sprint.getProjeto().getIdProjeto(), sprint.getIdSprint());
         List<TarefaResponseDto> tarefasResponse = new ArrayList<>();
         for (Tarefa tarefa : tarefas) {
             tarefasResponse.add(tarefaService.passarParaResponse(tarefa));

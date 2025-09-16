@@ -44,7 +44,7 @@ class SprintServiceTest {
         when(projeto.getIdProjeto()).thenReturn(1);
         when(tarefaRepository.existsImpedimentoBySprint(1)).thenReturn(true);
         Tarefa tarefa = mock(Tarefa.class);
-        when(tarefaRepository.findByProjetoAndSprint(1, 1)).thenReturn(Collections.singletonList(tarefa));
+        when(tarefaRepository.findByProjetoAndSprintOrderByDtFimAsc(1, 1)).thenReturn(Collections.singletonList(tarefa));
         when(tarefaService.passarParaResponse(tarefa)).thenReturn(mock(com.humanconsulting.humancore_api.controller.dto.response.tarefa.TarefaResponseDto.class));
         Checkpoint checkpoint = mock(Checkpoint.class);
         when(checkpointRepository.findAllByTarefa_Sprint_IdSprint(1)).thenReturn(Collections.singletonList(checkpoint));

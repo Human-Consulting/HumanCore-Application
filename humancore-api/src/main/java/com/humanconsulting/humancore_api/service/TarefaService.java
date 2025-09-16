@@ -94,7 +94,7 @@ public class TarefaService {
     }
 
     public List<TarefaResponseDto> listarPorSprint(Integer idSprint) {
-        List<Tarefa> all = tarefaRepository.findBySprint_IdSprint(idSprint);
+        List<Tarefa> all = tarefaRepository.findBySprint_IdSprintOrderByDtFimAsc(idSprint);
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma tarefa registrada");
         List<TarefaResponseDto> allResponse = new ArrayList<>();
         for (Tarefa tarefa : all) {

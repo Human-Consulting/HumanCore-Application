@@ -37,8 +37,7 @@ public class SalaNotifier implements SalaObserver {
 
         Sala sala = salaRepository.findByProjeto(projeto);
         if (sala == null) System.out.println("Sala não encontrada.");
-
-        if (!sala.getUsuarios().contains(tarefaResponsavel)) {
+        else if (!sala.getUsuarios().contains(tarefaResponsavel)) {
             sala.getUsuarios().add(tarefaResponsavel);
             salaRepository.save(sala);
         }
@@ -51,8 +50,7 @@ public class SalaNotifier implements SalaObserver {
 
         Sala sala = salaRepository.findByEmpresa(usuario.getEmpresa());
         if (sala == null) System.out.println("Sala não encontrada.");
-
-        if (!sala.getUsuarios().contains(usuario)) {
+        else if (!sala.getUsuarios().contains(usuario)) {
             sala.getUsuarios().add(usuario);
             Sala salaCriada = salaRepository.save(sala);
             enviarMensagemInfo(usuario.getNome() + " entrou na empresa.", salaCriada.getIdSala());
