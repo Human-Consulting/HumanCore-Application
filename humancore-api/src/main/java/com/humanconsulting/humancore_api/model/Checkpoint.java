@@ -14,6 +14,7 @@ public class Checkpoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCheckpoint;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String descricao;
 
     @Column(columnDefinition = "TINYINT(1)")

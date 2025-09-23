@@ -18,6 +18,7 @@ public class Tarefa {
 
     private String titulo;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String descricao;
 
     private LocalDate dtInicio;
