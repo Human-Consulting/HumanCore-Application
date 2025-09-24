@@ -4,9 +4,12 @@ import com.humanconsulting.humancore_api.novo.application.usecases.tarefa.mapper
 import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.TarefaMapper;
@@ -33,7 +36,7 @@ public class CadastrarTarefaUseCase {
     }
 
     public TarefaResponseDto execute(TarefaRequestDto tarefaRequestDto) {
-        PermissaoValidator.validarPermissao(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
+        ValidarPermissao.execute(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
         Sprint sprint = sprintRepository.findById(tarefaRequestDto.getFkSprint()).get();
         if (tarefaRequestDto.getDtInicio().isAfter(tarefaRequestDto.getDtFim()) ||
                 tarefaRequestDto.getDtInicio().isEqual(tarefaRequestDto.getDtFim()) ||

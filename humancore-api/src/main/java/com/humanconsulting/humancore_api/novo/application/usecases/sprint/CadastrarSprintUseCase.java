@@ -2,8 +2,10 @@ package com.humanconsulting.humancore_api.novo.application.usecases.sprint;
 
 import com.humanconsulting.humancore_api.novo.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SprintRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.SprintRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.SprintMapper;
@@ -20,7 +22,7 @@ public class CadastrarSprintUseCase {
     }
 
     public SprintResponseDto execute(SprintRequestDto sprintRequestDto) {
-        PermissaoValidator.validarPermissao(sprintRequestDto.getPermissaoEditor(), "ADICIONAR_SPRINT");
+        ValidarPermissao.execute(sprintRequestDto.getPermissaoEditor(), "ADICIONAR_SPRINT");
         if (sprintRequestDto.getDtInicio().isAfter(sprintRequestDto.getDtFim()) || sprintRequestDto.getDtInicio().isEqual(sprintRequestDto.getDtFim())) {
             throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
         }

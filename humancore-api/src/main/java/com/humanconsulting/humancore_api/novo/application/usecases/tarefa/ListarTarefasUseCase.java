@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.tarefa;
 
 import com.humanconsulting.humancore_api.novo.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 

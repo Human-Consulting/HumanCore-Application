@@ -55,7 +55,7 @@ public class MensagemService {
     }
 
     public void deletar(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-//        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_MENSAGEM");
+//        ValidarPermissao.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_MENSAGEM");
 
         Optional<Mensagem> optMensagem = mensagemRepository.findById(id);
         if (optMensagem.isEmpty()) throw new EntidadeNaoEncontradaException("MensagemEntity não encontrada.");
@@ -67,7 +67,7 @@ public class MensagemService {
 
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
 
-//        PermissaoValidator.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_MENSAGEM");
+//        ValidarPermissao.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_MENSAGEM");
 
         Mensagem mensagemAtualizada = mensagemRepository.save(MensagemMapper.toEntity(request, idMensagem, usuarioRepository.findById(request.getFkUsuario()).get(), salaRepository.findById(request.getFkSala()).get()));
         return passarParaResponse(mensagemAtualizada);

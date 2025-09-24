@@ -5,6 +5,8 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sala;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SalaRepository;

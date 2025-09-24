@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.novo.application.usecases.empresa.mappe
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.EmpresaMapper;
@@ -28,9 +29,9 @@ public class AtualizarEmpresaUseCase {
         if (request.getUrlImagem().isEmpty()) request.setUrlImagem(urlImagemOriginal);
         Optional<?> optUsuarioEditor = usuarioRepository.findById(request.getIdEditor());
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
-        PermissaoValidator.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_EMPRESA");
+        ValidarPermissao.execute(request.getPermissaoEditor(), "MODIFICAR_EMPRESA");
         Empresa empresaAtualizada = empresaRepository.save(EmpresaMapper.toEntity(request, idEmpresa));
         return empresaResponseMapper.toResponse(empresaAtualizada);
     }
-}
 
+}

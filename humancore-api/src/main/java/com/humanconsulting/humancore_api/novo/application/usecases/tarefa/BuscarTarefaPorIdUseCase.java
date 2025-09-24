@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.tarefa;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaRepository;
 
 import java.util.Optional;

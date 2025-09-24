@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.novo.web.controllers;
 
+import com.humanconsulting.humancore_api.novo.application.usecases.usuario.CadastrarUsuarioUseCase;
 import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.velho.controller.dto.atualizar.usuario.UsuarioAtualizarSenhaDto;
@@ -29,9 +30,6 @@ import java.util.List;
 @CrossOrigin("*")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService service;
-
     @Operation(
             summary = "Cadastrar um novo usuário",
             description = "Esse endpoint cria um novo usuário no sistema.",
@@ -44,7 +42,7 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Usuario> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
         final Usuario usuario = UsuarioTokenMapper.of(usuarioRequestDto);
-        Usuario novoUsuario = this.service.cadastrar(usuario, usuarioRequestDto.getFkEmpresa());
+        Usuario novoUsuario = CadastrarUsuarioUseCase.execute(usuario, usuarioRequestDto.getFkEmpresa());
 
         return ResponseEntity.status(201).body(novoUsuario);
     }

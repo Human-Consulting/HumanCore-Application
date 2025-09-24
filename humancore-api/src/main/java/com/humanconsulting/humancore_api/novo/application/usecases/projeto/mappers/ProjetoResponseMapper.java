@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaRepository;
+import com.humanconsulting.humancore_api.novo.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.ProjetoMapper;
 
@@ -26,7 +27,7 @@ public class ProjetoResponseMapper {
         List<Sprint> sprints = sprintRepository.findAll();
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(idProjeto);
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(idProjeto);
-        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+        Double progresso = ProgressoCalculator.execute(checkpoints);
         return ProjetoMapper.toDto(projeto, progresso, comImpedimento);
     }
 }

@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.empresa;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.UsuarioPermissaoDto;
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ public class DeletarEmpresaUseCase {
     }
 
     public void execute(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_EMPRESA");
+        ValidarPermissao.execute(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_EMPRESA");
         Optional<Empresa> optEmpresa = empresaRepository.findById(id);
         if (optEmpresa.isEmpty()) throw new EntidadeNaoEncontradaException("EmpresaEntity não encontrada.");
         empresaRepository.deleteById(id);

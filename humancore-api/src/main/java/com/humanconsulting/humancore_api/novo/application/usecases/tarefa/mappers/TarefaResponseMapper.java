@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.tarefa.mappe
 import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
+import com.humanconsulting.humancore_api.novo.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.checkpoint.CheckpointResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.CheckpointMapper;
@@ -24,7 +25,7 @@ public class TarefaResponseMapper {
         for (Checkpoint checkpoint : checkpoints) {
             checkpointResponseDtos.add(CheckpointMapper.toDto(checkpoint));
         }
-        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+        Double progresso = ProgressoCalculator.execute(checkpoints);
         return TarefaMapper.toDto(tarefa, checkpointResponseDtos, progresso);
     }
 }

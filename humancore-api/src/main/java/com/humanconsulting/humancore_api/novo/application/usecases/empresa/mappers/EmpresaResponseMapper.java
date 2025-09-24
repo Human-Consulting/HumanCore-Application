@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.EmpresaMapper;
 import java.util.List;
@@ -28,7 +29,7 @@ public class EmpresaResponseMapper {
         Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
         Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(empresa.getIdEmpresa());
-        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+        Double progresso = ProgressoCalculator.execute(checkpoints);
         return EmpresaMapper.toDto(empresa, nomeDiretor.orElse(null), comImpedimento, progresso, orcamento);
     }
 }

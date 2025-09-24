@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.mensagem;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Mensagem;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.MensagemRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.MensagemMapper;

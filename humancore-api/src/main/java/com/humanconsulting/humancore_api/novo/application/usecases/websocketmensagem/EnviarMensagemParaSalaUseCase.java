@@ -1,3 +1,4 @@
+/*
 package com.humanconsulting.humancore_api.novo.application.usecases.websocketmensagem;
 
 import com.corundumstudio.socketio.SocketIOServer;
@@ -13,3 +14,4 @@ public class EnviarMensagemParaSalaUseCase {
     }
 }
 
+*/

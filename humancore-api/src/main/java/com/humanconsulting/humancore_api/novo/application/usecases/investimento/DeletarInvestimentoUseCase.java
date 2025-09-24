@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.investimento;
 
 import com.humanconsulting.humancore_api.novo.domain.repositories.InvestimentoRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.UsuarioPermissaoDto;
 
 public class DeletarInvestimentoUseCase {
@@ -11,7 +12,7 @@ public class DeletarInvestimentoUseCase {
     }
 
     public void execute(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
-        PermissaoValidator.validarPermissao(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_INVESTIMENTO");
+        ValidarPermissao.execute(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_INVESTIMENTO");
         investimentoRepository.deleteById(id);
     }
 }

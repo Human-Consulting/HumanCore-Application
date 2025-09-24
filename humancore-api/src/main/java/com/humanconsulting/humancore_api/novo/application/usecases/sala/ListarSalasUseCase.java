@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.sala;
 
 import com.humanconsulting.humancore_api.novo.application.usecases.sala.mappers.SalaResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sala;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.sala.SalaResponseDto;
 

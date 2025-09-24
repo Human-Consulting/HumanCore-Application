@@ -1,8 +1,12 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.usuario;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.EmailNotifier;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.infrastructure.utils.SenhaGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class CadastrarUsuarioUseCase {
@@ -30,7 +34,7 @@ public class CadastrarUsuarioUseCase {
         if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isEmpty()) {
             novoUsuario.setCores("#606080|#8d7dca|#4e5e8c|true");
             novoUsuario.setEmpresa(empresaRepository.findById(fkEmpresa));
-            novoUsuario.setSenha(SenhaGenerator.gerarSenha(novoUsuario.getNome(), novoUsuario.getEmpresa().getNome()));
+            novoUsuario.setSenha(SenhaGenerator.execute(novoUsuario.getNome(), novoUsuario.getEmpresa().getNome()));
             String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
             try {
                 emailNotifier.cadastro(novoUsuario);

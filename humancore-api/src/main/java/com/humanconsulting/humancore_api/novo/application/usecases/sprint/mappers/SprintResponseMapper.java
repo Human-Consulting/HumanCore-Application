@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaRepository;
+import com.humanconsulting.humancore_api.novo.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.SprintMapper;
@@ -32,7 +33,7 @@ public class SprintResponseMapper {
             tarefasResponse.add(tarefaResponseMapper.toResponse(tarefa));
         }
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_IdSprint(idSprint);
-        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+        Double progresso = ProgressoCalculator.execute(checkpoints);
         return SprintMapper.toDto(sprint, progresso, comImpedimento, tarefasResponse);
     }
 }

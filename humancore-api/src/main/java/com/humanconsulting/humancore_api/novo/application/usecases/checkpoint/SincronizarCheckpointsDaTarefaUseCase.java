@@ -25,10 +25,10 @@ public class SincronizarCheckpointsDaTarefaUseCase {
         List<Checkpoint> atuais = checkpointRepository.findAllByTarefa_IdTarefa(idTarefa);
 
         // 2. Converte lista recebida em entidades associadas à tarefa
-        Tarefa tarefa = tarefaRepository.findById(idTarefa);
+        Optional<Tarefa> tarefa = tarefaRepository.findById(idTarefa);
         List<Checkpoint> recebidosConvertidos = new ArrayList<>();
         for (CheckpointRequestDto recebido : recebidos) {
-            recebidosConvertidos.add(CheckpointMapper.toEntity(recebido, tarefa));
+            recebidosConvertidos.add(CheckpointMapper.toEntity(recebido, tarefa.orElse(null)));
         }
 
         // 3. Cria mapa dos atuais para acesso rápido por ID

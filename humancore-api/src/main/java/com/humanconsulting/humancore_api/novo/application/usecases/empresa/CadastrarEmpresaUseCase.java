@@ -2,8 +2,10 @@ package com.humanconsulting.humancore_api.novo.application.usecases.empresa;
 
 import com.humanconsulting.humancore_api.novo.application.usecases.empresa.mappers.EmpresaResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.EmpresaRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.EmpresaMapper;
@@ -25,7 +27,7 @@ public class CadastrarEmpresaUseCase {
     }
 
     public EmpresaResponseDto execute(EmpresaRequestDto empresaRequestDto) {
-        PermissaoValidator.validarPermissao(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
+        ValidarPermissao.execute(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
         Empresa empresaCadastrada = empresaRepository.save(
             EmpresaMapper.toEntity(empresaRequestDto)

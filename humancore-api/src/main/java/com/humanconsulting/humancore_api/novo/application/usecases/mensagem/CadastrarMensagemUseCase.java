@@ -3,7 +3,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.mensagem;
 import com.humanconsulting.humancore_api.novo.domain.repositories.MensagemRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
-import com.humanconsulting.humancore_api.novo.web.dtos.request.MensagemInfoRequestDto;
+import com.humanconsulting.humancore_api.novo.web.dtos.request.MensagemRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.MensagemMapper;
 
@@ -18,12 +18,12 @@ public class CadastrarMensagemUseCase {
         this.salaRepository = salaRepository;
     }
 
-    public ChatMensagemUnificadaDto execute(MensagemInfoRequestDto mensagemInfoRequestDto) {
+    public ChatMensagemUnificadaDto execute(MensagemRequestDto mensagemRequestDto) {
         var mensagemCadastrada = mensagemRepository.save(
             MensagemMapper.toEntity(
-                mensagemInfoRequestDto,
-                usuarioRepository.findById(mensagemInfoRequestDto.getFkUsuario()).get(),
-                salaRepository.findById(mensagemInfoRequestDto.getFkSala()).get()
+                mensagemRequestDto,
+                usuarioRepository.findById(mensagemRequestDto.getFkUsuario()).get(),
+                salaRepository.findById(mensagemRequestDto.getFkSala()).get()
             )
         );
         return MensagemMapper.toMensagemUnificadaResponse(mensagemCadastrada);

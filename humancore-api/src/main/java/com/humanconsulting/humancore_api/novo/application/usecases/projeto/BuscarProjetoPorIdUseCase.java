@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.projeto;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.ProjetoRepository;
 
 import java.util.Optional;

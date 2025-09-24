@@ -1,9 +1,10 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.sala;
 
-import com.humanconsulting.humancore_api.novo.application.usecases.mensagem.CadastrarMensagemUseCase;
+import com.humanconsulting.humancore_api.novo.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
 import com.humanconsulting.humancore_api.novo.application.usecases.sala.mappers.SalaResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sala;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.MensagemInfoRequestDto;
@@ -18,13 +19,13 @@ import java.util.Set;
 public class CadastrarSalaUseCase {
     private final SalaRepository salaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final CadastrarMensagemUseCase cadastrarMensagemUseCase;
+    private final CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase;
     private final SalaResponseMapper salaResponseMapper;
 
-    public CadastrarSalaUseCase(SalaRepository salaRepository, UsuarioRepository usuarioRepository, CadastrarMensagemUseCase cadastrarMensagemUseCase, SalaResponseMapper salaResponseMapper) {
+    public CadastrarSalaUseCase(SalaRepository salaRepository, UsuarioRepository usuarioRepository, CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase, SalaResponseMapper salaResponseMapper) {
         this.salaRepository = salaRepository;
         this.usuarioRepository = usuarioRepository;
-        this.cadastrarMensagemUseCase = cadastrarMensagemUseCase;
+        this.cadastrarMensagemInfoUseCase = cadastrarMensagemInfoUseCase;
         this.salaResponseMapper = salaResponseMapper;
     }
 
@@ -36,7 +37,7 @@ public class CadastrarSalaUseCase {
         participantesIniciais.add(usuarioRepository.findById(salaRequestDto.getIdEditor()).orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário editor não encontrado.")));
         Sala salaCadastrada = salaRepository.save(SalaMapper.toEntity(salaRequestDto, participantesIniciais));
         MensagemInfoRequestDto mensagemInfoRequest = new MensagemInfoRequestDto("Conversa criada.", LocalDateTime.now(), salaCadastrada.getIdSala());
-        cadastrarMensagemUseCase.execute(mensagemInfoRequest);
+        cadastrarMensagemInfoUseCase.execute(mensagemInfoRequest);
         return salaResponseMapper.toResponse(salaCadastrada);
     }
 }

@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.empresa.mapp
 import com.humanconsulting.humancore_api.novo.domain.entities.Area;
 import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.empresa.DashboardEmpresaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.EmpresaMapper;
@@ -20,7 +21,7 @@ public class DashboardEmpresaMapper {
             Boolean comImpedimento,
             List<InvestimentoResponseDto> allResponse
     ) {
-        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+        Double progresso = ProgressoCalculator.execute(checkpoints);
         return EmpresaMapper.toDashboard(empresa, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }
 }

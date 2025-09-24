@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.investimento;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Investimento;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.InvestimentoRepository;
 
 import java.util.Optional;

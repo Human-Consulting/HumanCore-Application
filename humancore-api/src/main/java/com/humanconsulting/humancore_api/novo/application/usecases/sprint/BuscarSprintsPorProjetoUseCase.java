@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.sprint;
 
 import com.humanconsulting.humancore_api.novo.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.sprint.SprintResponseDto;
 

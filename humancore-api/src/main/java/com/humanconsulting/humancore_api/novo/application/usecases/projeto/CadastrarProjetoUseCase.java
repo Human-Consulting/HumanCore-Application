@@ -3,9 +3,12 @@ package com.humanconsulting.humancore_api.novo.application.usecases.projeto;
 import com.humanconsulting.humancore_api.novo.application.usecases.projeto.mappers.ProjetoResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeConflitanteException;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.ProjetoMapper;
@@ -26,7 +29,7 @@ public class CadastrarProjetoUseCase {
     }
 
     public ProjetoResponseDto execute(ProjetoRequestDto projetoRequestDto) {
-        PermissaoValidator.validarPermissao(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
+        ValidarPermissao.execute(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
         if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) {
             throw new EntidadeConflitanteException("ProjetoEntity já cadastrado");
         }

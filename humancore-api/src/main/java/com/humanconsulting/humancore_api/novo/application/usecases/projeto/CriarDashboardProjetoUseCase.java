@@ -3,9 +3,11 @@ package com.humanconsulting.humancore_api.novo.application.usecases.projeto;
 import com.humanconsulting.humancore_api.novo.domain.entities.Area;
 import com.humanconsulting.humancore_api.novo.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.novo.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.DashboardProjetoRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.DashboardProjetoResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.ProjetoMapper;
@@ -29,7 +31,7 @@ public class CriarDashboardProjetoUseCase {
     }
 
     public DashboardProjetoResponseDto execute(Projeto projeto) {
-        Optional<com.humanconsulting.humancore_api.velho.model.Usuario> usuario = usuarioRepository.findById(projeto.getResponsavel().getIdUsuario());
+        Optional<Usuario> usuario = usuarioRepository.findById(projeto.getResponsavel().getIdUsuario());
         String nomeDiretor = usuario.get().getNome();
         List<Area> areas = listarTarefasPorAreaUseCase.execute(projeto.getIdProjeto());
         Double orcamento = dashboardProjetoRepository.orcamentoTotal(projeto.getIdProjeto());
@@ -37,7 +39,7 @@ public class CriarDashboardProjetoUseCase {
         Boolean comImpedimento = dashboardProjetoRepository.projetoComImpedimento(projeto.getIdProjeto());
         List<InvestimentoResponseDto> allResponse = listarFinanceiroPorProjetoUseCase.execute(projeto.getIdProjeto());
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(projeto.getIdProjeto());
-        Double progresso = ProgressoCalculator.calularProgresso(checkpoints);
+        Double progresso = ProgressoCalculator.execute(checkpoints);
         return ProjetoMapper.toDashboard(projeto, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);
     }
 }

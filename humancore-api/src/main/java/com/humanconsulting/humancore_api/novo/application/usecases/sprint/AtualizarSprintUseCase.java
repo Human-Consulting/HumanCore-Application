@@ -3,8 +3,10 @@ package com.humanconsulting.humancore_api.novo.application.usecases.sprint;
 import com.humanconsulting.humancore_api.novo.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.novo.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.sprint.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.novo.web.mappers.SprintMapper;
@@ -27,7 +29,7 @@ public class AtualizarSprintUseCase {
         if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("SprintEntity não encontrada.");
         Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(request.getIdEditor());
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
-        PermissaoValidator.validarPermissao(request.getPermissaoEditor(), "MODIFICAR_SPRINT");
+        ValidarPermissao.execute(request.getPermissaoEditor(), "MODIFICAR_SPRINT");
         Sprint sprintAtualizada = sprintRepository.save(SprintMapper.toEntity(request, idSprint, optSprint.get().getProjeto()));
         return sprintResponseMapper.toResponse(sprintAtualizada, sprintAtualizada.getIdSprint());
     }

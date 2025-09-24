@@ -8,11 +8,16 @@ import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemPermissaoException;
+import com.humanconsulting.humancore_api.novo.domain.notifiers.EmailNotifier;
 import com.humanconsulting.humancore_api.novo.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.atualizar.tarefa.AtualizarStatusRequestDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.usuario.LoginResponseDto;
+
+import java.util.Optional;
 
 public class AtualizarImpedimentoTarefaUseCase {
     private final TarefaRepository tarefaRepository;
@@ -42,27 +47,27 @@ public class AtualizarImpedimentoTarefaUseCase {
     }
 
     public TarefaResponseDto execute(Integer idTarefa, AtualizarStatusRequestDto request) {
-        Tarefa tarefa = tarefaRepository.findById(idTarefa);
-        if (tarefa == null) {
+        Optional<Tarefa> tarefa = tarefaRepository.findById(idTarefa);
+        if (tarefa.isEmpty()) {
             throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada");
         }
-        Integer fkResponsavel = tarefa.getResponsavel().getIdUsuario();
-        Sprint sprintEntrega = buscarSprintPorIdUseCase.execute(tarefa.getSprint().getIdSprint());
+        Integer fkResponsavel = tarefa.get().getResponsavel().getIdUsuario();
+        Sprint sprintEntrega = buscarSprintPorIdUseCase.execute(tarefa.get().getSprint().getIdSprint());
         Projeto projetoEntrega = buscarProjetoPorIdUseCase.execute(sprintEntrega.getProjeto().getIdProjeto());
-        Usuario tarefaResponsavel = usuarioRepository.findById(tarefa.getResponsavel().getIdUsuario());
-        if (tarefaResponsavel == null) {
+        Optional<Usuario> tarefaResponsavel = usuarioRepository.findById(tarefa.get().getResponsavel().getIdUsuario());
+        if (tarefaResponsavel.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Usuário responsável pela tarefa não encontrado");
         }
-        Usuario projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario());
-        if (projetoResponsavel == null) {
+        Optional<Usuario> projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario());
+        if (projetoResponsavel.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Usuário responsável pelo projeto não encontrado");
         }
-        LoginResponseDto responsavelProjeto = usuarioMapper.toLoginResponse(projetoResponsavel, null);
-        LoginResponseDto responsavelEntrega = usuarioMapper.toLoginResponse(tarefaResponsavel, null);
+        LoginResponseDto responsavelProjeto = usuarioMapper.toLoginResponse(projetoResponsavel.orElse(null), null);
+        LoginResponseDto responsavelEntrega = usuarioMapper.toLoginResponse(tarefaResponsavel.orElse(null), null);
         if (!request.getIdEditor().equals(fkResponsavel))
-            throw new AcessoNegadoException("Usuário não é responsável pela tarefa");
+            throw new EntidadeSemPermissaoException("Usuário não é responsável pela tarefa");
         tarefaRepository.toggleImpedimento(idTarefa);
-        emailNotifier.update(tarefa, sprintEntrega, projetoEntrega, tarefaResponsavel, projetoResponsavel, responsavelProjeto, responsavelEntrega);
-        return tarefaResponseMapper.toResponse(tarefa);
+        emailNotifier.update(tarefa.orElse(null), sprintEntrega, projetoEntrega, tarefaResponsavel.orElse(null), projetoResponsavel.orElse(null), responsavelProjeto, responsavelEntrega);
+        return tarefaResponseMapper.toResponse(tarefa.orElse(null));
     }
 }
