@@ -8,6 +8,11 @@ public class ErrorResponse {
     private String error;
     private String message;
     private String path;
+    private String method;
+    private String params;
+    private String errorCode;
+    private String stackTrace;
+    private java.util.List<String> details;
 
     public ErrorResponse(int status, String error, String message, String path) {
         this.timestamp = LocalDateTime.now();
@@ -15,6 +20,19 @@ public class ErrorResponse {
         this.error = error;
         this.message = message;
         this.path = path;
+    }
+
+    public ErrorResponse(int status, String error, String message, String path, String method, String params, String errorCode, java.util.List<String> details, String stackTrace) {
+        this.timestamp = LocalDateTime.now();
+        this.status = status;
+        this.error = error;
+        this.message = message;
+        this.path = path;
+        this.method = method;
+        this.params = params;
+        this.errorCode = errorCode;
+        this.details = details;
+        this.stackTrace = stackTrace;
     }
 
     public LocalDateTime getTimestamp() {
@@ -55,5 +73,45 @@ public class ErrorResponse {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public java.util.List<String> getDetails() {
+        return details;
+    }
+
+    public void setDetails(java.util.List<String> details) {
+        this.details = details;
+    }
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
     }
 }
