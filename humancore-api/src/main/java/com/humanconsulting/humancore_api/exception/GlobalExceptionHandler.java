@@ -94,5 +94,6 @@ public class GlobalExceptionHandler {
                 path
         );
         return new ResponseEntity<>(response, status);
+
     }
 }
