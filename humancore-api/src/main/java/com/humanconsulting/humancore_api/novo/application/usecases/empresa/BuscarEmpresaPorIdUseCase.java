@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.novo.application.usecases.empresa;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.novo.domain.repositories.EmpresaRepository;
 
 import java.util.Optional;

@@ -18,7 +18,7 @@ public interface UsuarioRepository {
 
     void deleteById(Integer id);
 
-    List<Usuario> findByFkEmpresa(Integer id);
+    PageResult<Usuario> findByFkEmpresa(Integer id, int page, int size);
 
     Integer countTarefasByUsuario(Integer id);
 

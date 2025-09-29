@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.novo.application.usecases.projeto;
 import com.humanconsulting.humancore_api.novo.application.usecases.projeto.mappers.ProjetoResponseMapper;
 import com.humanconsulting.humancore_api.novo.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.novo.domain.exception.EntidadeSemRetornoException;
+import com.humanconsulting.humancore_api.novo.domain.repositories.PageResult;
 import com.humanconsulting.humancore_api.novo.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.novo.web.dtos.response.projeto.ProjetoResponseDto;
 
@@ -18,14 +19,19 @@ public class BuscarProjetosPorEmpresaUseCase {
         this.projetoResponseMapper = projetoResponseMapper;
     }
 
-    public List<ProjetoResponseDto> execute(Integer idEmpresa) {
-        List<Projeto> all = projetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa);
-        if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto encontrado");
+    public PageResult<ProjetoResponseDto> execute(Integer idEmpresa, int page, int size) {
+        PageResult<Projeto> pageResult = projetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa, page, size);
+        if (pageResult.getContent().isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto encontrado");
         List<ProjetoResponseDto> allResponse = new ArrayList<>();
-        for (Projeto projeto : all) {
+        for (Projeto projeto : pageResult.getContent()) {
             allResponse.add(projetoResponseMapper.toResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto()));
         }
-        return allResponse;
+        return new com.humanconsulting.humancore_api.novo.infrastructure.repositories.adapters.PageResultImpl<>(
+            allResponse,
+            pageResult.getPageNumber(),
+            pageResult.getPageSize(),
+            pageResult.getTotalElements(),
+            pageResult.getTotalPages()
+        );
     }
 }
-

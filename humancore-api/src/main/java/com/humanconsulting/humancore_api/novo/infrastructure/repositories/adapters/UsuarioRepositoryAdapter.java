@@ -1,12 +1,15 @@
 package com.humanconsulting.humancore_api.novo.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.novo.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.novo.domain.repositories.PageResult;
 import com.humanconsulting.humancore_api.novo.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.novo.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.novo.infrastructure.entities.UsuarioEntity;
 import com.humanconsulting.humancore_api.novo.infrastructure.mappers.TarefaMapper;
 import com.humanconsulting.humancore_api.novo.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.novo.infrastructure.repositories.jpa.JpaUsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,11 +55,17 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
-    public List<Usuario> findByFkEmpresa(Integer idEmpresa) {
-        return jpaUsuarioRepository.findByFkEmpresa(idEmpresa)
-                .stream()
-                .map(UsuarioMapper::toDomain)
-                .toList();
+    public PageResult<Usuario> findByFkEmpresa(Integer idEmpresa, int page, int size) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<UsuarioEntity> usuarioEntities = jpaUsuarioRepository.findByFkEmpresa(idEmpresa, pageable);
+
+        return new PageResultImpl<>(
+                usuarioEntities.getContent().stream().map(UsuarioMapper::toDomain).toList(),
+                usuarioEntities.getNumber(),
+                usuarioEntities.getSize(),
+                usuarioEntities.getTotalElements(),
+                usuarioEntities.getTotalPages()
+        );
     }
 
     @Override

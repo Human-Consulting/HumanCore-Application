@@ -11,6 +11,6 @@ public interface EmpresaRepository {
 
     Empresa save(Empresa empresa);
     Optional<Empresa> findById(Integer id);
-    List<Empresa> findAll();
+    PageResult<Empresa> findAll(int page, int size);
     void deleteById(Integer id);
 }
