@@ -6,7 +6,8 @@ import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.Us
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
-import com.humanconsulting.humancore_api.domain.notifiers.EmailNotifier;
+import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.mappers.EmailCadastroMapper;
 import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.configs.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.UsuarioRepositoryAdapter;
@@ -23,17 +24,19 @@ public class UsuarioConfig {
             UsuarioRepository usuarioRepository,
             EmpresaRepository empresaRepository,
             PasswordEncoder passwordEncoder,
-            EmailNotifier emailNotifier,
+            RabbitTemplateConfiguration rabbitMQ,
             SalaNotifier salaNotifier,
-            UsuarioResponseMapper usuarioResponseMapper
+            UsuarioResponseMapper usuarioResponseMapper,
+            EmailCadastroMapper emailCadastroMapper
     ) {
         return new CadastrarUsuarioUseCase(
                 usuarioRepository,
                 empresaRepository,
                 passwordEncoder,
-                emailNotifier,
+                rabbitMQ,
                 salaNotifier,
-                usuarioResponseMapper
+                usuarioResponseMapper,
+                emailCadastroMapper
         );
     }
 
@@ -91,8 +94,8 @@ public class UsuarioConfig {
     }
 
     @Bean
-    public EnviarCodigoUseCase enviarCodigoUseCase(EmailNotifier emailNotifier) {
-        return new EnviarCodigoUseCase(emailNotifier);
+    public EnviarCodigoUseCase enviarCodigoUseCase(RabbitTemplateConfiguration rabbitMQ) {
+        return new EnviarCodigoUseCase(rabbitMQ);
     }
 
     @Bean
