@@ -10,13 +10,13 @@ import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeSemPermissaoException;
-import com.humanconsulting.humancore_api.domain.notifiers.EmailNotifier;
+import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.mappers.EmailUpdateMapper;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa.AtualizarStatusRequestDto;
-import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.email.EmailUpdateResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.web.dtos.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.SprintMapper;
 
 import java.util.Optional;
@@ -24,28 +24,31 @@ import java.util.Optional;
 public class AtualizarImpedimentoTarefaUseCase {
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final EmailNotifier emailNotifier;
+    private final RabbitTemplateConfiguration rabbitMQ;
     private final BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase;
     private final BuscarSprintPorIdUseCase buscarSprintPorIdUseCase;
     private final UsuarioLoginResponseMapper usuarioMapper;
     private final TarefaResponseMapper tarefaResponseMapper;
+    private final EmailUpdateMapper emailUpdateMapper;
 
     public AtualizarImpedimentoTarefaUseCase(
             TarefaRepository tarefaRepository,
             UsuarioRepository usuarioRepository,
-            EmailNotifier emailNotifier,
+            RabbitTemplateConfiguration rabbitMQ,
             BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase,
             BuscarSprintPorIdUseCase buscarSprintPorIdUseCase,
             UsuarioLoginResponseMapper usuarioMapper,
-            TarefaResponseMapper tarefaResponseMapper
+            TarefaResponseMapper tarefaResponseMapper,
+            EmailUpdateMapper emailUpdateMapper
     ) {
         this.tarefaRepository = tarefaRepository;
         this.usuarioRepository = usuarioRepository;
-        this.emailNotifier = emailNotifier;
+        this.rabbitMQ = rabbitMQ;
         this.buscarProjetoPorIdUseCase = buscarProjetoPorIdUseCase;
         this.buscarSprintPorIdUseCase = buscarSprintPorIdUseCase;
         this.usuarioMapper = usuarioMapper;
         this.tarefaResponseMapper = tarefaResponseMapper;
+        this.emailUpdateMapper = emailUpdateMapper;
     }
 
     public TarefaResponseDto execute(Integer idTarefa, AtualizarStatusRequestDto request) {
@@ -54,22 +57,31 @@ public class AtualizarImpedimentoTarefaUseCase {
             throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada");
         }
         Integer fkResponsavel = tarefa.get().getResponsavel().getIdUsuario();
-        Sprint sprintEntrega = SprintMapper.toEntity(buscarSprintPorIdUseCase.execute(tarefa.get().getSprint().getIdSprint()));
-        Projeto projetoEntrega = buscarProjetoPorIdUseCase.execute(sprintEntrega.getProjeto().getIdProjeto());
+        Sprint sprintTarefa = SprintMapper.toEntity(buscarSprintPorIdUseCase.execute(tarefa.get().getSprint().getIdSprint()));
+        Projeto projetoTarefa = buscarProjetoPorIdUseCase.execute(sprintTarefa.getProjeto().getIdProjeto());
         Optional<Usuario> tarefaResponsavel = usuarioRepository.findById(tarefa.get().getResponsavel().getIdUsuario());
         if (tarefaResponsavel.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Usuário responsável pela tarefa não encontrado");
         }
-        Optional<Usuario> projetoResponsavel = usuarioRepository.findById(projetoEntrega.getResponsavel().getIdUsuario());
+        Optional<Usuario> projetoResponsavel = usuarioRepository.findById(projetoTarefa.getResponsavel().getIdUsuario());
         if (projetoResponsavel.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Usuário responsável pelo projeto não encontrado");
         }
-        LoginResponseDto responsavelProjeto = usuarioMapper.toLoginResponse(projetoResponsavel.get(), null);
-        LoginResponseDto responsavelEntrega = usuarioMapper.toLoginResponse(tarefaResponsavel.get(), null);
+
         if (!request.getIdEditor().equals(fkResponsavel))
             throw new EntidadeSemPermissaoException("Usuário não é responsável pela tarefa");
         tarefaRepository.toggleImpedimento(idTarefa);
-        emailNotifier.update(tarefa.get(), sprintEntrega, projetoEntrega, tarefaResponsavel.get(), projetoResponsavel.get(), responsavelProjeto, responsavelEntrega);
+
+        EmailUpdateResponseDto emailUpdateResponseDto = emailUpdateMapper.toEmailUpdateResponseDto(
+                tarefa.get(),
+                sprintTarefa,
+                projetoTarefa,
+                tarefaResponsavel.get(),
+                projetoResponsavel.get()
+        );
+
+        rabbitMQ.rabbitTemplate().convertAndSend("email_update_queue", emailUpdateResponseDto);
+
         return tarefaResponseMapper.toResponse(tarefa.get());
     }
 }
