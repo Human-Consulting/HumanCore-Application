@@ -24,6 +24,9 @@ public class LoginResponseDto {
     @Schema(description = "Permissão atribuída ao usuário", example = "CONSULTOR")
     private String permissao;
 
+    @Schema(description = "Identificador da empresa do usuário", example = "5")
+    private Integer idEmpresa;
+
     @Schema(description = "Nome da empresa à qual o usuário pertence", example = "Tech Corp")
     private String nomeEmpresa;
 

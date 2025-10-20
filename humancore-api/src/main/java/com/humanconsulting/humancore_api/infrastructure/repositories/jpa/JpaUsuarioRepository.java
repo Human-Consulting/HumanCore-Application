@@ -22,7 +22,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     @Query("SELECT u FROM UsuarioEntity u WHERE u.email = :email AND u.senha = :senha")
     Optional<UsuarioEntity> autenticar(String email, String senha);
 
-    @Query("SELECT u.nome FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa AND u.permissao = 'DIRETOR'")
+    @Query("SELECT u.nome FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa AND u.permissao LIKE '%DIRETOR%'")
     Optional<String> findDiretorByEmpresaId(@Param("idEmpresa") Integer idEmpresa);
 
     @Query("SELECT COUNT(t.idTarefa) FROM TarefaEntity t WHERE t.responsavel.idUsuario = :idUsuario")
