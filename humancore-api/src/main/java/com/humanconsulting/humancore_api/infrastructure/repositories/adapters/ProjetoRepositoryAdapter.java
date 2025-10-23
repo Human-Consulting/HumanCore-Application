@@ -2,9 +2,13 @@ package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaProjetoRepository;
+import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,11 +27,17 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
     }
 
     @Override
-    public List<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa) {
-        return jpaProjetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa)
-                .stream()
-                .map(ProjetoMapper::toDomain)
-                .toList();
+    public PageResult<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa, int page, int size) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa, pageable);
+
+        return new PageResultImpl<>(
+                projetoEntities.getContent().stream().map(ProjetoMapper::toDomain).toList(),
+                projetoEntities.getNumber(),
+                projetoEntities.getSize(),
+                projetoEntities.getTotalElements(),
+                projetoEntities.getTotalPages()
+        );
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.domain.repositories;
 
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,6 @@ public interface EmpresaRepository {
 
     Empresa save(Empresa empresa);
     Optional<Empresa> findById(Integer id);
-    List<Empresa> findAll();
+    PageResult<Empresa> findAll(int page, int size);
     void deleteById(Integer id);
 }

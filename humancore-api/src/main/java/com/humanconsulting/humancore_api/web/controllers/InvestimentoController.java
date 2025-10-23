@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.application.usecases.investimento.Lista
 import com.humanconsulting.humancore_api.application.usecases.investimento.BuscarInvestimentoPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.investimento.AtualizarInvestimentoUseCase;
 import com.humanconsulting.humancore_api.application.usecases.investimento.DeletarInvestimentoUseCase;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.investimento.AtualizarInvestimentoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.InvestimentoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
@@ -78,8 +79,10 @@ public class InvestimentoController {
             @ApiResponse(responseCode = "404", description = "Investimentos não encontrados")
     })
     @GetMapping("/buscarPorProjeto/{idProjeto}")
-    public ResponseEntity<List<InvestimentoResponseDto>> listarPorId(@PathVariable Integer idProjeto) {
-        List<InvestimentoResponseDto> response = listarInvestimentosPorProjetoUseCase.execute(idProjeto);
+    public ResponseEntity<PageResult<InvestimentoResponseDto>> listarPorId(@PathVariable Integer idProjeto,
+                                                                     @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                     @RequestParam(name = "size", defaultValue = "10") int size) {
+        PageResult<InvestimentoResponseDto> response = listarInvestimentosPorProjetoUseCase.execute(idProjeto, page, size);
         return ResponseEntity.status(200).body(response);
     }
 

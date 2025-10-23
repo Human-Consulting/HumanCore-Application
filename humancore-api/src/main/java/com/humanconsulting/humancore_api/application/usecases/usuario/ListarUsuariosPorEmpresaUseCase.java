@@ -4,6 +4,8 @@ import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.Us
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
+import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 
 import java.util.ArrayList;
@@ -18,14 +20,24 @@ public class ListarUsuariosPorEmpresaUseCase {
         this.usuarioResponseMapper = usuarioResponseMapper;
     }
 
-    public List<UsuarioResponseDto> execute(Integer idEmpresa) {
-        List<Usuario> all = usuarioRepository.findByFkEmpresa(idEmpresa);
+    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size) {
+        PageResult<Usuario> usuarios = usuarioRepository.findByFkEmpresa(idEmpresa, page, size);
+
+        List<Usuario> all = new ArrayList<>();
+
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
-        for (Usuario usuario : all) {
+        for (Usuario usuario : usuarios.getContent()) {
             allResponse.add(usuarioResponseMapper.toResponse(usuario));
         }
-        return allResponse;
+
+        return new PageResultImpl<>(
+                allResponse,
+                usuarios.getPageNumber(),
+                usuarios.getPageSize(),
+                usuarios.getTotalElements(),
+                usuarios.getTotalPages()
+        );
     }
 }
 
