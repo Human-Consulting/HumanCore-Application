@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.web.controllers;
 
 import com.humanconsulting.humancore_api.application.usecases.empresa.*;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.EmpresaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
@@ -55,8 +56,9 @@ public class EmpresaController {
     )
     @ApiResponse(responseCode = "200", description = "Lista de empresas retornada com sucesso")
     @GetMapping
-    public ResponseEntity<List<EmpresaResponseDto>> listar() {
-        List<EmpresaResponseDto> response = listarEmpresasUseCase.execute();
+    public ResponseEntity<PageResult<EmpresaResponseDto>> listar(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                           @RequestParam(name = "size", defaultValue = "10") int size) {
+        PageResult<EmpresaResponseDto> response = listarEmpresasUseCase.execute(page, size);
         return ResponseEntity.status(200).body(response);
     }
 

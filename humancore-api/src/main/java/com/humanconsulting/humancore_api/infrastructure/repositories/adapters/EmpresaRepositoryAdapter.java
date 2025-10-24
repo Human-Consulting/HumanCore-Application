@@ -3,9 +3,13 @@ package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.EmpresaEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmpresaMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaEmpresaRepository;
+import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,11 +55,17 @@ public class EmpresaRepositoryAdapter implements EmpresaRepository {
     }
 
     @Override
-    public List<Empresa> findAll() {
-        return jpaEmpresaRepository.findAll()
-                .stream()
-                .map(EmpresaMapper::toDomain)
-                .toList();
+    public PageResult<Empresa> findAll(int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<EmpresaEntity> empresaEntities = jpaEmpresaRepository.findAll(pageable);
+
+        return new PageResultImpl<>(
+                empresaEntities.getContent().stream().map(EmpresaMapper::toDomain).toList(),
+                empresaEntities.getNumber(),
+                empresaEntities.getSize(),
+                empresaEntities.getTotalElements(),
+                empresaEntities.getTotalPages()
+        );
     }
 
     @Override

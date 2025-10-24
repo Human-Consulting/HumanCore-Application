@@ -1,17 +1,17 @@
 package com.humanconsulting.humancore_api.application.usecases.usuario;
 
-import com.humanconsulting.humancore_api.domain.notifiers.EmailNotifier;
+import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioEnviarCodigoRequestDto;
 
 public class EnviarCodigoUseCase {
-    private final EmailNotifier emailNotifier;
+    private final RabbitTemplateConfiguration rabbitMQ;
 
-    public EnviarCodigoUseCase(EmailNotifier emailNotifier) {
-        this.emailNotifier = emailNotifier;
+    public EnviarCodigoUseCase(RabbitTemplateConfiguration rabbitMQ) {
+        this.rabbitMQ = rabbitMQ;
     }
 
     public void execute(UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
-        emailNotifier.codigo(usuarioEnviarCodigoRequestDto);
+        rabbitMQ.rabbitTemplate().convertAndSend("email_codigo_queue", usuarioEnviarCodigoRequestDto);
     }
 }
 

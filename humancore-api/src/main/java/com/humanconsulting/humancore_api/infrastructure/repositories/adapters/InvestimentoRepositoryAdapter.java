@@ -2,9 +2,13 @@ package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.repositories.InvestimentoRepository;
 import com.humanconsulting.humancore_api.domain.entities.Investimento;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.InvestimentoEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.InvestimentoMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaInvestimentoRepository;
+import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +22,17 @@ public class InvestimentoRepositoryAdapter implements InvestimentoRepository {
     }
 
     @Override
-    public List<Investimento> findAllByProjeto_IdProjeto(Integer idProjeto) {
-        return jpaInvestimentoRepository.findAllByProjeto_IdProjeto(idProjeto)
-                .stream()
-                .map(InvestimentoMapper::toDomain)
-                .collect(Collectors.toList());
+    public PageResult<Investimento> findAllByProjeto_IdProjeto(Integer idProjeto, int page, int size) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<InvestimentoEntity> investimentoEntities = jpaInvestimentoRepository.findAllByProjeto_IdProjeto(idProjeto, pageable);
+
+        return new PageResultImpl<>(
+                investimentoEntities.getContent().stream().map(InvestimentoMapper::toDomain).toList(),
+                investimentoEntities.getNumber(),
+                investimentoEntities.getSize(),
+                investimentoEntities.getTotalElements(),
+                investimentoEntities.getTotalPages()
+        );
     }
 
     @Override

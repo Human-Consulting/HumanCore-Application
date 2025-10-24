@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.web.controllers;
 
 import com.humanconsulting.humancore_api.application.usecases.projeto.*;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
@@ -86,8 +87,10 @@ public class ProjetoController {
             @ApiResponse(responseCode = "404", description = "Lista de projetos por empresa não retornada")
     })
     @GetMapping("/buscarPorEmpresa/{idEmpresa}")
-    public ResponseEntity<List<ProjetoResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idEmpresa) {
-        List<ProjetoResponseDto> response = buscarProjetosPorEmpresaUseCase.execute(idEmpresa);
+    public ResponseEntity<PageResult<ProjetoResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idEmpresa,
+                                                                       @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(name = "size", defaultValue = "10") int size) {
+        PageResult<ProjetoResponseDto> response = buscarProjetosPorEmpresaUseCase.execute(idEmpresa, page, size);
         return ResponseEntity.status(200).body(response);
     }
 

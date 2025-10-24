@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.web.controllers;
 
 import com.humanconsulting.humancore_api.application.usecases.usuario.*;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarSenhaDto;
@@ -79,8 +80,10 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
     })
     @GetMapping("/buscarPorEmpresa/{idEmpresa}")
-    public ResponseEntity<List<UsuarioResponseDto>> listarPorEmpresa(@PathVariable Integer idEmpresa) {
-        List<UsuarioResponseDto> response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa);
+    public ResponseEntity<PageResult<UsuarioResponseDto>> listarPorEmpresa( @PathVariable Integer idEmpresa,
+                                                                      @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                      @RequestParam(name = "size", defaultValue = "10") int size) {
+        PageResult<UsuarioResponseDto> response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size);
         return ResponseEntity.status(200).body(response);
     }
 

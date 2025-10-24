@@ -65,6 +65,7 @@ public class UsuarioMapper {
                 .nome(usuario.getNome())
                 .email(usuario.getEmail())
                 .permissao(usuario.getPermissao())
+                .idEmpresa(usuario.getEmpresa().getIdEmpresa())
                 .nomeEmpresa(nomeEmpresa)
                 .qtdTarefas(qtdTarefas)
                 .comImpedimento(comImpedimento)
