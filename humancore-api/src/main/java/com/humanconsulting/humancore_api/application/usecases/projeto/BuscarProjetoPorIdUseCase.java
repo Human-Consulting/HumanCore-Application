@@ -16,6 +16,7 @@ public class BuscarProjetoPorIdUseCase {
     public Projeto execute(Integer id) {
         Optional<Projeto> optProjeto = projetoRepository.findById(id);
         if (optProjeto.isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto encontrado.");
+        System.out.println("projeto encontrado: " + optProjeto.get().getDescricao());
         return optProjeto.get();
     }
 }

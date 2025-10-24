@@ -53,7 +53,6 @@ public class SalaNotifierAdapter implements SalaNotifier {
     public void onProjetoCriado(Projeto projeto, Usuario editor) {
         Sala novaSala = new Sala();
         Set<Usuario> participantesIniciais = new HashSet<>();
-        participantesIniciais.add(projeto.getResponsavel());
         participantesIniciais.add(editor);
         novaSala.setProjeto(projeto);
         novaSala.setNome(projeto.getTitulo());

@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.application.usecases.projeto;
 
+import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
@@ -14,8 +15,11 @@ public class DeletarProjetoUseCase {
     }
 
     public void execute(Integer id, UsuarioPermissaoDto usuarioPermissaoDto) {
+        System.out.println("Entrei no execute do deletarProjeto");
         ValidarPermissao.execute(usuarioPermissaoDto.getPermissaoEditor(), "EXCLUIR_PROJETO");
-        buscarProjetoPorIdUseCase.execute(id);
+        Projeto projeto = buscarProjetoPorIdUseCase.execute(id);
+        projeto.setEmpresa(null);
+        projeto.setResponsavel(null);
         projetoRepository.deleteById(id);
     }
 }

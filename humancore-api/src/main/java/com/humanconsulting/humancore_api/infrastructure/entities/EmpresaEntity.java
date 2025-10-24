@@ -3,6 +3,9 @@ package com.humanconsulting.humancore_api.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -21,4 +24,10 @@ public class EmpresaEntity {
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String urlImagem;
+
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SalaEntity> salas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjetoEntity> projetos = new ArrayList<>();
 }

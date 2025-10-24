@@ -1,10 +1,12 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
+import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.domain.entities.Sala;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.infrastructure.entities.SalaEntity;
+import com.humanconsulting.humancore_api.infrastructure.entities.TarefaEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmpresaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;
@@ -47,7 +49,15 @@ public class SalaRepositoryAdapter implements SalaRepository {
 
     @Override
     public Sala save(Sala sala) {
-        SalaEntity entity = SalaMapper.toEntity(sala);
+        SalaEntity entity = null;
+        if (sala.getIdSala() != null) {
+            entity = jpaSalaRepository.findById(sala.getIdSala())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Sala não encontrada"));
+        } else entity = new SalaEntity();
+
+        entity.setNome(sala.getNome());
+        entity.setUrlImagem(sala.getUrlImagem());
+
         SalaEntity saved = jpaSalaRepository.save(entity);
         return SalaMapper.toDomain(saved);
     }

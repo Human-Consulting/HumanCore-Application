@@ -1,7 +1,9 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
+import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.infrastructure.entities.EmpresaEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaProjetoRepository;
@@ -37,7 +39,17 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
 
     @Override
     public Projeto save(Projeto projeto) {
-        ProjetoEntity entity = ProjetoMapper.toEntity(projeto);
+        ProjetoEntity entity = null;
+        if (projeto.getIdProjeto() != null) {
+            entity = jpaProjetoRepository.findById(projeto.getIdProjeto())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Projeto não encontrada"));
+        } else entity = new ProjetoEntity();
+
+        entity.setTitulo(projeto.getTitulo());
+        entity.setDescricao(projeto.getDescricao());
+        entity.setOrcamento(projeto.getOrcamento());
+        entity.setUrlImagem(projeto.getUrlImagem());
+
         ProjetoEntity saved = jpaProjetoRepository.save(entity);
         return ProjetoMapper.toDomain(saved);
     }

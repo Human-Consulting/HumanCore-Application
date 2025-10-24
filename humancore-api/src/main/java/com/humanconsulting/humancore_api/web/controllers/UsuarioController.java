@@ -128,7 +128,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    @PatchMapping("/cores/{idUsuario}")
+    @PatchMapping("/atualizarCores/{idUsuario}")
     public ResponseEntity<Boolean> atualizarCores(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
         Boolean response = atualizarCoresPorIdUseCase.execute(idUsuario, usuarioAtualizarCoresDto);
         return ResponseEntity.status(200).body(response);

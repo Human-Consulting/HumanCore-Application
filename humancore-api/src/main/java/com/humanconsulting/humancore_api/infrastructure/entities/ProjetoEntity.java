@@ -3,6 +3,9 @@ package com.humanconsulting.humancore_api.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -31,4 +34,13 @@ public class ProjetoEntity {
     @ManyToOne
     @JoinColumn(name = "fkResponsavel")
     private UsuarioEntity responsavel;
+
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SalaEntity> salas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SprintEntity> sprints = new ArrayList<>();
+
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvestimentoEntity> investimentos = new ArrayList<>();
 }

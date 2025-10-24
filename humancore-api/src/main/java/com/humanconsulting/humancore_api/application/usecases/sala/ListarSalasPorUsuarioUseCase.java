@@ -7,11 +7,13 @@ import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoReposit
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatUsuarioDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnificadaDto;
+import jakarta.transaction.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 public class ListarSalasPorUsuarioUseCase {
     private final SalaRepository salaRepository;
     private final MensagemRepository mensagemRepository;
