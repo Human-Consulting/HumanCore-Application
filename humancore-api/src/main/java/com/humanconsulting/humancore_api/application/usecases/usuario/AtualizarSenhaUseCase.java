@@ -22,12 +22,12 @@ public class AtualizarSenhaUseCase {
 
     public UsuarioResponseDto execute(Integer idUsuario, UsuarioAtualizarSenhaDto usuarioAtualizar) {
         if (!usuarioAtualizar.getIdEditor().equals(idUsuario)) {
-            throw new EntidadeSemPermissaoException("Apenas o dono da senha pode editá-la");
+            throw new EntidadeSemPermissaoException("Apenas o dono da conta pode editá-la");
         }
         Usuario usuarioAtual = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
         if (!passwordEncoder.matches(usuarioAtualizar.getSenhaAtual(), usuarioAtual.getSenha())) {
-            throw new EntidadeSemPermissaoException("Senha atual errada");
+            throw new EntidadeSemPermissaoException("Senha atual incorreta");
         }
         if (passwordEncoder.matches(usuarioAtualizar.getSenhaAtualizada(), usuarioAtual.getSenha())) {
             throw new EntidadeSemPermissaoException("Nova senha deve ser diferente da atual");

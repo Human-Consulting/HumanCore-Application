@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
+import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
@@ -32,7 +33,16 @@ public class EmpresaRepositoryAdapter implements EmpresaRepository {
 
     @Override
     public Empresa save(Empresa empresa) {
-        EmpresaEntity entity = EmpresaMapper.toEntity(empresa);
+        EmpresaEntity entity = null;
+        if (empresa.getIdEmpresa() != null) {
+            entity = jpaEmpresaRepository.findById(empresa.getIdEmpresa())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
+        } else entity = new EmpresaEntity();
+
+        entity.setNome(empresa.getNome());
+        entity.setCnpj(empresa.getCnpj());
+        entity.setUrlImagem(empresa.getUrlImagem());
+
         EmpresaEntity saved = jpaEmpresaRepository.save(entity);
         return EmpresaMapper.toDomain(saved);
     }

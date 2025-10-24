@@ -1,8 +1,10 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.infrastructure.entities.SalaEntity;
+import com.humanconsulting.humancore_api.infrastructure.entities.SprintEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.TarefaEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.TarefaMapper;
@@ -20,7 +22,19 @@ public class TarefaRepositoryAdapter implements TarefaRepository {
 
     @Override
     public Tarefa save(Tarefa tarefa) {
-        TarefaEntity entity = TarefaMapper.toEntity(tarefa);
+        TarefaEntity entity = null;
+        if (tarefa.getIdTarefa() != null) {
+            entity = jpaTarefaRepository.findById(tarefa.getIdTarefa())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Tarefa não encontrada"));
+        } else entity = new TarefaEntity();
+
+        entity.setTitulo(tarefa.getTitulo());
+        entity.setDescricao(tarefa.getDescricao());
+        entity.setDtInicio(tarefa.getDtInicio());
+        entity.setDtFim(tarefa.getDtFim());
+        entity.setComentario(tarefa.getComentario());
+        entity.setComImpedimento(tarefa.getComImpedimento());
+
         TarefaEntity saved = jpaTarefaRepository.save(entity);
         return TarefaMapper.toDomain(saved);
     }

@@ -1,7 +1,9 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
+import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.SprintEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.SprintMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaSprintRepository;
@@ -18,7 +20,17 @@ public class SprintRepositoryAdapter implements SprintRepository {
 
     @Override
     public Sprint save(Sprint sprint) {
-        SprintEntity entity = SprintMapper.toEntity(sprint);
+        SprintEntity entity = null;
+        if (sprint.getIdSprint() != null) {
+            entity = jpaSprintRepository.findById(sprint.getIdSprint())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Sprint não encontrada"));
+        } else entity = new SprintEntity();
+
+        entity.setTitulo(sprint.getTitulo());
+        entity.setDescricao(sprint.getDescricao());
+        entity.setDtInicio(sprint.getDtInicio());
+        entity.setDtFim(sprint.getDtFim());
+
         SprintEntity saved = jpaSprintRepository.save(entity);
         return SprintMapper.toDomain(saved);
     }

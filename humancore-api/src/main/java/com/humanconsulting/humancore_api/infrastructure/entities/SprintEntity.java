@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,4 +29,7 @@ public class SprintEntity {
     @ManyToOne
     @JoinColumn(name = "fkProjeto")
     private ProjetoEntity projeto;
+
+    @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TarefaEntity> tarefas = new ArrayList<>();
 }

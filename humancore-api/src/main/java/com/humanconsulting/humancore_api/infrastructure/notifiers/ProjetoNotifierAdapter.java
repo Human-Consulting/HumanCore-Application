@@ -13,6 +13,7 @@ import com.humanconsulting.humancore_api.application.usecases.mensagem.Cadastrar
 import com.humanconsulting.humancore_api.web.dtos.request.MensagemInfoRequestDto;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class ProjetoNotifierAdapter implements ProjetoNotifier {
@@ -38,10 +39,13 @@ public class ProjetoNotifierAdapter implements ProjetoNotifier {
 
     @Override
     public void onProjetoCriado(Projeto projeto, Usuario editor) {
+        System.out.println(projeto.getResponsavel().getNome());
+        System.out.println(editor.getNome());
         Sala novaSala = new Sala();
         Set<Usuario> participantesIniciais = new HashSet<>();
         participantesIniciais.add(projeto.getResponsavel());
-        participantesIniciais.add(editor);
+        if (!Objects.equals(projeto.getResponsavel(), editor)) participantesIniciais.add(editor);
+
         novaSala.setProjeto(projeto);
         novaSala.setNome(projeto.getTitulo());
         novaSala.setUrlImagem(projeto.getUrlImagem());

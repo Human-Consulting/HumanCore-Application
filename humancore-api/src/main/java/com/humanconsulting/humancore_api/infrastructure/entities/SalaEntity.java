@@ -3,7 +3,9 @@ package com.humanconsulting.humancore_api.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,4 +40,10 @@ public class SalaEntity {
             inverseJoinColumns = @JoinColumn(name = "idUsuario")
     )
     private Set<UsuarioEntity> usuarios = new HashSet<>();
+
+    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MensagemEntity> mensagens = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MensagemInfoEntity> mensagensInfo = new ArrayList<>();
 }

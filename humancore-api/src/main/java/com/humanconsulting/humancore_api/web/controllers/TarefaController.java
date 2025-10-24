@@ -85,7 +85,7 @@ public class TarefaController {
     @DeleteMapping("/{idTarefa}")
     public ResponseEntity<Void> deletar(@PathVariable Integer idTarefa, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
         deletarTarefaUseCase.execute(idTarefa, usuarioPermissaoDto);
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(204).build();
     }
 
     @Operation(

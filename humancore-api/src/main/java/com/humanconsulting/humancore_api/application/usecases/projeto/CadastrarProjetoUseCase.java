@@ -12,7 +12,9 @@ import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.ProjetoMapper;
+import jakarta.transaction.Transactional;
 
+@Transactional
 public class CadastrarProjetoUseCase {
     private final ProjetoRepository projetoRepository;
     private final EmpresaRepository empresaRepository;
@@ -31,7 +33,7 @@ public class CadastrarProjetoUseCase {
     public ProjetoResponseDto execute(ProjetoRequestDto projetoRequestDto) {
         ValidarPermissao.execute(projetoRequestDto.getPermissaoEditor(), "ADICIONAR_PROJETO");
         if (projetoRepository.existsByEmpresa_IdEmpresaAndDescricao(projetoRequestDto.getFkEmpresa(), projetoRequestDto.getDescricao())) {
-            throw new EntidadeConflitanteException("ProjetoEntity já cadastrado");
+            throw new EntidadeConflitanteException("Este projeto já foi cadastrado!");
         }
         Projeto projeto = projetoRepository.save(
            ProjetoMapper.toEntity(
