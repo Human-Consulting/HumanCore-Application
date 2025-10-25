@@ -108,5 +108,10 @@ public class TarefaConfig {
     public TarefaRepository tarefaRepository(JpaTarefaRepository jpaTarefaRepository) {
         return new TarefaRepositoryAdapter(jpaTarefaRepository);
     }
+
+    @Bean
+    public EmailUpdateMapper emailUpdateMapper() {
+        return new EmailUpdateMapper();
+    }
 }
 

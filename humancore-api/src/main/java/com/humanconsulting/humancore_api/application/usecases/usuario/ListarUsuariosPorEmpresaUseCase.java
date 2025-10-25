@@ -23,13 +23,12 @@ public class ListarUsuariosPorEmpresaUseCase {
     public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size) {
         PageResult<Usuario> usuarios = usuarioRepository.findByFkEmpresa(idEmpresa, page, size);
 
-        List<Usuario> all = new ArrayList<>();
 
-        if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : usuarios.getContent()) {
             allResponse.add(usuarioResponseMapper.toResponse(usuario));
         }
+        if (allResponse.isEmpty()) throw new EntidadeSemRetornoException("Nenhum usuário encontrado");
 
         return new PageResultImpl<>(
                 allResponse,

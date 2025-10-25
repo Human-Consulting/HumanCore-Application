@@ -122,4 +122,9 @@ public class UsuarioConfig {
     public UsuarioRepository usuarioRepository(JpaUsuarioRepository jpaUsuarioRepository) {
         return new UsuarioRepositoryAdapter(jpaUsuarioRepository);
     }
+
+    @Bean
+    public EmailCadastroMapper emailCadastroMapper() {
+        return new EmailCadastroMapper();
+    }
 }

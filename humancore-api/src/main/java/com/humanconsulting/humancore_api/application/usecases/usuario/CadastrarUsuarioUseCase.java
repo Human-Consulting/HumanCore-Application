@@ -47,7 +47,6 @@ public class CadastrarUsuarioUseCase {
         if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isEmpty()) {
             Usuario usuario = UsuarioMapper.toEntity(novoUsuario);
             usuario.setCores("#606080|#8d7dca|#4e5e8c|true");
-            System.out.println("fkEmpresa: " + novoUsuario.getFkEmpresa());
             usuario.setEmpresa(
                     empresaRepository.findById(novoUsuario.getFkEmpresa())
                             .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"))
