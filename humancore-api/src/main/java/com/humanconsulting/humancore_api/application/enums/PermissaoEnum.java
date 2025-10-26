@@ -95,8 +95,9 @@ public enum PermissaoEnum {
                     //TAREFA
                     "ADICIONAR_TAREFA",
                     "MODIFICAR_TAREFA",
-                    "EXCLUIR_TAREFA"
+                    "EXCLUIR_TAREFA",
                     //INVESTIMENTO
+                    "ADICIONAR_INVESTIMENTO"
             )
     ),
 
@@ -123,8 +124,9 @@ public enum PermissaoEnum {
                     //TAREFA
                     "ADICIONAR_TAREFA",
                     "MODIFICAR_TAREFA",
-                    "EXCLUIR_TAREFA"
+                    "EXCLUIR_TAREFA",
                     //INVESTIMENTO
+                    "ADICIONAR_INVESTIMENTO"
             )
     );
 

@@ -55,7 +55,11 @@ public class CadastrarUsuarioUseCase {
             String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
             try {
                 EmailCadastroResponseDto emailCadastroResponseDto = emailCadastroMapper.toEmailCadastroResponseDto(usuario);
-                rabbitMQ.rabbitTemplate().convertAndSend("email_cadastro_queue", emailCadastroResponseDto);
+                rabbitMQ.rabbitTemplate().convertAndSend(
+                        "cadastro",
+                        emailCadastroResponseDto
+                );
+
             } catch (Exception exception) {
                 throw new RuntimeException("Não foi possível cadastrar o usuário.");
             }

@@ -79,8 +79,10 @@ public class AtualizarImpedimentoTarefaUseCase {
                 tarefaResponsavel.get(),
                 projetoResponsavel.get()
         );
-
-        rabbitMQ.rabbitTemplate().convertAndSend("email_update_queue", emailUpdateResponseDto);
+        rabbitMQ.rabbitTemplate().convertAndSend(
+                "update",
+                emailUpdateResponseDto
+        );
 
         return tarefaResponseMapper.toResponse(tarefa.get());
     }

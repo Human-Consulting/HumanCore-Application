@@ -11,7 +11,10 @@ public class EnviarCodigoUseCase {
     }
 
     public void execute(UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
-        rabbitMQ.rabbitTemplate().convertAndSend("email_codigo_queue", usuarioEnviarCodigoRequestDto);
+        rabbitMQ.rabbitTemplate().convertAndSend(
+                "codigo",
+                usuarioEnviarCodigoRequestDto
+        );
     }
 }
 

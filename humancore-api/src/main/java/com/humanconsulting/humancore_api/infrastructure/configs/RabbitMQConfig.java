@@ -1,31 +1,54 @@
 package com.humanconsulting.humancore_api.infrastructure.configs;
 
 import org.springframework.amqp.core.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${broker.exchange.name}")
-    private String exchangeName;
+    public static final String QUEUE_EMAIL_CADASTRO = "email_cadastro_queue";
+    public static final String QUEUE_EMAIL_UPDATE = "email_update_queue";
+    public static final String QUEUE_EMAIL_CODIGO = "email_codigo_queue";
 
-    @Value("${broker.queue.name}")
-    private String queueName;
+    public static final String EXCHANGE_NAME = "emailsender.direct.exchange";
+
+    public static final String ROUTING_KEY_CADASTRO = "cadastro";
+    public static final String ROUTING_KEY_UPDATE = "update";
+    public static final String ROUTING_KEY_CODIGO = "codigo";
 
     @Bean
-    public FanoutExchange exchange() {
-        return new FanoutExchange(exchangeName);
+    public DirectExchange directExchange() {
+        return new DirectExchange(EXCHANGE_NAME, true, false);
     }
 
     @Bean
-    public Queue queue() {
-        return new Queue(queueName, true);
+    public Queue emailCadastroQueue() {
+        return new Queue(QUEUE_EMAIL_CADASTRO, true);
     }
 
     @Bean
-    public Binding binding(Queue queue, FanoutExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange);
+    public Queue emailUpdateQueue() {
+        return new Queue(QUEUE_EMAIL_UPDATE, true);
+    }
+
+    @Bean
+    public Queue emailCodigoQueue() {
+        return new Queue(QUEUE_EMAIL_CODIGO, true);
+    }
+
+    @Bean
+    public Binding bindingCadastro(Queue emailCadastroQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(emailCadastroQueue).to(directExchange).with(ROUTING_KEY_CADASTRO);
+    }
+
+    @Bean
+    public Binding bindingUpdate(Queue emailUpdateQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(emailUpdateQueue).to(directExchange).with(ROUTING_KEY_UPDATE);
+    }
+
+    @Bean
+    public Binding bindingCodigo(Queue emailCodigoQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(emailCodigoQueue).to(directExchange).with(ROUTING_KEY_CODIGO);
     }
 }
