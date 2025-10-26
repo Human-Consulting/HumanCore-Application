@@ -4,9 +4,10 @@ import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaE
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
-import com.humanconsulting.humancore_api.infrastructure.entities.EmpresaEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
+import com.humanconsulting.humancore_api.infrastructure.mappers.EmpresaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
+import com.humanconsulting.humancore_api.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaProjetoRepository;
 import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
 import org.springframework.data.domain.Page;
@@ -59,6 +60,8 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
         entity.setDescricao(projeto.getDescricao());
         entity.setOrcamento(projeto.getOrcamento());
         entity.setUrlImagem(projeto.getUrlImagem());
+        entity.setResponsavel(UsuarioMapper.toEntity(projeto.getResponsavel()));
+        entity.setEmpresa(EmpresaMapper.toEntity(projeto.getEmpresa()));
 
         ProjetoEntity saved = jpaProjetoRepository.save(entity);
         return ProjetoMapper.toDomain(saved);
