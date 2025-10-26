@@ -31,8 +31,8 @@ public class DashboardProjetoRepositoryAdapter implements DashboardProjetoReposi
     public boolean projetoComImpedimento(Integer idProjeto) { return jpaDashboardProjetoRepository.projetoComImpedimento(idProjeto); }
 
     @Override
-    public List<Investimento> listarFinanceiroPorEmpresa(Integer idProjeto) {
-        return jpaDashboardProjetoRepository.listarFinanceiroPorEmpresa(idProjeto)
+    public List<Investimento> listarFinanceiroPorProjeto(Integer idProjeto) {
+        return jpaDashboardProjetoRepository.listarFinanceiroPorProjeto(idProjeto)
                 .stream()
                 .map(InvestimentoMapper::toDomain)
                 .toList();

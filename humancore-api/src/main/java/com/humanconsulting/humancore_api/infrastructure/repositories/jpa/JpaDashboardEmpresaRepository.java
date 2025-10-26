@@ -1,7 +1,7 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.jpa;
 
+import com.humanconsulting.humancore_api.infrastructure.entities.InvestimentoEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
-import com.humanconsulting.humancore_api.domain.entities.Investimento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,6 +52,6 @@ public interface JpaDashboardEmpresaRepository extends JpaRepository<ProjetoEnti
         WHERE i.projeto.empresa.idEmpresa = :idEmpresa
         ORDER BY i.dtInvestimento ASC
         """)
-    List<Investimento> listarFinanceiroPorEmpresa(@Param("idEmpresa") Integer idEmpresa);
+    List<InvestimentoEntity> listarFinanceiroPorEmpresa(@Param("idEmpresa") Integer idEmpresa);
 }
 

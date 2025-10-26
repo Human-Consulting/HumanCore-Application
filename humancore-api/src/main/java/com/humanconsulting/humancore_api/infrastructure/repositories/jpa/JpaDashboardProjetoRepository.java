@@ -60,6 +60,6 @@ public interface JpaDashboardProjetoRepository extends JpaRepository<ProjetoEnti
         WHERE i.projeto.idProjeto = :idProjeto
         ORDER BY i.dtInvestimento ASC
         """)
-    List<InvestimentoEntity> listarFinanceiroPorEmpresa(@Param("idProjeto") Integer idProjeto);
+    List<InvestimentoEntity> listarFinanceiroPorProjeto(@Param("idProjeto") Integer idProjeto);
 }
 

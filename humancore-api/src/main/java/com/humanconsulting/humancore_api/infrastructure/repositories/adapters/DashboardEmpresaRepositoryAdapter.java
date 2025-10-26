@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.repositories.DashboardEmpresaRepository;
+import com.humanconsulting.humancore_api.infrastructure.mappers.InvestimentoMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaDashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.domain.entities.Investimento;
 
@@ -30,6 +31,11 @@ public class DashboardEmpresaRepositoryAdapter implements DashboardEmpresaReposi
     public boolean empresaComImpedimento(Integer idEmpresa) { return jpaDashboardEmpresaRepository.empresaComImpedimento(idEmpresa); }
 
     @Override
-    public List<Investimento> listarFinanceiroPorEmpresa(Integer idEmpresa) { return jpaDashboardEmpresaRepository.listarFinanceiroPorEmpresa(idEmpresa); }
+    public List<Investimento> listarFinanceiroPorEmpresa(Integer idEmpresa) {
+        return jpaDashboardEmpresaRepository.listarFinanceiroPorEmpresa(idEmpresa)
+                .stream()
+                .map(InvestimentoMapper::toDomain)
+                .toList();
+    }
 }
 
