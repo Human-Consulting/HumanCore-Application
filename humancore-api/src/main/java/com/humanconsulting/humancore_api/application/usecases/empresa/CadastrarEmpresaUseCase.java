@@ -9,7 +9,9 @@ import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.web.dtos.request.EmpresaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.EmpresaMapper;
+import jakarta.transaction.Transactional;
 
+@Transactional
 public class CadastrarEmpresaUseCase {
     private final EmpresaRepository empresaRepository;
     private final UsuarioRepository usuarioRepository;
@@ -28,6 +30,7 @@ public class CadastrarEmpresaUseCase {
 
     public EmpresaResponseDto execute(EmpresaRequestDto empresaRequestDto) {
         ValidarPermissao.execute(empresaRequestDto.getPermissaoEditor(), "ADICIONAR_EMPRESA");
+
         empresaRepository.existsByCnpj(empresaRequestDto.getCnpj());
         Empresa empresaCadastrada = empresaRepository.save(
             EmpresaMapper.toEntity(empresaRequestDto)

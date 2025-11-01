@@ -21,6 +21,9 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     @Query("SELECT u FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa")
     Page<UsuarioEntity> findByFkEmpresa(@Param("idEmpresa") Integer idEmpresa, Pageable pageable);
 
+    @Query("SELECT u FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa AND (:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')))")
+    Page<UsuarioEntity> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, Pageable pageable, String nome);
+
     @Query("SELECT u FROM UsuarioEntity u WHERE u.email = :email AND u.senha = :senha")
     Optional<UsuarioEntity> autenticar(String email, String senha);
 
@@ -38,4 +41,5 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
 
     @Query("SELECT t FROM TarefaEntity t WHERE t.responsavel.idUsuario = :idUsuario")
     List<TarefaEntity> findTarefasVinculadas(@Param("idUsuario") Integer idUsuario);
+
 }

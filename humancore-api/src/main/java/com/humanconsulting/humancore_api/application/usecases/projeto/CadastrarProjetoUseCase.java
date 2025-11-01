@@ -44,7 +44,7 @@ public class CadastrarProjetoUseCase {
         );
         Usuario editor = usuarioRepository.findById(projetoRequestDto.getIdEditor()).get();
         salaNotifier.onProjetoCriado(projeto, editor);
-        return projetoResponseMapper.toResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto());
+        return projetoResponseMapper.toResponse(projeto);
     }
 }
 

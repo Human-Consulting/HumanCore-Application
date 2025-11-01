@@ -31,7 +31,7 @@ public class AtualizarSprintUseCase {
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
         ValidarPermissao.execute(request.getPermissaoEditor(), "MODIFICAR_SPRINT");
         Sprint sprintAtualizada = sprintRepository.save(SprintMapper.toEntity(request, idSprint, optSprint.get().getProjeto()));
-        return sprintResponseMapper.toResponse(sprintAtualizada, sprintAtualizada.getIdSprint());
+        return sprintResponseMapper.toResponse(sprintAtualizada);
     }
 }
 

@@ -33,6 +33,7 @@ public class UsuarioController {
     @Autowired private CadastrarUsuarioUseCase cadastrarUsuarioUseCase;
     @Autowired private ListarUsuariosUseCase listarUsuariosUseCase;
     @Autowired private ListarUsuariosPorEmpresaUseCase listarUsuariosPorEmpresaUseCase;
+    @Autowired private ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase;
     @Autowired private BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase;
     @Autowired private BuscarUsuarioPorEmailUseCase buscarUsuarioPorEmailUseCase;
     @Autowired private AtualizarUsuarioUseCase atualizarUsuarioUseCase;
@@ -82,8 +83,12 @@ public class UsuarioController {
     @GetMapping("/buscarPorEmpresa/{idEmpresa}")
     public ResponseEntity<PageResult<UsuarioResponseDto>> listarPorEmpresa( @PathVariable Integer idEmpresa,
                                                                       @RequestParam(name = "page", defaultValue = "0") int page,
-                                                                      @RequestParam(name = "size", defaultValue = "10") int size) {
-        PageResult<UsuarioResponseDto> response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size);
+                                                                      @RequestParam(name = "size", defaultValue = "10") int size,
+                                                                            @RequestParam(name = "nome", required = false) String nome) {
+        PageResult<UsuarioResponseDto> response = null;
+        if (nome != null && !nome.isEmpty()) response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome);
+        else response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size);
+
         return ResponseEntity.status(200).body(response);
     }
 

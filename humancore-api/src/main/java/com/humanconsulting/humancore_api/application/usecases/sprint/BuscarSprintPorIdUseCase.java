@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.application.usecases.sprint;
 
+import com.humanconsulting.humancore_api.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Checkpoint;
@@ -22,25 +23,18 @@ public class BuscarSprintPorIdUseCase {
     private final SprintRepository sprintRepository;
     private final TarefaRepository tarefaRepository;
     private final CheckpointRepository checkpointRepository;
+    private final SprintResponseMapper sprintResponseMapper;
 
-    public BuscarSprintPorIdUseCase(SprintRepository sprintRepository, TarefaRepository tarefaRepository, CheckpointRepository checkpointRepository) {
+    public BuscarSprintPorIdUseCase(SprintRepository sprintRepository, TarefaRepository tarefaRepository, CheckpointRepository checkpointRepository, SprintResponseMapper sprintResponseMapper) {
         this.sprintRepository = sprintRepository;
         this.tarefaRepository = tarefaRepository;
         this.checkpointRepository = checkpointRepository;
+        this.sprintResponseMapper = sprintResponseMapper;
     }
 
     public SprintResponseDto execute(Integer id) {
         Optional<Sprint> optSprint = sprintRepository.findById(id);
         if (optSprint.isEmpty()) throw new EntidadeNaoEncontradaException("SprintEntity não encontrada.");
-        Sprint sprint = optSprint.get();
-        List<Tarefa> tarefas = tarefaRepository.findBySprint_IdSprint(id);
-        List<TarefaResponseDto> entregas = tarefas.stream().map(tarefa -> {
-            List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_IdTarefa(tarefa.getIdTarefa());
-            double progresso = ProgressoCalculator.execute(checkpoints);
-            return TarefaMapper.toDto(tarefa, checkpoints.stream().map(cp -> CheckpointMapper.toDto(cp)).collect(Collectors.toList()), progresso);
-        }).collect(Collectors.toList());
-        double progressoSprint = entregas.isEmpty() ? 0.0 : entregas.stream().mapToDouble(TarefaResponseDto::getProgresso).average().orElse(0.0);
-        boolean comImpedimento = tarefaRepository.existsImpedimentoBySprint(id);
-        return SprintMapper.toDto(sprint, progressoSprint, comImpedimento, entregas);
+        return sprintResponseMapper.toResponse(optSprint.get());
     }
 }

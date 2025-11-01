@@ -15,6 +15,20 @@ public interface JpaProjetoRepository extends JpaRepository<ProjetoEntity, Integ
 
     Page<ProjetoEntity> findAllByEmpresa_IdEmpresa(Integer idEmpresa, Pageable pageable);
 
+    List<ProjetoEntity> findAllByEmpresa_IdEmpresa(Integer idEmpresa);
+
     @Query("SELECT p.urlImagem FROM ProjetoEntity p WHERE p.id = :idProjeto")
     String findUrlImagemById(Integer idProjeto);
+
+    @Query("""
+                SELECT p 
+                FROM ProjetoEntity p 
+                WHERE p.empresa.idEmpresa = :idEmpresa 
+                AND (
+                    :nome IS NULL 
+                    OR LOWER(p.titulo) LIKE LOWER(CONCAT('%', :nome, '%'))
+                )
+            """)
+    Page<ProjetoEntity> findAllByEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, Pageable pageable, String nome);
+
 }

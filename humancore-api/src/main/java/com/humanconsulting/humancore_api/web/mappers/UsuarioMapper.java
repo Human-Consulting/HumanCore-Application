@@ -5,9 +5,11 @@ import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioRequestDto;
+import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +59,7 @@ public class UsuarioMapper {
             Integer qtdTarefas,
             Boolean comImpedimento,
             List<Integer> projetosVinculados,
-            List<TarefaResponseDto> tarefasVinculadas,
+            List<TarefaLoginResponseDto> tarefasVinculadas,
             String token) {
 
         return LoginResponseDto.builder()
@@ -87,6 +89,13 @@ public class UsuarioMapper {
                 .qtdTarefas(qtdTarefas)
                 .comImpedimento(comImpedimento)
                 .cores(usuario.getCores())
+                .build();
+    }
+
+    public static UsuarioSprintResponseDto toUsuarioSprintDto(Usuario usuario) {
+        return UsuarioSprintResponseDto.builder()
+                .idUsuario(usuario.getIdUsuario())
+                .nome(usuario.getNome())
                 .build();
     }
 }

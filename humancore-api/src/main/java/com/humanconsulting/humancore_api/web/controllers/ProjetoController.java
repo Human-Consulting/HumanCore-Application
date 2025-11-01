@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.web.dtos.atualizar.projeto.ProjetoAtual
 import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.DashboardProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.KpiProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +28,9 @@ public class ProjetoController {
     @Autowired private CadastrarProjetoUseCase cadastrarProjetoUseCase;
     @Autowired private ListarProjetosUseCase listarProjetosUseCase;
     @Autowired private BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase;
-    @Autowired private BuscarProjetosPorEmpresaUseCase buscarProjetosPorEmpresaUseCase;
+    @Autowired private ListarProjetosPorEmpresaUseCase listarProjetosPorEmpresaUseCase;
+    @Autowired private ListarProjetosMenuRapidoUseCase listarProjetosMenuRapidoUseCase;
+    @Autowired private ListarProjetosKpisUseCase listarProjetosKpisUseCase;
     @Autowired private AtualizarProjetoUseCase atualizarProjetoUseCase;
     @Autowired private DeletarProjetoUseCase deletarProjetoUseCase;
     @Autowired private CriarDashboardProjetoUseCase criarDashboardProjetoUseCase;
@@ -77,7 +80,7 @@ public class ProjetoController {
     }
 
     @Operation(
-            summary = "Buscar projetos por ID da empresa",
+            summary = "Listar projetos por ID da empresa",
             description = "Esse endpoint retorna os projetos de uma empresa específica.",
             parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para listar os projetos."),
             security = @SecurityRequirement(name = "Bearer")
@@ -86,11 +89,47 @@ public class ProjetoController {
             @ApiResponse(responseCode = "200", description = "Lista de projetos por empresa retornada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Lista de projetos por empresa não retornada")
     })
-    @GetMapping("/buscarPorEmpresa/{idEmpresa}")
-    public ResponseEntity<PageResult<ProjetoResponseDto>> buscarPorIdEmpresa(@PathVariable Integer idEmpresa,
-                                                                       @RequestParam(name = "page", defaultValue = "0") int page,
-                                                                       @RequestParam(name = "size", defaultValue = "10") int size) {
-        PageResult<ProjetoResponseDto> response = buscarProjetosPorEmpresaUseCase.execute(idEmpresa, page, size);
+    @GetMapping("/listarPorEmpresa/{idEmpresa}")
+    public ResponseEntity<PageResult<ProjetoResponseDto>> listarPorIdEmpresa(@PathVariable Integer idEmpresa,
+                                                                             @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                             @RequestParam(name = "size", defaultValue = "10") int size,
+                                                                             @RequestParam(name = "nome", required = false) String nome) {
+        PageResult<ProjetoResponseDto> response = listarProjetosPorEmpresaUseCase.execute(idEmpresa, page, size, nome);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(
+            summary = "Listar projetos com menos informações para menu rapido",
+            description = "Esse endpoint retorna as empresas contendo apenas titulo, progresso, comImpedimento, urlImagem e idProjeto.",
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de projetos por empresa retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Lista de projetos por empresa não retornada")
+    })
+    @GetMapping("/menuRapido/{idEmpresa}")
+    public ResponseEntity<PageResult<ProjetoResponseDto>> listarMenuRapido(@PathVariable Integer idEmpresa,
+                                                                           @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                           @RequestParam(name = "size", defaultValue = "10") int size,
+                                                                           @RequestParam(name = "nome", required = false) String nome,
+                                                                           @RequestParam(name = "impedidos", required = false) Boolean impedidos,
+                                                                           @RequestParam(name = "concluidos", required = false) Boolean concluidos) {
+        PageResult<ProjetoResponseDto> response = listarProjetosMenuRapidoUseCase.execute(idEmpresa, page, size, nome, impedidos, concluidos);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(
+            summary = "Listar projetos por ID da empresa com menos informações para kpis",
+            description = "Esse endpoint retorna os projetos de uma empresa específica, contendo apenas titulo, progresso, comImpedimento, urlImagem, nomeResponsavel, idProjeto.",
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de projetos por empresa retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Lista de projetos por empresa não retornada")
+    })
+    @GetMapping("/kpis/{idEmpresa}")
+    public ResponseEntity<KpiProjetoResponseDto> listarKpis(@PathVariable Integer idEmpresa) {
+        KpiProjetoResponseDto response = listarProjetosKpisUseCase.execute(idEmpresa);
         return ResponseEntity.status(200).body(response);
     }
 

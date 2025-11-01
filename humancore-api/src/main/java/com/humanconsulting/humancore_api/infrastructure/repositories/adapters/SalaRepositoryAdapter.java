@@ -6,10 +6,10 @@ import com.humanconsulting.humancore_api.domain.entities.Sala;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.infrastructure.entities.SalaEntity;
-import com.humanconsulting.humancore_api.infrastructure.entities.TarefaEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmpresaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;
+import com.humanconsulting.humancore_api.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaSalaRepository;
 
 import java.util.List;
@@ -57,6 +57,12 @@ public class SalaRepositoryAdapter implements SalaRepository {
 
         entity.setNome(sala.getNome());
         entity.setUrlImagem(sala.getUrlImagem());
+        entity.setUsuarios(
+                sala.getUsuarios()
+                        .stream()
+                        .map(UsuarioMapper::toEntity)
+                        .collect(Collectors.toSet())
+        );
 
         SalaEntity saved = jpaSalaRepository.save(entity);
         return SalaMapper.toDomain(saved);

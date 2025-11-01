@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.web.dtos.response.usuario;
 
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -39,8 +40,8 @@ public class LoginResponseDto {
     @Schema(description = "Lista de IDs dos projetos vinculados ao usuário", example = "[1, 2, 3]")
     private List<Integer> projetosVinculados;
 
-    @Schema(description = "Lista de tarefas vinculadas ao usuário", implementation = TarefaResponseDto.class)
-    private List<TarefaResponseDto> tarefasVinculadas;
+    @Schema(description = "Lista de tarefas vinculadas ao usuário", implementation = TarefaLoginResponseDto.class)
+    private List<TarefaLoginResponseDto> tarefasVinculadas;
 
     @Schema(description = "Token de segurança do usuário")
     private String token;

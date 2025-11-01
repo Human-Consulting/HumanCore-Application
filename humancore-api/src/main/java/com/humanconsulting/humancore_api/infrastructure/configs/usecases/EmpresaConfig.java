@@ -11,6 +11,7 @@ import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.Da
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.EmpresaRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaDashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaEmpresaRepository;
+import com.humanconsulting.humancore_api.web.mappers.EmpresaMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -65,6 +66,11 @@ public class EmpresaConfig {
     }
 
     @Bean
+    public EmpresaMapper empresaMapper() {
+        return new EmpresaMapper();
+    }
+
+    @Bean
     public EmpresaResponseMapper empresaResponseMapper(
             UsuarioRepository usuarioRepository,
             DashboardEmpresaRepository dashRepository,
@@ -85,6 +91,16 @@ public class EmpresaConfig {
     @Bean
     public ListarEmpresasUseCase listarEmpresasUseCase(EmpresaRepository empresaRepository, EmpresaResponseMapper empresaResponseMapper) {
         return new ListarEmpresasUseCase(empresaRepository, empresaResponseMapper);
+    }
+
+    @Bean
+    public ListarEmpresasMenuRapidoUseCase listarEmpresasMenuRapidoUseCase(EmpresaRepository empresaRepository, EmpresaResponseMapper empresaResponseMapper) {
+        return new ListarEmpresasMenuRapidoUseCase(empresaRepository, empresaResponseMapper);
+    }
+
+    @Bean
+    public ListarEmpresasKpisUseCase listarEmpresasKpisUseCase(EmpresaRepository empresaRepository, EmpresaResponseMapper empresaResponseMapper, EmpresaMapper empresaMapper) {
+        return new ListarEmpresasKpisUseCase(empresaRepository, empresaResponseMapper, empresaMapper);
     }
 
     @Bean

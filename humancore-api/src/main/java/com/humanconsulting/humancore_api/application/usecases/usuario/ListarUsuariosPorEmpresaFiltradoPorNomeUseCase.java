@@ -11,17 +11,17 @@ import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioRespon
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListarUsuariosPorEmpresaUseCase {
+public class ListarUsuariosPorEmpresaFiltradoPorNomeUseCase {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioResponseMapper usuarioResponseMapper;
 
-    public ListarUsuariosPorEmpresaUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
+    public ListarUsuariosPorEmpresaFiltradoPorNomeUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioResponseMapper = usuarioResponseMapper;
     }
 
-    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size) {
-        PageResult<Usuario> usuarios = usuarioRepository.findByFkEmpresa(idEmpresa, page, size);
+    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size, String nome) {
+        PageResult<Usuario> usuarios = usuarioRepository.findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, page, size, nome);
 
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : usuarios.getContent()) {

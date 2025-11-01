@@ -6,6 +6,8 @@ import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.checkpoint.CheckpointResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseLoginDto;
+import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 
 import java.util.List;
@@ -48,8 +50,18 @@ public class TarefaMapper {
                 .progresso(progresso)
                 .comImpedimento(tarefa.getComImpedimento())
                 .comentario(tarefa.getComentario())
-                .sprint(tarefa.getSprint())
-                .responsavel(tarefa.getResponsavel())
+                .responsavel(UsuarioMapper.toUsuarioSprintDto(tarefa.getResponsavel()))
+                .checkpoints(checkpoints)
+                .build();
+    }
+
+    public static TarefaLoginResponseDto toDtoLogin(Tarefa tarefa, List<CheckpointResponseDto> checkpoints, Double progresso, SprintResponseLoginDto sprint) {
+        return TarefaLoginResponseDto.builder()
+                .titulo(tarefa.getTitulo())
+                .dtFim(tarefa.getDtFim())
+                .progresso(progresso)
+                .comImpedimento(tarefa.getComImpedimento())
+                .sprint(sprint)
                 .checkpoints(checkpoints)
                 .build();
     }

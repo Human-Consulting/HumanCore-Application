@@ -14,8 +14,10 @@ import com.humanconsulting.humancore_api.web.dtos.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.email.EmailCadastroResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Transactional
 public class CadastrarUsuarioUseCase {
     private final UsuarioRepository usuarioRepository;
     private final EmpresaRepository empresaRepository;

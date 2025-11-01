@@ -3,7 +3,7 @@ package com.humanconsulting.humancore_api.application.usecases.tarefa;
 import com.humanconsulting.humancore_api.application.usecases.projeto.BuscarProjetoPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
-import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioLoginResponseMapper;
+import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
@@ -27,7 +27,7 @@ public class AtualizarImpedimentoTarefaUseCase {
     private final RabbitTemplateConfiguration rabbitMQ;
     private final BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase;
     private final BuscarSprintPorIdUseCase buscarSprintPorIdUseCase;
-    private final UsuarioLoginResponseMapper usuarioMapper;
+    private final UsuarioResponseMapper usuarioMapper;
     private final TarefaResponseMapper tarefaResponseMapper;
     private final EmailUpdateMapper emailUpdateMapper;
 
@@ -37,7 +37,7 @@ public class AtualizarImpedimentoTarefaUseCase {
             RabbitTemplateConfiguration rabbitMQ,
             BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase,
             BuscarSprintPorIdUseCase buscarSprintPorIdUseCase,
-            UsuarioLoginResponseMapper usuarioMapper,
+            UsuarioResponseMapper usuarioMapper,
             TarefaResponseMapper tarefaResponseMapper,
             EmailUpdateMapper emailUpdateMapper
     ) {

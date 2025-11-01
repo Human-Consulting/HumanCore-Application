@@ -6,9 +6,12 @@ import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.entities.Area;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
+import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseLoginDto;
 import com.humanconsulting.humancore_api.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.DashboardProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.KpiProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseLoginDto;
 
 import java.util.List;
 
@@ -61,6 +64,22 @@ public class ProjetoMapper {
                 .areas(areas)
                 .financeiroResponseDtos(financeiroResponseDtos)
                 .totalItens(projetos)
+                .build();
+    }
+
+    public static KpiProjetoResponseDto toKpiDto(List<ProjetoResponseDto> impedidos, List<ProjetoResponseDto> finalizadas, Integer totalAndamento) {
+        return KpiProjetoResponseDto.builder()
+                .impedidos(impedidos)
+                .finalizadas(finalizadas)
+                .totalAndamento(totalAndamento)
+                .build();
+    }
+
+    public static ProjetoResponseLoginDto toResponseLoginDto(Projeto projeto, EmpresaResponseLoginDto empresa) {
+        return ProjetoResponseLoginDto.builder()
+                .idProjeto(projeto.getIdProjeto())
+                .titulo(projeto.getTitulo())
+                .empresa(empresa)
                 .build();
     }
 }

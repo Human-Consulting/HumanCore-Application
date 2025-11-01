@@ -11,21 +11,24 @@ import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoRespon
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuscarProjetosPorEmpresaUseCase {
+public class ListarProjetosPorEmpresaUseCase {
     private final ProjetoRepository projetoRepository;
     private final ProjetoResponseMapper projetoResponseMapper;
 
-    public BuscarProjetosPorEmpresaUseCase(ProjetoRepository projetoRepository, ProjetoResponseMapper projetoResponseMapper) {
+    public ListarProjetosPorEmpresaUseCase(ProjetoRepository projetoRepository, ProjetoResponseMapper projetoResponseMapper) {
         this.projetoRepository = projetoRepository;
         this.projetoResponseMapper = projetoResponseMapper;
     }
 
-    public PageResult<ProjetoResponseDto> execute(Integer idEmpresa, int page, int size) {
-        PageResult<Projeto> pageResult = projetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa, page, size);
+    public PageResult<ProjetoResponseDto> execute(Integer idEmpresa, int page, int size, String nome) {
+        PageResult<Projeto> pageResult = null;
+        if (nome != null && !nome.isEmpty()) pageResult = projetoRepository.findAllByEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, page, size, nome);
+        else pageResult = projetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa, page, size);
+
         if (pageResult.getContent().isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto encontrado");
         List<ProjetoResponseDto> allResponse = new ArrayList<>();
         for (Projeto projeto : pageResult.getContent()) {
-            allResponse.add(projetoResponseMapper.toResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto()));
+            allResponse.add(projetoResponseMapper.toResponse(projeto));
         }
         return new PageResultImpl<>(
                 allResponse,

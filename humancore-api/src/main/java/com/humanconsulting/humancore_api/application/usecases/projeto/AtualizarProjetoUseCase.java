@@ -32,7 +32,7 @@ public class AtualizarProjetoUseCase {
         ValidarPermissao.execute(projetoAtualizarRequestDto.getPermissaoEditor(), "MODIFICAR_PROJETO");
         Usuario usuarioResponsavel = usuarioRepository.findById(projetoAtualizarRequestDto.getFkResponsavel()).get();
         Projeto projetoAtualizado = projetoRepository.save(ProjetoMapper.toEntity(projetoAtualizarRequestDto, idProjeto, usuarioResponsavel, projeto.getEmpresa()));
-        return projetoResponseMapper.toResponse(projetoAtualizado, projetoAtualizado.getResponsavel().getIdUsuario(), projetoAtualizado.getIdProjeto());
+        return projetoResponseMapper.toResponse(projetoAtualizado);
     }
 }
 

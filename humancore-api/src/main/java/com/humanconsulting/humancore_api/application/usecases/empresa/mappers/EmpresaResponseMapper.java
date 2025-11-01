@@ -32,5 +32,23 @@ public class EmpresaResponseMapper {
         Double progresso = ProgressoCalculator.execute(checkpoints);
         return EmpresaMapper.toDto(empresa, nomeDiretor.orElse(null), comImpedimento, progresso, orcamento);
     }
+
+    public EmpresaResponseDto toResponseMenuRapido(Empresa empresa) {
+        Optional<String> nomeDiretor = usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa());
+        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
+        Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(empresa.getIdEmpresa());
+        Double progresso = ProgressoCalculator.execute(checkpoints);
+        return EmpresaMapper.toDto(empresa, nomeDiretor.orElse(null), comImpedimento, progresso, orcamento);
+    }
+
+    public EmpresaResponseDto toResponseKpi(Empresa empresa) {
+        Optional<String> nomeDiretor = usuarioRepository.findDiretorByEmpresaId(empresa.getIdEmpresa());
+        Boolean comImpedimento = dashRepository.empresaComImpedimento(empresa.getIdEmpresa());
+        Double orcamento = dashRepository.orcamentoTotal(empresa.getIdEmpresa());
+        List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_Empresa_IdEmpresa(empresa.getIdEmpresa());
+        Double progresso = ProgressoCalculator.execute(checkpoints);
+        return EmpresaMapper.toDto(empresa, nomeDiretor.orElse(null), comImpedimento, progresso, orcamento);
+    }
 }
 

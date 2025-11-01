@@ -11,6 +11,7 @@ import com.humanconsulting.humancore_api.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaProjetoRepository;
 import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -23,7 +24,6 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
         this.jpaProjetoRepository = jpaProjetoRepository;
     }
 
-
     @Override
     public boolean existsByEmpresa_IdEmpresaAndDescricao(Integer idEmpresa, String descricao) {
         return jpaProjetoRepository.existsByEmpresa_IdEmpresaAndDescricao(idEmpresa, descricao);
@@ -31,7 +31,7 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
 
     @Override
     public PageResult<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa, int page, int size) {
-        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa, pageable);
 
         return new PageResultImpl<>(
@@ -41,6 +41,26 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
                 projetoEntities.getTotalElements(),
                 projetoEntities.getTotalPages()
         );
+    }
+
+    @Override
+    public PageResult<Projeto> findAllByEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, pageable, nome);
+
+        return new PageResultImpl<>(
+                projetoEntities.getContent().stream().map(ProjetoMapper::toDomain).toList(),
+                projetoEntities.getNumber(),
+                projetoEntities.getSize(),
+                projetoEntities.getTotalElements(),
+                projetoEntities.getTotalPages()
+        );
+    }
+
+    @Override
+    public List<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa) {
+        List<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa);
+        return projetoEntities.stream().map(ProjetoMapper::toDomain).toList();
     }
 
     @Override

@@ -21,13 +21,16 @@ public class ListarEmpresasUseCase {
         this.empresaResponseMapper = empresaResponseMapper;
     }
 
-    public PageResult<EmpresaResponseDto> execute(int page, int size) {
-        PageResult<Empresa> empresas = empresaRepository.findAll(page, size);
+    public PageResult<EmpresaResponseDto> execute(int page, int size, String nome) {
+        PageResult<Empresa> empresas = null;
+        if (nome != null && !nome.isEmpty()) empresas = empresaRepository.findAllByNomeContainingIgnoreCase(page, size, nome);
+        else empresas = empresaRepository.findAll(page, size);
+
         if (empresas.getContent().isEmpty()) throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
         List<EmpresaResponseDto> allResponse = new ArrayList<>();
         for (Empresa empresa : empresas.getContent()) {
-            String urlImagem = empresaRepository.findUrlImagemById(empresa.getIdEmpresa());
-            empresa.setUrlImagem(urlImagem);
+            /*String urlImagem = empresaRepository.findUrlImagemById(empresa.getIdEmpresa());
+            empresa.setUrlImagem(urlImagem);*/
             allResponse.add(empresaResponseMapper.toResponse(empresa));
         }
 

@@ -1,8 +1,8 @@
 package com.humanconsulting.humancore_api.web.dtos.response.tarefa;
 
-import com.humanconsulting.humancore_api.web.dtos.response.checkpoint.CheckpointResponseDto;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
-import com.humanconsulting.humancore_api.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.web.dtos.response.checkpoint.CheckpointResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseLoginDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -15,19 +15,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TarefaResponseDto {
-
-    @Schema(description = "ID da TarefaEntity", example = "1")
-    private Integer idTarefa;
+public class TarefaLoginResponseDto {
 
     @Schema(description = "Título da tarefa", example = "Login")
     private String titulo;
-
-    @Schema(description = "Descrição da TarefaEntity", example = "Desenvolver API para gestão de tarefas")
-    private String descricao;
-
-    @Schema(description = "Data de início da TarefaEntity", example = "2025-04-01")
-    private LocalDate dtInicio;
 
     @Schema(description = "Data de término da TarefaEntity", example = "2025-04-10")
     private LocalDate dtFim;
@@ -38,14 +29,8 @@ public class TarefaResponseDto {
     @Schema(description = "Indica se há impedimentos na TarefaEntity", example = "false")
     private Boolean comImpedimento;
 
-    /*@Schema(description = "SprintEntity associada à TarefaEntity", example = "2")
-    private Sprint sprint;*/
-
-    @Schema(description = "Usuário responsável pela TarefaEntity", example = "101")
-    private UsuarioSprintResponseDto responsavel;
-
-    @Schema(description = "Comentário da TarefaEntity", example = "Impedimento referente a...")
-    private String comentario;
+    @Schema(description = "SprintEntity associada à TarefaEntity", example = "2")
+    private SprintResponseLoginDto sprint;
 
     @Schema(description = "Checkpoints da tarefa", example = "[{id: 1, descricao: 'Subtarefa', finalizado: true}]")
     private List<CheckpointResponseDto> checkpoints;

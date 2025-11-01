@@ -2,7 +2,6 @@ package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.application.usecases.usuario.*;
-import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioLoginResponseMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
@@ -68,13 +67,13 @@ public class UsuarioConfig {
             UsuarioRepository usuarioRepository,
             AuthenticationManager authenticationManager,
             GerenciadorTokenJwt gerenciadorTokenJwt,
-            UsuarioLoginResponseMapper usuarioLoginResponseMapper
+            UsuarioResponseMapper usuarioResponseMapper
     ) {
         return new AutenticarUsuarioUseCase(
                 usuarioRepository,
                 authenticationManager,
                 gerenciadorTokenJwt,
-                usuarioLoginResponseMapper
+                usuarioResponseMapper
         );
     }
 
@@ -84,8 +83,8 @@ public class UsuarioConfig {
     }
 
     @Bean
-    public BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase(UsuarioRepository usuarioRepository, UsuarioLoginResponseMapper usuarioLoginResponseMapper) {
-        return new BuscarUsuarioPorIdUseCase(usuarioRepository, usuarioLoginResponseMapper);
+    public BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
+        return new BuscarUsuarioPorIdUseCase(usuarioRepository, usuarioResponseMapper);
     }
 
     @Bean
@@ -104,19 +103,19 @@ public class UsuarioConfig {
     }
 
     @Bean
+    public ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
+        return new ListarUsuariosPorEmpresaFiltradoPorNomeUseCase(usuarioRepository, usuarioResponseMapper);
+    }
+
+    @Bean
     public ListarUsuariosUseCase listarUsuariosUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
         return new ListarUsuariosUseCase(usuarioRepository, usuarioResponseMapper);
     }
 
-    @Bean
-    public UsuarioResponseMapper usuarioResponseMapper(UsuarioRepository usuarioRepository) {
-        return new UsuarioResponseMapper(usuarioRepository);
-    }
-
-    @Bean
-    public UsuarioLoginResponseMapper usuarioLoginResponseMapper(UsuarioRepository usuarioRepository, TarefaResponseMapper tarefaResponseMapper) {
-        return new UsuarioLoginResponseMapper(usuarioRepository, tarefaResponseMapper);
-    }
+    /*@Bean
+    public UsuarioResponseMapper usuarioResponseMapper(UsuarioRepository usuarioRepository, TarefaResponseMapper tarefaResponseMapper) {
+        return new UsuarioResponseMapper(usuarioRepository, tarefaResponseMapper);
+    }*/
 
     @Bean
     public UsuarioRepository usuarioRepository(JpaUsuarioRepository jpaUsuarioRepository) {

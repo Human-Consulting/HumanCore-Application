@@ -70,6 +70,20 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
+    public PageResult<Usuario> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<UsuarioEntity> usuarioEntities = jpaUsuarioRepository.findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, pageable, nome);
+
+        return new PageResultImpl<>(
+                usuarioEntities.getContent().stream().map(UsuarioMapper::toDomain).toList(),
+                usuarioEntities.getNumber(),
+                usuarioEntities.getSize(),
+                usuarioEntities.getTotalElements(),
+                usuarioEntities.getTotalPages()
+        );
+    }
+
+    @Override
     public Integer countTarefasByUsuario(Integer idUsuario) {
         return jpaUsuarioRepository.countTarefasByUsuario(idUsuario);
     }
