@@ -96,6 +96,7 @@ public class UsuarioMapper {
         return UsuarioSprintResponseDto.builder()
                 .idUsuario(usuario.getIdUsuario())
                 .nome(usuario.getNome())
+                .cargo(usuario.getCargo())
                 .build();
     }
 }

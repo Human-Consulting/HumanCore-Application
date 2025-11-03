@@ -1,8 +1,6 @@
 package com.humanconsulting.humancore_api.web.dtos.response.tarefa;
 
 import com.humanconsulting.humancore_api.web.dtos.response.checkpoint.CheckpointResponseDto;
-import com.humanconsulting.humancore_api.domain.entities.Sprint;
-import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -37,9 +35,6 @@ public class TarefaResponseDto {
 
     @Schema(description = "Indica se há impedimentos na TarefaEntity", example = "false")
     private Boolean comImpedimento;
-
-    /*@Schema(description = "SprintEntity associada à TarefaEntity", example = "2")
-    private Sprint sprint;*/
 
     @Schema(description = "Usuário responsável pela TarefaEntity", example = "101")
     private UsuarioSprintResponseDto responsavel;

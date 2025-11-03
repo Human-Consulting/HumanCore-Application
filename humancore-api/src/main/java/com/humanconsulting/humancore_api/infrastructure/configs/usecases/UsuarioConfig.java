@@ -103,6 +103,11 @@ public class UsuarioConfig {
     }
 
     @Bean
+    public ListarUsuariosResponsaveisPorEmpresaUseCase listarUsuariosResponsaveisPorEmpresaUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
+        return new ListarUsuariosResponsaveisPorEmpresaUseCase(usuarioRepository, usuarioResponseMapper);
+    }
+
+    @Bean
     public ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
         return new ListarUsuariosPorEmpresaFiltradoPorNomeUseCase(usuarioRepository, usuarioResponseMapper);
     }
@@ -111,11 +116,6 @@ public class UsuarioConfig {
     public ListarUsuariosUseCase listarUsuariosUseCase(UsuarioRepository usuarioRepository, UsuarioResponseMapper usuarioResponseMapper) {
         return new ListarUsuariosUseCase(usuarioRepository, usuarioResponseMapper);
     }
-
-    /*@Bean
-    public UsuarioResponseMapper usuarioResponseMapper(UsuarioRepository usuarioRepository, TarefaResponseMapper tarefaResponseMapper) {
-        return new UsuarioResponseMapper(usuarioRepository, tarefaResponseMapper);
-    }*/
 
     @Bean
     public UsuarioRepository usuarioRepository(JpaUsuarioRepository jpaUsuarioRepository) {

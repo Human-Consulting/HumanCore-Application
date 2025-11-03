@@ -33,4 +33,5 @@ public interface UsuarioRepository {
 
     Optional<String> findDiretorByEmpresaId(Integer idEmpresa);
 
+    PageResult<Usuario> findByFkEmpresaAndPermissaoNot(Integer idEmpresa, int page, int size);
 }

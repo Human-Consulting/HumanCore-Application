@@ -5,6 +5,8 @@ import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.exception.RabbitPublishException;
+import com.humanconsulting.humancore_api.infrastructure.exception.RabbitUnavailableException;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmailCadastroMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
@@ -15,6 +17,8 @@ import com.humanconsulting.humancore_api.web.dtos.response.email.EmailCadastroRe
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.amqp.AmqpConnectException;
+import org.springframework.amqp.AmqpException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Transactional
@@ -62,8 +66,10 @@ public class CadastrarUsuarioUseCase {
                         emailCadastroResponseDto
                 );
 
-            } catch (Exception exception) {
-                throw new RuntimeException("Não foi possível cadastrar o usuário.");
+            } catch (AmqpConnectException e) {
+                throw new RabbitUnavailableException("O email está na fila de envio!");
+            } catch (AmqpException e) {
+                throw new RabbitPublishException("Falha ao enviar email");
             }
             usuario.setSenha(senhaCriptografada);
             Usuario usuarioCadastrado = usuarioRepository.save(usuario);

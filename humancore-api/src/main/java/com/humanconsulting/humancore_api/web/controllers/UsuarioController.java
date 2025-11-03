@@ -34,6 +34,7 @@ public class UsuarioController {
     @Autowired private ListarUsuariosUseCase listarUsuariosUseCase;
     @Autowired private ListarUsuariosPorEmpresaUseCase listarUsuariosPorEmpresaUseCase;
     @Autowired private ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase;
+    @Autowired private ListarUsuariosResponsaveisPorEmpresaUseCase listarUsuariosResponsaveisPorEmpresaUseCase;
     @Autowired private BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase;
     @Autowired private BuscarUsuarioPorEmailUseCase buscarUsuarioPorEmailUseCase;
     @Autowired private AtualizarUsuarioUseCase atualizarUsuarioUseCase;
@@ -89,6 +90,24 @@ public class UsuarioController {
         if (nome != null && !nome.isEmpty()) response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome);
         else response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size);
 
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(
+            summary = "Listar usuários que não tem permissão FUNC por empresa",
+            description = "Esse endpoint retorna todos os usuários responsaveis associados a uma empresa específica.",
+            parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para buscar os usuários."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
+    })
+    @GetMapping("/buscarResponsaveisPorEmpresa/{idEmpresa}")
+    public ResponseEntity<PageResult<UsuarioResponseDto>> listarResponsaveisPorEmpresa( @PathVariable Integer idEmpresa,
+                                                                            @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                            @RequestParam(name = "size", defaultValue = "10") int size) {
+        PageResult<UsuarioResponseDto> response = listarUsuariosResponsaveisPorEmpresaUseCase.execute(idEmpresa, page, size);
         return ResponseEntity.status(200).body(response);
     }
 

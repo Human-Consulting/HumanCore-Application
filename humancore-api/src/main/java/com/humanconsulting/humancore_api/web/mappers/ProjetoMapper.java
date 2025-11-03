@@ -12,6 +12,7 @@ import com.humanconsulting.humancore_api.web.dtos.response.projeto.DashboardProj
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.KpiProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseLoginDto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ProjetoMapper {
         return projeto;
     }
 
-    public static ProjetoResponseDto toDto(Projeto projeto, double progresso, boolean comImpedimento) {
+    public static ProjetoResponseDto toDto(Projeto projeto, double progresso, boolean comImpedimento, UsuarioSprintResponseDto usuario) {
         return ProjetoResponseDto.builder()
                 .idProjeto(projeto.getIdProjeto())
                 .titulo(projeto.getTitulo())
@@ -47,8 +48,7 @@ public class ProjetoMapper {
                 .orcamento(projeto.getOrcamento())
                 .urlImagem(projeto.getUrlImagem())
                 .urlImagemEmpresa(projeto.getEmpresa().getUrlImagem())
-                .nomeResponsavel(projeto.getResponsavel().getNome())
-                .fkResponsavel(projeto.getResponsavel().getIdUsuario())
+                .responsavel(usuario)
                 .progresso(progresso)
                 .comImpedimento(comImpedimento)
                 .build();

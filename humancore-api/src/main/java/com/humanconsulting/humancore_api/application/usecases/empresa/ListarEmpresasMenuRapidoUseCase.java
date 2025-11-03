@@ -56,7 +56,6 @@ public class ListarEmpresasMenuRapidoUseCase {
         int toIndex = Math.min(fromIndex + size, filtradas.size());
         List<EmpresaResponseDto> paginaFiltrada = filtradas.subList(fromIndex, toIndex);
 
-
         return new PageResultImpl<>(
                 paginaFiltrada,
                 page,

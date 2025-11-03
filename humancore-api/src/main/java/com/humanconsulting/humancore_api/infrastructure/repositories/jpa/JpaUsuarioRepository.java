@@ -42,4 +42,6 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     @Query("SELECT t FROM TarefaEntity t WHERE t.responsavel.idUsuario = :idUsuario")
     List<TarefaEntity> findTarefasVinculadas(@Param("idUsuario") Integer idUsuario);
 
+    @Query("SELECT u FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa AND u.permissao NOT LIKE '%FUNC%'")
+    Page<UsuarioEntity> findByFkEmpresaAndPermissaoNot(@Param("idEmpresa") Integer idEmpresa, Pageable pageable);
 }

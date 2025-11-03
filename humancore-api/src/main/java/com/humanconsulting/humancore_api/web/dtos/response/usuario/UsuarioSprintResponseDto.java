@@ -14,4 +14,7 @@ public class UsuarioSprintResponseDto {
 
     @Schema(description = "Nome completo do usuário", example = "João Silva")
     private String nome;
+
+    @Schema(description = "Cargo do usuário", example = "Líder Técnico")
+    private String cargo;
 }

@@ -73,6 +73,7 @@ public class EmpresaController {
                                                                            @RequestParam(name = "impedidos", required = false) Boolean impedidos,
                                                                            @RequestParam(name = "concluidos", required = false) Boolean concluidos) {
         PageResult<EmpresaResponseDto> response = listarEmpresasMenuRapidoUseCase.execute(page, size, nome, impedidos, concluidos);
+        System.out.println("Entrei no menuRapido!");
         return ResponseEntity.status(200).body(response);
     }
 
@@ -88,6 +89,7 @@ public class EmpresaController {
     @GetMapping("/kpis")
     public ResponseEntity<KpiEmpresaResponseDto> listarKpis() {
         KpiEmpresaResponseDto response = listarEmpresasKpisUseCase.execute();
+        System.out.println("Entrei no kpis!");
         return ResponseEntity.status(200).body(response);
     }
 

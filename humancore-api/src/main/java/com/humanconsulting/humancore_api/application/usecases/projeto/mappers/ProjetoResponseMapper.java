@@ -7,7 +7,9 @@ import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.ProjetoMapper;
+import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
 
 import java.util.List;
 
@@ -24,21 +26,24 @@ public class ProjetoResponseMapper {
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(projeto.getIdProjeto());
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(projeto.getIdProjeto());
         Double progresso = ProgressoCalculator.execute(checkpoints);
-        return ProjetoMapper.toDto(projeto, progresso, comImpedimento);
+        UsuarioSprintResponseDto usuario = UsuarioMapper.toUsuarioSprintDto(projeto.getResponsavel());
+        return ProjetoMapper.toDto(projeto, progresso, comImpedimento, usuario);
     }
 
     public ProjetoResponseDto toResponseKpi(Projeto projeto) {
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(projeto.getIdProjeto());
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(projeto.getIdProjeto());
         Double progresso = ProgressoCalculator.execute(checkpoints);
-        return ProjetoMapper.toDto(projeto, progresso, comImpedimento);
+        UsuarioSprintResponseDto usuario = UsuarioMapper.toUsuarioSprintDto(projeto.getResponsavel());
+        return ProjetoMapper.toDto(projeto, progresso, comImpedimento, usuario);
     }
 
     public ProjetoResponseDto toResponseMenuRapido(Projeto projeto) {
         boolean comImpedimento = tarefaRepository.existsImpedimentoByProjeto(projeto.getIdProjeto());
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(projeto.getIdProjeto());
         Double progresso = ProgressoCalculator.execute(checkpoints);
-        return ProjetoMapper.toDto(projeto, progresso, comImpedimento);
+        UsuarioSprintResponseDto usuario = UsuarioMapper.toUsuarioSprintDto(projeto.getResponsavel());
+        return ProjetoMapper.toDto(projeto, progresso, comImpedimento, usuario);
     }
 }
 
