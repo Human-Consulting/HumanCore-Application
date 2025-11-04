@@ -6,6 +6,7 @@ import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprin
 import com.humanconsulting.humancore_api.application.usecases.tarefa.*;
 import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmailUpdateMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.CheckpointRepository;
@@ -74,7 +75,8 @@ public class TarefaConfig {
             UsuarioRepository usuarioRepository,
             SalaNotifier salaNotifier,
             TarefaResponseMapper tarefaResponseMapper,
-            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase,
+            GoogleCalendarService googleCalendarService
     ) {
         return new CadastrarTarefaUseCase(
                 tarefaRepository,
@@ -82,7 +84,8 @@ public class TarefaConfig {
                 usuarioRepository,
                 salaNotifier,
                 tarefaResponseMapper,
-                sincronizarCheckpointsDaTarefaUseCase
+                sincronizarCheckpointsDaTarefaUseCase,
+                googleCalendarService
         );
     }
 

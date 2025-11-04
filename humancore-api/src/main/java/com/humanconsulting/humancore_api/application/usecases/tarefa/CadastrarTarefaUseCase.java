@@ -11,14 +11,12 @@ import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
-import com.humanconsulting.humancore_api.infrastructure.mappers.CheckpointMapper;
-import com.humanconsulting.humancore_api.web.dtos.request.CheckpointRequestDto;
+import com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService;
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.TarefaMapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 public class CadastrarTarefaUseCase {
     private final TarefaRepository tarefaRepository;
@@ -27,6 +25,7 @@ public class CadastrarTarefaUseCase {
     private final SalaNotifier salaNotifier;
     private final TarefaResponseMapper tarefaResponseMapper;
     private final SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase;
+    private final GoogleCalendarService googleCalendarService;
 
     public CadastrarTarefaUseCase(
             TarefaRepository tarefaRepository,
@@ -34,7 +33,8 @@ public class CadastrarTarefaUseCase {
             UsuarioRepository usuarioRepository,
             SalaNotifier salaNotifier,
             TarefaResponseMapper tarefaResponseMapper,
-            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase,
+            GoogleCalendarService googleCalendarService
     ) {
         this.tarefaRepository = tarefaRepository;
         this.sprintRepository = sprintRepository;
@@ -42,9 +42,10 @@ public class CadastrarTarefaUseCase {
         this.salaNotifier = salaNotifier;
         this.tarefaResponseMapper = tarefaResponseMapper;
         this.sincronizarCheckpointsDaTarefaUseCase = sincronizarCheckpointsDaTarefaUseCase;
+        this.googleCalendarService = googleCalendarService;
     }
 
-    public TarefaResponseDto execute(TarefaRequestDto tarefaRequestDto) {
+    public TarefaResponseDto execute(TarefaRequestDto tarefaRequestDto) throws IOException {
         ValidarPermissao.execute(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
         Sprint sprint = sprintRepository.findById(tarefaRequestDto.getFkSprint()).get();
         if (tarefaRequestDto.getDtInicio().isAfter(tarefaRequestDto.getDtFim()) ||
@@ -58,6 +59,13 @@ public class CadastrarTarefaUseCase {
         if (!tarefaRequestDto.getCheckpoints().isEmpty()) sincronizarCheckpointsDaTarefaUseCase.execute(tarefa.getIdTarefa(), tarefaRequestDto.getCheckpoints());
 
         if (tarefa.getResponsavel() != null) salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
+
+        String tituloEvento = "Tarefa: " + tarefa.getTitulo();
+        String descricaoEvento = "Descrição: " + tarefa.getDescricao() + "\n" +
+                "Início: " + tarefa.getDtInicio() + "\n" +
+                "Fim: " + tarefa.getDtFim() + "\n" +
+                "Responsável: " + (tarefa.getResponsavel() != null ? tarefa.getResponsavel().getNome() : "Não atribuído");
+        googleCalendarService.criarEvento(tituloEvento, descricaoEvento);
 
         return tarefaResponseMapper.toResponse(tarefa);
     }
