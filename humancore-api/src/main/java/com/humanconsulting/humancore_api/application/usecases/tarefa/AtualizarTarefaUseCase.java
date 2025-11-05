@@ -44,14 +44,14 @@ public class AtualizarTarefaUseCase {
     }
 
     public TarefaResponseDto execute(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
-        Optional<Tarefa> tarefa = tarefaRepository.findById(idTarefa);
+        Optional<Tarefa>    tarefa = tarefaRepository.findById(idTarefa);
         if (tarefa.isEmpty()) {
             throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada");
         }
         Optional<Usuario> optUsuarioEditor = usuarioRepository.findById(requestUpdate.getIdEditor());
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
         ValidarPermissao.execute(requestUpdate.getPermissaoEditor(), "MODIFICAR_TAREFA");
-        Usuario usuario = usuarioRepository.findById(requestUpdate.getFkResponsavel()).get();
+        Usuario usuario = requestUpdate.getFkResponsavel() != null ? usuarioRepository.findById(requestUpdate.getFkResponsavel()).get() : null;
         Tarefa tarefaAtualizada = TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.get().getSprint(), usuario);
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_IdTarefa(tarefa.get().getIdTarefa());
         Double progresso = ProgressoCalculator.execute(checkpoints);
