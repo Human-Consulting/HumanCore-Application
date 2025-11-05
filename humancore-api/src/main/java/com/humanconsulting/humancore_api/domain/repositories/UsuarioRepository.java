@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.domain.repositories;
 
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +19,9 @@ public interface UsuarioRepository {
 
     void deleteById(Integer id);
 
-    List<Usuario> findByFkEmpresa(Integer id);
+    PageResult<Usuario> findByFkEmpresa(Integer id, int page, int size);
+
+    PageResult<Usuario> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome);
 
     Integer countTarefasByUsuario(Integer id);
 
@@ -29,4 +32,6 @@ public interface UsuarioRepository {
     List<Tarefa> findTarefasVinculadas(Integer id);
 
     Optional<String> findDiretorByEmpresaId(Integer idEmpresa);
+
+    PageResult<Usuario> findByFkEmpresaAndPermissaoNot(Integer idEmpresa, int page, int size);
 }

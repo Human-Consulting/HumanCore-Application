@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.web.controllers;
 
 import com.humanconsulting.humancore_api.application.usecases.usuario.*;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarCoresDto;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarSenhaDto;
@@ -32,6 +33,8 @@ public class UsuarioController {
     @Autowired private CadastrarUsuarioUseCase cadastrarUsuarioUseCase;
     @Autowired private ListarUsuariosUseCase listarUsuariosUseCase;
     @Autowired private ListarUsuariosPorEmpresaUseCase listarUsuariosPorEmpresaUseCase;
+    @Autowired private ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase;
+    @Autowired private ListarUsuariosResponsaveisPorEmpresaUseCase listarUsuariosResponsaveisPorEmpresaUseCase;
     @Autowired private BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase;
     @Autowired private BuscarUsuarioPorEmailUseCase buscarUsuarioPorEmailUseCase;
     @Autowired private AtualizarUsuarioUseCase atualizarUsuarioUseCase;
@@ -79,8 +82,32 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
     })
     @GetMapping("/buscarPorEmpresa/{idEmpresa}")
-    public ResponseEntity<List<UsuarioResponseDto>> listarPorEmpresa(@PathVariable Integer idEmpresa) {
-        List<UsuarioResponseDto> response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa);
+    public ResponseEntity<PageResult<UsuarioResponseDto>> listarPorEmpresa( @PathVariable Integer idEmpresa,
+                                                                      @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                      @RequestParam(name = "size", defaultValue = "10") int size,
+                                                                            @RequestParam(name = "nome", required = false) String nome) {
+        PageResult<UsuarioResponseDto> response = null;
+        if (nome != null && !nome.isEmpty()) response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome);
+        else response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size);
+
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(
+            summary = "Listar usuários que não tem permissão FUNC por empresa",
+            description = "Esse endpoint retorna todos os usuários responsaveis associados a uma empresa específica.",
+            parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para buscar os usuários."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
+    })
+    @GetMapping("/buscarResponsaveisPorEmpresa/{idEmpresa}")
+    public ResponseEntity<PageResult<UsuarioResponseDto>> listarResponsaveisPorEmpresa( @PathVariable Integer idEmpresa,
+                                                                            @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                            @RequestParam(name = "size", defaultValue = "10") int size) {
+        PageResult<UsuarioResponseDto> response = listarUsuariosResponsaveisPorEmpresaUseCase.execute(idEmpresa, page, size);
         return ResponseEntity.status(200).body(response);
     }
 

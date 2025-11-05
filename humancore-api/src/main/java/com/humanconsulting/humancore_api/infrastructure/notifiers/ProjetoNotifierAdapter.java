@@ -44,7 +44,7 @@ public class ProjetoNotifierAdapter implements ProjetoNotifier {
         Sala novaSala = new Sala();
         Set<Usuario> participantesIniciais = new HashSet<>();
         participantesIniciais.add(projeto.getResponsavel());
-        if (!Objects.equals(projeto.getResponsavel(), editor)) participantesIniciais.add(editor);
+        if (!projeto.getResponsavel().getIdUsuario().equals(editor.getIdUsuario())) participantesIniciais.add(editor);
 
         novaSala.setProjeto(projeto);
         novaSala.setNome(projeto.getTitulo());

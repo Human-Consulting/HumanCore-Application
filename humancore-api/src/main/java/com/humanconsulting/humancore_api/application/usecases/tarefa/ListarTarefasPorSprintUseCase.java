@@ -20,7 +20,9 @@ public class ListarTarefasPorSprintUseCase {
 
     public List<TarefaResponseDto> execute(Integer idSprint) {
         List<Tarefa> all = tarefaRepository.findBySprint_IdSprint(idSprint);
+        System.out.println("Entrei no execute do ListarTarefasPorSprintUseCase!");
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhuma tarefa registrada");
+        System.out.println("Passei do throw!");
         List<TarefaResponseDto> allResponse = new ArrayList<>();
         for (Tarefa tarefa : all) {
             allResponse.add(tarefaResponseMapper.toResponse(tarefa));

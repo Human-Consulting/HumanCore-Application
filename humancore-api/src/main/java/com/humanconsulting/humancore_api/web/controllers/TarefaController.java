@@ -116,7 +116,7 @@ public class TarefaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
             @ApiResponse(responseCode = "404", description = "TarefaEntity não encontrada")
     })
-    @PatchMapping("/status/{idTarefa}")
+    @PatchMapping("/impedimento/{idTarefa}")
     public ResponseEntity<TarefaResponseDto> atualizarStatus(@PathVariable Integer idTarefa, @Valid @RequestBody AtualizarStatusRequestDto atualizarStatusRequestDto) {
         TarefaResponseDto response = atualizarImpedimentoTarefaUseCase.execute(idTarefa, atualizarStatusRequestDto);
         return ResponseEntity.status(200).body(response);

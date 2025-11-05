@@ -23,7 +23,7 @@ public class BuscarSprintsPorProjetoUseCase {
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto encontrado");
         List<SprintResponseDto> allResponse = new ArrayList<>();
         for (Sprint sprint : all) {
-            allResponse.add(sprintResponseMapper.toResponse(sprint, sprint.getIdSprint()));
+            allResponse.add(sprintResponseMapper.toResponse(sprint));
         }
         return allResponse;
     }

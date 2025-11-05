@@ -4,8 +4,9 @@ import com.humanconsulting.humancore_api.application.usecases.checkpoint.Sincron
 import com.humanconsulting.humancore_api.application.usecases.projeto.BuscarProjetoPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.*;
-import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioLoginResponseMapper;
-import com.humanconsulting.humancore_api.domain.notifiers.EmailNotifier;
+import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
+import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.mappers.EmailUpdateMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
@@ -13,9 +14,7 @@ import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.TarefaRepositoryAdapter;
-import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.UsuarioRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaTarefaRepository;
-import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaUsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,20 +24,22 @@ public class TarefaConfig {
     public AtualizarImpedimentoTarefaUseCase atualizarImpedimentoTarefaUseCase(
             TarefaRepository tarefaRepository,
             UsuarioRepository usuarioRepository,
-            EmailNotifier emailNotifier,
+            RabbitTemplateConfiguration rabbitMQ,
             BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase,
             BuscarSprintPorIdUseCase buscarSprintPorIdUseCase,
-            UsuarioLoginResponseMapper usuarioMapper,
-            TarefaResponseMapper tarefaResponseMapper
+            UsuarioResponseMapper usuarioMapper,
+            TarefaResponseMapper tarefaResponseMapper,
+            EmailUpdateMapper emailUpdateMapper
     ) {
         return new AtualizarImpedimentoTarefaUseCase(
                 tarefaRepository,
                 usuarioRepository,
-                emailNotifier,
+                rabbitMQ,
                 buscarProjetoPorIdUseCase,
                 buscarSprintPorIdUseCase,
                 usuarioMapper,
-                tarefaResponseMapper
+                tarefaResponseMapper,
+                emailUpdateMapper
         );
     }
 
@@ -72,14 +73,16 @@ public class TarefaConfig {
             SprintRepository sprintRepository,
             UsuarioRepository usuarioRepository,
             SalaNotifier salaNotifier,
-            TarefaResponseMapper tarefaResponseMapper
+            TarefaResponseMapper tarefaResponseMapper,
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase
     ) {
         return new CadastrarTarefaUseCase(
                 tarefaRepository,
                 sprintRepository,
                 usuarioRepository,
                 salaNotifier,
-                tarefaResponseMapper
+                tarefaResponseMapper,
+                sincronizarCheckpointsDaTarefaUseCase
         );
     }
 
@@ -106,6 +109,11 @@ public class TarefaConfig {
     @Bean
     public TarefaRepository tarefaRepository(JpaTarefaRepository jpaTarefaRepository) {
         return new TarefaRepositoryAdapter(jpaTarefaRepository);
+    }
+
+    @Bean
+    public EmailUpdateMapper emailUpdateMapper() {
+        return new EmailUpdateMapper();
     }
 }
 

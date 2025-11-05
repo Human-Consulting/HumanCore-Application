@@ -23,7 +23,7 @@ public class ListarProjetosUseCase {
         if (all.isEmpty()) throw new EntidadeSemRetornoException("Nenhum projeto registrado.");
         List<ProjetoResponseDto> allResponse = new ArrayList<>();
         for (Projeto projeto : all) {
-            allResponse.add(projetoResponseMapper.toResponse(projeto, projeto.getResponsavel().getIdUsuario(), projeto.getIdProjeto()));
+            allResponse.add(projetoResponseMapper.toResponse(projeto));
         }
         return allResponse;
     }

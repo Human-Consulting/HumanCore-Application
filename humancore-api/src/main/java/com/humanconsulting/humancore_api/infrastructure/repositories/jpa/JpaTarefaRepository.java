@@ -12,13 +12,10 @@ import java.util.List;
 
 @Repository
 public interface JpaTarefaRepository extends JpaRepository<TarefaEntity, Integer> {
-    @Query("SELECT t FROM TarefaEntity t WHERE t.sprint.projeto.idProjeto = :idProjeto AND t.sprint.idSprint = :idSprint")
+    @Query("SELECT t FROM TarefaEntity t WHERE t.sprint.projeto.idProjeto = :idProjeto AND t.sprint.idSprint = :idSprint ORDER BY t.dtFim ASC")
     List<TarefaEntity> findByProjetoAndSprint(@Param("idProjeto") Integer idProjeto, @Param("idSprint") Integer idSprint);
 
     List<TarefaEntity> findBySprint_IdSprint(Integer idSprint);
-
-//    @Query("SELECT COALESCE(AVG(t.progresso), 0) FROM TarefaEntity t WHERE t.sprint.idSprint = :idSprint")
-//    Double mediaProgressoSprint(@Param("idSprint") Integer idSprint);
 
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM TarefaEntity t WHERE t.comImpedimento = true AND t.sprint.idSprint = :idSprint")
     boolean existsImpedimentoBySprint(@Param("idSprint") Integer idSprint);

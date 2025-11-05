@@ -23,7 +23,6 @@ import java.util.List;
 public class SprintController {
 
     @Autowired private CadastrarSprintUseCase cadastrarSprintUseCase;
-    @Autowired private ListarSprintsUseCase listarSprintsUseCase;
     @Autowired private BuscarSprintPorIdUseCase buscarSprintPorIdUseCase;
     @Autowired private BuscarSprintsPorProjetoUseCase buscarSprintsPorProjetoUseCase;
     @Autowired private AtualizarSprintUseCase atualizarSprintUseCase;
@@ -42,18 +41,6 @@ public class SprintController {
     public ResponseEntity<SprintResponseDto> cadastrarSprint(@Valid @RequestBody SprintRequestDto sprintRequestDto) {
         SprintResponseDto response = cadastrarSprintUseCase.execute(sprintRequestDto);
         return ResponseEntity.status(201).body(response);
-    }
-
-    @Operation(
-            summary = "Listar todas as Sprints",
-            description = "Esse endpoint retorna todas as sprints cadastradas.",
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponse(responseCode = "200", description = "Lista de sprints retornada com sucesso")
-    @GetMapping
-    public ResponseEntity<List<SprintResponseDto>> listar() {
-        List<SprintResponseDto> response = listarSprintsUseCase.execute();
-        return ResponseEntity.status(200).body(response);
     }
 
     @Operation(

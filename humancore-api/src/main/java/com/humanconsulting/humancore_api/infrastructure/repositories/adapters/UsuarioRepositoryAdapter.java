@@ -3,10 +3,14 @@ package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.UsuarioEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.TarefaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaUsuarioRepository;
+import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,11 +56,45 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
-    public List<Usuario> findByFkEmpresa(Integer idEmpresa) {
-        return jpaUsuarioRepository.findByFkEmpresa(idEmpresa)
-                .stream()
-                .map(UsuarioMapper::toDomain)
-                .toList();
+    public PageResult<Usuario> findByFkEmpresa(Integer idEmpresa, int page, int size) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<UsuarioEntity> usuarioEntities = jpaUsuarioRepository.findByFkEmpresa(idEmpresa, pageable);
+
+        return new PageResultImpl<>(
+                usuarioEntities.getContent().stream().map(UsuarioMapper::toDomain).toList(),
+                usuarioEntities.getNumber(),
+                usuarioEntities.getSize(),
+                usuarioEntities.getTotalElements(),
+                usuarioEntities.getTotalPages()
+        );
+    }
+
+    @Override
+    public PageResult<Usuario> findByFkEmpresaAndPermissaoNot(Integer idEmpresa, int page, int size) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<UsuarioEntity> usuarioEntities = jpaUsuarioRepository.findByFkEmpresaAndPermissaoNot(idEmpresa, pageable);
+
+        return new PageResultImpl<>(
+                usuarioEntities.getContent().stream().map(UsuarioMapper::toDomain).toList(),
+                usuarioEntities.getNumber(),
+                usuarioEntities.getSize(),
+                usuarioEntities.getTotalElements(),
+                usuarioEntities.getTotalPages()
+        );
+    }
+
+    @Override
+    public PageResult<Usuario> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Page<UsuarioEntity> usuarioEntities = jpaUsuarioRepository.findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, pageable, nome);
+
+        return new PageResultImpl<>(
+                usuarioEntities.getContent().stream().map(UsuarioMapper::toDomain).toList(),
+                usuarioEntities.getNumber(),
+                usuarioEntities.getSize(),
+                usuarioEntities.getTotalElements(),
+                usuarioEntities.getTotalPages()
+        );
     }
 
     @Override

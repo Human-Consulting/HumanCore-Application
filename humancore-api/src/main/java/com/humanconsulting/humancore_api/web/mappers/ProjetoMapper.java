@@ -6,9 +6,13 @@ import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.entities.Area;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
+import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseLoginDto;
 import com.humanconsulting.humancore_api.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.DashboardProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.KpiProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseLoginDto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 
 import java.util.List;
 
@@ -36,7 +40,7 @@ public class ProjetoMapper {
         return projeto;
     }
 
-    public static ProjetoResponseDto toDto(Projeto projeto, double progresso, boolean comImpedimento) {
+    public static ProjetoResponseDto toDto(Projeto projeto, double progresso, boolean comImpedimento, UsuarioSprintResponseDto usuario) {
         return ProjetoResponseDto.builder()
                 .idProjeto(projeto.getIdProjeto())
                 .titulo(projeto.getTitulo())
@@ -44,8 +48,7 @@ public class ProjetoMapper {
                 .orcamento(projeto.getOrcamento())
                 .urlImagem(projeto.getUrlImagem())
                 .urlImagemEmpresa(projeto.getEmpresa().getUrlImagem())
-                .nomeResponsavel(projeto.getResponsavel().getNome())
-                .fkResponsavel(projeto.getResponsavel().getIdUsuario())
+                .responsavel(usuario)
                 .progresso(progresso)
                 .comImpedimento(comImpedimento)
                 .build();
@@ -61,6 +64,22 @@ public class ProjetoMapper {
                 .areas(areas)
                 .financeiroResponseDtos(financeiroResponseDtos)
                 .totalItens(projetos)
+                .build();
+    }
+
+    public static KpiProjetoResponseDto toKpiDto(List<ProjetoResponseDto> impedidos, List<ProjetoResponseDto> finalizadas, Integer totalAndamento) {
+        return KpiProjetoResponseDto.builder()
+                .impedidos(impedidos)
+                .finalizadas(finalizadas)
+                .totalAndamento(totalAndamento)
+                .build();
+    }
+
+    public static ProjetoResponseLoginDto toResponseLoginDto(Projeto projeto, EmpresaResponseLoginDto empresa) {
+        return ProjetoResponseLoginDto.builder()
+                .idProjeto(projeto.getIdProjeto())
+                .titulo(projeto.getTitulo())
+                .empresa(empresa)
                 .build();
     }
 }

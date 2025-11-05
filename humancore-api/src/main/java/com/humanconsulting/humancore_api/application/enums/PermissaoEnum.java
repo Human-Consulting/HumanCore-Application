@@ -76,6 +76,8 @@ public enum PermissaoEnum {
                     //USUARIO
                     "MODIFICAR_PROPRIO",
                     "MODIFICAR_GESTOR",
+                    "MODIFICAR_CONSULTOR",
+                    "MODIFICAR_CONSULTOR_DIRETOR",
                     "MODIFICAR_FUNC",
                     "EDITAR_USUARIOS_EMPRESA",
                     "EXCLUIR_USUARIOS_EMPRESA",
@@ -95,8 +97,9 @@ public enum PermissaoEnum {
                     //TAREFA
                     "ADICIONAR_TAREFA",
                     "MODIFICAR_TAREFA",
-                    "EXCLUIR_TAREFA"
+                    "EXCLUIR_TAREFA",
                     //INVESTIMENTO
+                    "ADICIONAR_INVESTIMENTO"
             )
     ),
 
@@ -123,8 +126,9 @@ public enum PermissaoEnum {
                     //TAREFA
                     "ADICIONAR_TAREFA",
                     "MODIFICAR_TAREFA",
-                    "EXCLUIR_TAREFA"
+                    "EXCLUIR_TAREFA",
                     //INVESTIMENTO
+                    "ADICIONAR_INVESTIMENTO"
             )
     );
 
