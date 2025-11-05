@@ -50,7 +50,7 @@ public class TarefaMapper {
                 .progresso(progresso)
                 .comImpedimento(tarefa.getComImpedimento())
                 .comentario(tarefa.getComentario())
-                .responsavel(UsuarioMapper.toUsuarioSprintDto(tarefa.getResponsavel()))
+                .responsavel(tarefa.getResponsavel() != null ? UsuarioMapper.toUsuarioSprintDto(tarefa.getResponsavel()) : null)
                 .checkpoints(checkpoints)
                 .build();
     }
