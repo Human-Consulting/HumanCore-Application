@@ -1,0 +1,52 @@
+package com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa;
+
+import com.humanconsulting.humancore_api.web.dtos.request.CheckpointRequestDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class AtualizarGeralRequestDto {
+    @Schema(description = "Título da tarefa", example = "Login")
+    @NotNull
+    private String titulo;
+
+    @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
+    private String descricao;
+
+    @Schema(description = "Data de início da tarefa", example = "2025-05-01")
+    @NotNull
+    private LocalDate dtInicio;
+
+    @Schema(description = "Data de término da tarefa", example = "2025-05-10")
+    @NotNull
+    private LocalDate dtFim;
+
+    @Schema(description = "Indica se há impedimentos na TarefaEntity", example = "false")
+    @NotNull
+    private Boolean comImpedimento;
+
+    @Schema(description = "Comentário da tarefa", example = "Impedimento em relação a...")
+    private String comentario;
+
+    @Schema(description = "Usuário responsável pela tarefa", example = "3")
+    private Integer fkResponsavel;
+
+    @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
+    @NotNull
+    private Integer idEditor;
+
+    @Schema(description = "Permissão do editor", example = "CONSULTOR")
+    @NotNull
+    private String permissaoEditor;
+
+    @Schema(description = "Lista de checkpoints", example = "[{descricao: 'desenvolver código'}, {descricao: 'validar com techlead'}]")
+    private List<CheckpointRequestDto> checkpoints;
+}
