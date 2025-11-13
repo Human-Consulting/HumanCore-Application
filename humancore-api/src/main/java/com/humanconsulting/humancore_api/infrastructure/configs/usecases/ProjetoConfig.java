@@ -4,12 +4,11 @@ import com.humanconsulting.humancore_api.application.usecases.projeto.*;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.*;
 import com.humanconsulting.humancore_api.application.usecases.projeto.mappers.ProjetoResponseMapper;
-import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.DashboardEmpresaRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.DashboardProjetoRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.ProjetoRepositoryAdapter;
-import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaDashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaDashboardProjetoRepository;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaProjetoRepository;
+import com.humanconsulting.humancore_api.web.mappers.ProjetoMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,8 +35,18 @@ public class ProjetoConfig {
     }
 
     @Bean
-    public BuscarProjetosPorEmpresaUseCase buscarProjetosPorEmpresaUseCase(ProjetoRepository projetoRepository, ProjetoResponseMapper projetoResponseMapper) {
-        return new BuscarProjetosPorEmpresaUseCase(projetoRepository, projetoResponseMapper);
+    public ListarProjetosPorEmpresaUseCase buscarProjetosPorEmpresaUseCase(ProjetoRepository projetoRepository, ProjetoResponseMapper projetoResponseMapper) {
+        return new ListarProjetosPorEmpresaUseCase(projetoRepository, projetoResponseMapper);
+    }
+
+    @Bean
+    public ListarProjetosMenuRapidoUseCase buscarProjetosMenuRapidoUseCase(ProjetoRepository projetoRepository, ProjetoResponseMapper projetoResponseMapper) {
+        return new ListarProjetosMenuRapidoUseCase(projetoRepository, projetoResponseMapper);
+    }
+
+    @Bean
+    public ListarProjetosKpisUseCase buscarProjetosKpisUseCase(ProjetoRepository projetoRepository, ProjetoResponseMapper projetoResponseMapper, ProjetoMapper projetoMapper) {
+        return new ListarProjetosKpisUseCase(projetoRepository, projetoResponseMapper, projetoMapper);
     }
 
     @Bean
@@ -92,14 +101,17 @@ public class ProjetoConfig {
     @Bean
     public ProjetoResponseMapper projetoResponseMapper(
             TarefaRepository tarefaRepository,
-            CheckpointRepository checkpointRepository,
-            SprintRepository sprintRepository
+            CheckpointRepository checkpointRepository
     ) {
         return new ProjetoResponseMapper(
                 tarefaRepository,
-                checkpointRepository,
-                sprintRepository
+                checkpointRepository
         );
+    }
+
+    @Bean
+    public ProjetoMapper projetoMapper() {
+        return new ProjetoMapper();
     }
 
     @Bean

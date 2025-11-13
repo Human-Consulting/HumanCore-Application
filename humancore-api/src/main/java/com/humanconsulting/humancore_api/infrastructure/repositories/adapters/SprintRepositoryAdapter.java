@@ -3,8 +3,8 @@ package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
-import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.SprintEntity;
+import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.SprintMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaSprintRepository;
 
@@ -30,6 +30,7 @@ public class SprintRepositoryAdapter implements SprintRepository {
         entity.setDescricao(sprint.getDescricao());
         entity.setDtInicio(sprint.getDtInicio());
         entity.setDtFim(sprint.getDtFim());
+        entity.setProjeto(ProjetoMapper.toEntity(sprint.getProjeto()));
 
         SprintEntity saved = jpaSprintRepository.save(entity);
         return SprintMapper.toDomain(saved);

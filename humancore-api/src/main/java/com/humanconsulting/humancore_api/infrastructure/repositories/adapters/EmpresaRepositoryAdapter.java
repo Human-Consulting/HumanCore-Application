@@ -69,6 +69,26 @@ public class EmpresaRepositoryAdapter implements EmpresaRepository {
     }
 
     @Override
+    public PageResult<Empresa> findAllByNomeContainingIgnoreCase(int page, int size, String nome) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<EmpresaEntity> empresaEntities = jpaEmpresaRepository.findAllByNomeContainingIgnoreCase(pageable, nome);
+
+        return new PageResultImpl<>(
+                empresaEntities.getContent().stream().map(EmpresaMapper::toDomain).toList(),
+                empresaEntities.getNumber(),
+                empresaEntities.getSize(),
+                empresaEntities.getTotalElements(),
+                empresaEntities.getTotalPages()
+        );
+    }
+
+    @Override
+    public List<Empresa> findAll() {
+        List<EmpresaEntity> empresaEntities = jpaEmpresaRepository.findAll();
+        return empresaEntities.stream().map(EmpresaMapper::toDomain).toList();
+    }
+
+    @Override
     public void deleteById(Integer id) {
         jpaEmpresaRepository.deleteById(id);
     }

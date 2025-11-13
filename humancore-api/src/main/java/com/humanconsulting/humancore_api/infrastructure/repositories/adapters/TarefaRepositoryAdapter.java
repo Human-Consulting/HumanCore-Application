@@ -1,13 +1,13 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
+import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
-import com.humanconsulting.humancore_api.infrastructure.entities.SalaEntity;
-import com.humanconsulting.humancore_api.infrastructure.entities.SprintEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.TarefaEntity;
-import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;
+import com.humanconsulting.humancore_api.infrastructure.mappers.SprintMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.TarefaMapper;
+import com.humanconsulting.humancore_api.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaTarefaRepository;
 
 import java.util.List;
@@ -34,6 +34,8 @@ public class TarefaRepositoryAdapter implements TarefaRepository {
         entity.setDtFim(tarefa.getDtFim());
         entity.setComentario(tarefa.getComentario());
         entity.setComImpedimento(tarefa.getComImpedimento());
+        entity.setResponsavel(UsuarioMapper.toEntity(tarefa.getResponsavel()));
+        entity.setSprint(SprintMapper.toEntity(tarefa.getSprint()));
 
         TarefaEntity saved = jpaTarefaRepository.save(entity);
         return TarefaMapper.toDomain(saved);

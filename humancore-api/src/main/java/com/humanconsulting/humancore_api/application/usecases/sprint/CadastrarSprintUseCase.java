@@ -27,7 +27,7 @@ public class CadastrarSprintUseCase {
             throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
         }
         Sprint sprint = sprintRepository.save(SprintMapper.toEntity(sprintRequestDto, projetoRepository.findById(sprintRequestDto.getFkProjeto()).get()));
-        return sprintResponseMapper.toResponse(sprint, sprint.getIdSprint());
+        return sprintResponseMapper.toResponse(sprint);
     }
 }
 

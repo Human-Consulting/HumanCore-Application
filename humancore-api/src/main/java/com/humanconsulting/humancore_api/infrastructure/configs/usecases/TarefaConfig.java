@@ -4,7 +4,7 @@ import com.humanconsulting.humancore_api.application.usecases.checkpoint.Sincron
 import com.humanconsulting.humancore_api.application.usecases.projeto.BuscarProjetoPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.*;
-import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioLoginResponseMapper;
+import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmailUpdateMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
@@ -27,7 +27,7 @@ public class TarefaConfig {
             RabbitTemplateConfiguration rabbitMQ,
             BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase,
             BuscarSprintPorIdUseCase buscarSprintPorIdUseCase,
-            UsuarioLoginResponseMapper usuarioMapper,
+            UsuarioResponseMapper usuarioMapper,
             TarefaResponseMapper tarefaResponseMapper,
             EmailUpdateMapper emailUpdateMapper
     ) {
@@ -73,14 +73,16 @@ public class TarefaConfig {
             SprintRepository sprintRepository,
             UsuarioRepository usuarioRepository,
             SalaNotifier salaNotifier,
-            TarefaResponseMapper tarefaResponseMapper
+            TarefaResponseMapper tarefaResponseMapper,
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase
     ) {
         return new CadastrarTarefaUseCase(
                 tarefaRepository,
                 sprintRepository,
                 usuarioRepository,
                 salaNotifier,
-                tarefaResponseMapper
+                tarefaResponseMapper,
+                sincronizarCheckpointsDaTarefaUseCase
         );
     }
 
@@ -107,6 +109,11 @@ public class TarefaConfig {
     @Bean
     public TarefaRepository tarefaRepository(JpaTarefaRepository jpaTarefaRepository) {
         return new TarefaRepositoryAdapter(jpaTarefaRepository);
+    }
+
+    @Bean
+    public EmailUpdateMapper emailUpdateMapper() {
+        return new EmailUpdateMapper();
     }
 }
 

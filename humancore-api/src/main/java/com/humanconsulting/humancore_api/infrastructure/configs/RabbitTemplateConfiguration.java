@@ -17,11 +17,12 @@ public class RabbitTemplateConfiguration {
     @Value("${broker.exchange.name}")
     private String exchangeName;
 
+    // 5️⃣ RabbitTemplate configurado com conversor JSON
     @Bean
     public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setExchange(exchangeName);
-        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
-        return rabbitTemplate;
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setExchange(exchangeName);
+        template.setMessageConverter(new Jackson2JsonMessageConverter());
+        return template;
     }
 }

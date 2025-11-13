@@ -16,7 +16,7 @@ public class ListarFinanceiroPorProjetoUseCase {
     }
 
     public List<InvestimentoResponseDto> execute(Integer idProjeto) {
-        List<Investimento> financeiros = dashboardProjetoRepository.listarFinanceiroPorEmpresa(idProjeto);
+        List<Investimento> financeiros = dashboardProjetoRepository.listarFinanceiroPorProjeto(idProjeto);
         List<InvestimentoResponseDto> financeiroResponseDtos = new ArrayList<>();
         for (Investimento financeiro : financeiros) {
             financeiroResponseDtos.add(InvestimentoMapper.toDto(financeiro));

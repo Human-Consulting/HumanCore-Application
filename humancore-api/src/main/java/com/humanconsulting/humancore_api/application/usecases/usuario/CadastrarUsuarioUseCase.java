@@ -5,6 +5,8 @@ import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.exception.RabbitPublishException;
+import com.humanconsulting.humancore_api.infrastructure.exception.RabbitUnavailableException;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmailCadastroMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
@@ -14,8 +16,12 @@ import com.humanconsulting.humancore_api.web.dtos.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.email.EmailCadastroResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
+import jakarta.transaction.Transactional;
+import org.springframework.amqp.AmqpConnectException;
+import org.springframework.amqp.AmqpException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Transactional
 public class CadastrarUsuarioUseCase {
     private final UsuarioRepository usuarioRepository;
     private final EmpresaRepository empresaRepository;
@@ -47,7 +53,6 @@ public class CadastrarUsuarioUseCase {
         if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isEmpty()) {
             Usuario usuario = UsuarioMapper.toEntity(novoUsuario);
             usuario.setCores("#606080|#8d7dca|#4e5e8c|true");
-            System.out.println("fkEmpresa: " + novoUsuario.getFkEmpresa());
             usuario.setEmpresa(
                     empresaRepository.findById(novoUsuario.getFkEmpresa())
                             .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"))
@@ -56,9 +61,15 @@ public class CadastrarUsuarioUseCase {
             String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
             try {
                 EmailCadastroResponseDto emailCadastroResponseDto = emailCadastroMapper.toEmailCadastroResponseDto(usuario);
-                rabbitMQ.rabbitTemplate().convertAndSend("email_cadastro_queue", emailCadastroResponseDto);
-            } catch (Exception exception) {
-                throw new RuntimeException("Não foi possível cadastrar o usuário.");
+                rabbitMQ.rabbitTemplate().convertAndSend(
+                        "cadastro",
+                        emailCadastroResponseDto
+                );
+
+            } catch (AmqpConnectException e) {
+                throw new RabbitUnavailableException("O email está na fila de envio!");
+            } catch (AmqpException e) {
+                throw new RabbitPublishException("Falha ao enviar email");
             }
             usuario.setSenha(senhaCriptografada);
             Usuario usuarioCadastrado = usuarioRepository.save(usuario);

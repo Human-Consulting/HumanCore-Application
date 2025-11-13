@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +18,6 @@ public class TarefaRequestDto {
     private String titulo;
 
     @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
-    @NotNull
     private String descricao;
 
     @Schema(description = "Data de início da tarefa", example = "2025-05-01")
@@ -33,8 +33,10 @@ public class TarefaRequestDto {
     private Integer fkSprint;
 
     @Schema(description = "ID do responsável pela tarefa", example = "150")
-    @NotNull
     private Integer fkResponsavel;
+
+    @Schema(description = "Lista de checkpoints", example = "[{descricao: 'desenvolver código'}, {descricao: 'validar com techlead'}]")
+    private List<CheckpointRequestDto> checkpoints;
 
     @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")
     @NotNull

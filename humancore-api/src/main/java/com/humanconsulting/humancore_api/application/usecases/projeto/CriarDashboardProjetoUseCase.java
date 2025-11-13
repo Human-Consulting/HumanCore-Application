@@ -33,11 +33,19 @@ public class CriarDashboardProjetoUseCase {
     public DashboardProjetoResponseDto execute(Projeto projeto) {
         Optional<Usuario> usuario = usuarioRepository.findById(projeto.getResponsavel().getIdUsuario());
         String nomeDiretor = usuario.get().getNome();
+        System.out.println("nomeDiretor: " + nomeDiretor);
         List<Area> areas = listarTarefasPorAreaUseCase.execute(projeto.getIdProjeto());
+        System.out.println("Número de áreas: " + areas.size());
+
         Double orcamento = dashboardProjetoRepository.orcamentoTotal(projeto.getIdProjeto());
+        System.out.println("Orçamento: " + orcamento);
+
         Integer projetos = dashboardProjetoRepository.totalSprints(projeto.getIdProjeto());
+
         Boolean comImpedimento = dashboardProjetoRepository.projetoComImpedimento(projeto.getIdProjeto());
+
         List<InvestimentoResponseDto> allResponse = listarFinanceiroPorProjetoUseCase.execute(projeto.getIdProjeto());
+
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_Sprint_Projeto_IdProjeto(projeto.getIdProjeto());
         Double progresso = ProgressoCalculator.execute(checkpoints);
         return ProjetoMapper.toDashboard(projeto, nomeDiretor, progresso, areas, orcamento, projetos, comImpedimento, allResponse);

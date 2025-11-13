@@ -15,7 +15,7 @@ public interface DashboardProjetoRepository {
 
     boolean projetoComImpedimento(Integer idProjeto);
 
-    List<Investimento> listarFinanceiroPorEmpresa(Integer idProjeto);
+    List<Investimento> listarFinanceiroPorProjeto(Integer idProjeto);
 
 }
 

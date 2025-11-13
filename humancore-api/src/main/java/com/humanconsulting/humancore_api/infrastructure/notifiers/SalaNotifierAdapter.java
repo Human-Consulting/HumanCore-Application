@@ -23,10 +23,9 @@ public class SalaNotifierAdapter implements SalaNotifier {
 
     @Override
     public void adicionarUsuarioEmSalaProjeto(Tarefa tarefa, Projeto projeto, Usuario tarefaResponsavel) {
-        if (projeto == null || tarefaResponsavel == null) throw new RuntimeException("Projeto e/ou TarefaResponsavel não encontrado.");
         Sala sala = salaRepository.findByProjeto(projeto);
         if (sala == null) System.out.println("Sala não encontrada.");
-        if (!sala.getUsuarios().contains(tarefaResponsavel)) {
+        else if (!sala.getUsuarios().contains(tarefaResponsavel)) {
             sala.getUsuarios().add(tarefaResponsavel);
             salaRepository.save(sala);
         }

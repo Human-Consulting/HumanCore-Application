@@ -2,11 +2,17 @@ package com.humanconsulting.humancore_api.web.mappers;
 
 import com.humanconsulting.humancore_api.domain.entities.Area;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.EmpresaRequestDto;
+import com.humanconsulting.humancore_api.web.dtos.response.checkpoint.CheckpointResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.DashboardEmpresaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseLoginDto;
+import com.humanconsulting.humancore_api.web.dtos.response.empresa.KpiEmpresaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.investimento.InvestimentoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseLoginDto;
+import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
 
 import java.util.List;
 
@@ -51,6 +57,21 @@ public class EmpresaMapper {
                 .totalItens(projetos)
                 .areas(areas)
                 .financeiroResponseDtos(financeiroResponseDtos)
+                .build();
+    }
+
+    public static KpiEmpresaResponseDto toKpiDto(List<EmpresaResponseDto> impedidos, List<EmpresaResponseDto> finalizadas, Integer totalAndamento) {
+        return KpiEmpresaResponseDto.builder()
+                .impedidos(impedidos)
+                .finalizadas(finalizadas)
+                .totalAndamento(totalAndamento)
+                .build();
+    }
+
+    public static EmpresaResponseLoginDto toResponseLoginDto(Empresa empresa) {
+        return EmpresaResponseLoginDto.builder()
+                .idEmpresa(empresa.getIdEmpresa())
+                .nome(empresa.getNome())
                 .build();
     }
 }

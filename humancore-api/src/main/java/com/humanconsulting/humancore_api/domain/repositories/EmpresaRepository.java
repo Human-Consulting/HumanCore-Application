@@ -13,5 +13,8 @@ public interface EmpresaRepository {
     Empresa save(Empresa empresa);
     Optional<Empresa> findById(Integer id);
     PageResult<Empresa> findAll(int page, int size);
+    List<Empresa> findAll();
     void deleteById(Integer id);
+
+    PageResult<Empresa> findAllByNomeContainingIgnoreCase(int page, int size, String nome);
 }

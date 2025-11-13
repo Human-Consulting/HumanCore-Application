@@ -4,12 +4,14 @@ import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaE
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
-import com.humanconsulting.humancore_api.infrastructure.entities.EmpresaEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
+import com.humanconsulting.humancore_api.infrastructure.mappers.EmpresaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.ProjetoMapper;
+import com.humanconsulting.humancore_api.infrastructure.mappers.UsuarioMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaProjetoRepository;
 import com.humanconsulting.humancore_api.infrastructure.utils.PageResultImpl;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -22,7 +24,6 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
         this.jpaProjetoRepository = jpaProjetoRepository;
     }
 
-
     @Override
     public boolean existsByEmpresa_IdEmpresaAndDescricao(Integer idEmpresa, String descricao) {
         return jpaProjetoRepository.existsByEmpresa_IdEmpresaAndDescricao(idEmpresa, descricao);
@@ -30,7 +31,7 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
 
     @Override
     public PageResult<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa, int page, int size) {
-        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa, pageable);
 
         return new PageResultImpl<>(
@@ -40,6 +41,26 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
                 projetoEntities.getTotalElements(),
                 projetoEntities.getTotalPages()
         );
+    }
+
+    @Override
+    public PageResult<Projeto> findAllByEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, pageable, nome);
+
+        return new PageResultImpl<>(
+                projetoEntities.getContent().stream().map(ProjetoMapper::toDomain).toList(),
+                projetoEntities.getNumber(),
+                projetoEntities.getSize(),
+                projetoEntities.getTotalElements(),
+                projetoEntities.getTotalPages()
+        );
+    }
+
+    @Override
+    public List<Projeto> findAllByEmpresa_IdEmpresa(Integer idEmpresa) {
+        List<ProjetoEntity> projetoEntities = jpaProjetoRepository.findAllByEmpresa_IdEmpresa(idEmpresa);
+        return projetoEntities.stream().map(ProjetoMapper::toDomain).toList();
     }
 
     @Override
@@ -59,6 +80,8 @@ public class ProjetoRepositoryAdapter implements ProjetoRepository {
         entity.setDescricao(projeto.getDescricao());
         entity.setOrcamento(projeto.getOrcamento());
         entity.setUrlImagem(projeto.getUrlImagem());
+        entity.setResponsavel(UsuarioMapper.toEntity(projeto.getResponsavel()));
+        entity.setEmpresa(EmpresaMapper.toEntity(projeto.getEmpresa()));
 
         ProjetoEntity saved = jpaProjetoRepository.save(entity);
         return ProjetoMapper.toDomain(saved);

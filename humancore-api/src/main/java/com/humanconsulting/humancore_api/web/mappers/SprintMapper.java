@@ -4,8 +4,11 @@ import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.sprint.SprintAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.SprintRequestDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseLoginDto;
 import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseLoginDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class SprintMapper {
         return sprint;
     }
 
-    public static SprintResponseDto toDto(Sprint sprint, double progresso, boolean comImpedimento, List<TarefaResponseDto> entregas) {
+    public static SprintResponseDto toDto(Sprint sprint, double progresso, boolean comImpedimento, List<TarefaResponseDto> tarefas) {
         return SprintResponseDto.builder()
                 .idSprint(sprint.getIdSprint())
                 .titulo(sprint.getTitulo())
@@ -40,8 +43,7 @@ public class SprintMapper {
                 .dtFim(sprint.getDtFim())
                 .progresso(progresso)
                 .comImpedimento(comImpedimento)
-                .projeto(sprint.getProjeto())
-                .tarefas(entregas)
+                .tarefas(tarefas)
                 .build();
     }
 
@@ -52,7 +54,14 @@ public class SprintMapper {
         sprint.setDescricao(dto.getDescricao());
         sprint.setDtInicio(dto.getDtInicio());
         sprint.setDtFim(dto.getDtFim());
-        sprint.setProjeto(dto.getProjeto());
         return sprint;
+    }
+
+    public static SprintResponseLoginDto toResponseLoginDto(Sprint sprint, ProjetoResponseLoginDto projeto) {
+        return SprintResponseLoginDto.builder()
+                .idSprint(sprint.getIdSprint())
+                .titulo(sprint.getTitulo())
+                .projeto(projeto)
+                .build();
     }
 }

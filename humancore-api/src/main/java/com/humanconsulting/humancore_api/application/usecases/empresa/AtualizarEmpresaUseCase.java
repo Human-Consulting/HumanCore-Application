@@ -6,7 +6,6 @@ import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaE
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
-import com.humanconsulting.humancore_api.infrastructure.entities.EmpresaEntity;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.EmpresaMapper;

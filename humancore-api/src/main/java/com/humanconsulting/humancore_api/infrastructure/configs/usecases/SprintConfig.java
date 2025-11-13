@@ -2,10 +2,12 @@ package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.sprint.*;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
+import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.domain.repositories.*;
 import com.humanconsulting.humancore_api.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.SprintRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaSprintRepository;
+import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,12 +30,14 @@ public class SprintConfig {
     public BuscarSprintPorIdUseCase buscarSprintPorIdUseCase(
             SprintRepository sprintRepository,
             TarefaRepository tarefaRepository,
-            CheckpointRepository checkpointRepository
+            CheckpointRepository checkpointRepository,
+            SprintResponseMapper sprintResponseMapper
     ) {
         return new BuscarSprintPorIdUseCase(
                 sprintRepository,
                 tarefaRepository,
-                checkpointRepository
+                checkpointRepository,
+                sprintResponseMapper
         );
     }
 
@@ -57,27 +61,32 @@ public class SprintConfig {
     }
 
     @Bean
-    public ListarSprintsUseCase listarSprintsUseCase(
-            SprintRepository sprintRepository,
-            TarefaRepository tarefaRepository,
-            CheckpointRepository checkpointRepository
-    ) {
-        return new ListarSprintsUseCase(
-                sprintRepository,
-                tarefaRepository,
-                checkpointRepository
-        );
-    }
-
-    @Bean
     public SprintResponseMapper sprintResponseMapper(
             TarefaRepository tarefaRepository,
             CheckpointRepository checkpointRepository,
-            TarefaResponseMapper tarefaResponseMapper
+            TarefaResponseMapper tarefaResponseMapper,
+            UsuarioMapper usuarioMapper
     ) {
         return new SprintResponseMapper(
                 tarefaRepository,
                 checkpointRepository,
+                tarefaResponseMapper,
+                usuarioMapper
+        );
+    }
+
+    @Bean
+    public UsuarioMapper usuarioMapper() {
+        return new UsuarioMapper();
+    }
+
+    @Bean
+    public UsuarioResponseMapper usuarioResponseMapper(
+            UsuarioRepository usuarioRepository,
+            TarefaResponseMapper tarefaResponseMapper
+    ) {
+        return new UsuarioResponseMapper(
+                usuarioRepository,
                 tarefaResponseMapper
         );
     }

@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.web.dtos.response.sprint;
 
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -35,9 +36,6 @@ public class SprintResponseDto {
 
     @Schema(description = "Indica se há impedimentos na SprintEntity", example = "true")
     private Boolean comImpedimento;
-
-    @Schema(description = "ProjetoEntity associado à SprintEntity", example = "101")
-    private Projeto projeto;
 
     @Schema(description = "Lista de tarefas associadas à SprintEntity", implementation = TarefaResponseDto.class)
     private List<TarefaResponseDto> tarefas;
