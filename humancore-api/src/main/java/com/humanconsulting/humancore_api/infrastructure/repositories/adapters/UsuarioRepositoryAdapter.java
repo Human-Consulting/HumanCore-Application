@@ -1,8 +1,8 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
-import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
+import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.UsuarioEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.TarefaMapper;
@@ -121,7 +121,9 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
-    public Optional<String> findDiretorByEmpresaId(Integer idEmpresa) {
-        return jpaUsuarioRepository.findDiretorByEmpresaId(idEmpresa);
+    public Usuario findDiretorByEmpresaId(Integer idEmpresa) {
+        return jpaUsuarioRepository.findDiretorByEmpresaId(idEmpresa)
+                .map(UsuarioMapper::toDomain)
+                .orElse(null);
     }
 }

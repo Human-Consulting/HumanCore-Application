@@ -1,10 +1,10 @@
 package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.sprint.*;
+import com.humanconsulting.humancore_api.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.domain.repositories.*;
-import com.humanconsulting.humancore_api.application.usecases.sprint.mappers.SprintResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.SprintRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaSprintRepository;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;

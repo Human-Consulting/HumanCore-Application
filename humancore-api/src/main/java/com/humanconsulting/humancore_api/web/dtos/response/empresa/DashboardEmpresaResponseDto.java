@@ -1,7 +1,9 @@
 package com.humanconsulting.humancore_api.web.dtos.response.empresa;
 
 import com.humanconsulting.humancore_api.domain.entities.Area;
+import com.humanconsulting.humancore_api.domain.entities.TarefaUsuario;
 import com.humanconsulting.humancore_api.web.dtos.response.investimento.InvestimentoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -16,8 +18,8 @@ public class DashboardEmpresaResponseDto {
     @Schema(description = "ID da EmpresaEntity", example = "1")
     private Integer idEmpresa;
 
-    @Schema(description = "Nome completo do Responsável pela EmpresaEntity", example = "Carlos Silva")
-    private String nomeResponsavel;
+    @Schema(description = "Responsável pela EmpresaEntity", example = "Carlos Silva")
+    private UsuarioSprintResponseDto responsavel;
 
     @Schema(description = "Indica se a empresa possui algum projeto com impedimentos", example = "false")
     private boolean comImpedimento;
@@ -30,6 +32,9 @@ public class DashboardEmpresaResponseDto {
 
     @Schema(description = "Áreas associadas à empresa", example = "[\"TI\", \"InvestimentoEntity\"]")
     private List<Area> areas;
+
+    @Schema(description = "Lista de usuários associadas à empresa com nome e quantidade de tarefas", example = "[\"TI\", \"InvestimentoEntity\"]")
+    private List<TarefaUsuario> usuarios;
 
     @Schema(description = "Lista de dados financeiros da empresa", implementation = InvestimentoResponseDto.class)
     private List<InvestimentoResponseDto> financeiroResponseDtos;

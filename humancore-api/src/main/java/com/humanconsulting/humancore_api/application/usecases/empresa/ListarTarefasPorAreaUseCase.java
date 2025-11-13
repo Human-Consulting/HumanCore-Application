@@ -1,7 +1,6 @@
 package com.humanconsulting.humancore_api.application.usecases.empresa;
 
 import com.humanconsulting.humancore_api.domain.entities.Area;
-import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.repositories.DashboardEmpresaRepository;
 
 import java.util.List;

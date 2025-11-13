@@ -1,9 +1,9 @@
 package com.humanconsulting.humancore_api.web.dtos.token;
 
+import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.dtos.request.LoginRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
-import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
 
 

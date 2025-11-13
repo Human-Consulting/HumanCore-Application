@@ -11,7 +11,6 @@ import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
 import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
-import com.humanconsulting.humancore_api.web.dtos.atualizar.sala.SalaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.SalaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.sala.SalaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.SalaMapper;

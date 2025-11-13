@@ -1,7 +1,6 @@
 package com.humanconsulting.humancore_api.web.dtos.response.projeto;
 
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseLoginDto;
-import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseLoginDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

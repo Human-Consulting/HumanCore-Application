@@ -4,13 +4,11 @@ import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.Tar
 import com.humanconsulting.humancore_api.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
-import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.SprintMapper;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
 

@@ -31,7 +31,7 @@ public interface UsuarioRepository {
 
     List<Tarefa> findTarefasVinculadas(Integer id);
 
-    Optional<String> findDiretorByEmpresaId(Integer idEmpresa);
+    Usuario findDiretorByEmpresaId(Integer idEmpresa);
 
     PageResult<Usuario> findByFkEmpresaAndPermissaoNot(Integer idEmpresa, int page, int size);
 }

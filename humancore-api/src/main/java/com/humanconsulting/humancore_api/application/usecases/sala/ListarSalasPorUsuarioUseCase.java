@@ -1,15 +1,17 @@
 package com.humanconsulting.humancore_api.application.usecases.sala;
 
 import com.humanconsulting.humancore_api.domain.entities.Sala;
-import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
-import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
 import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoRepository;
+import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
+import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
+import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatUsuarioDto;
-import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import jakarta.transaction.Transactional;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +42,9 @@ public class ListarSalasPorUsuarioUseCase {
                     .stream()
                     .map(m -> new ChatMensagemUnificadaDto(
                             m.getIdMensagem(),
+                            m.getSala().getIdSala(),
                             m.getUsuario().getIdUsuario(),
+                            m.getUsuario().getNome(),
                             m.getConteudo(),
                             m.getHorario(),
                             false
@@ -50,6 +54,8 @@ public class ListarSalasPorUsuarioUseCase {
                     .stream()
                     .map(m -> new ChatMensagemUnificadaDto(
                             m.getIdMensagemInfo(),
+                            m.getSala().getIdSala(),
+                            null,
                             null,
                             m.getConteudo(),
                             m.getHorario(),

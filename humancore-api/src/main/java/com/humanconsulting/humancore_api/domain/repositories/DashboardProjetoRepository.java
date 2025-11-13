@@ -7,7 +7,7 @@ import java.util.List;
 public interface DashboardProjetoRepository {
     List<Object[]> buscarTarefasPorArea(Integer idProjeto);
 
-//    Double mediaProgresso(@Param("idProjeto") Integer idProjeto);
+    List<Object[]> buscarTarefasPorProjetoUsuario(Integer idProjeto);
 
     Double orcamentoTotal(Integer idProjeto);
 

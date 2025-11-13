@@ -1,24 +1,33 @@
 package com.humanconsulting.humancore_api.infrastructure.notifiers;
 
+import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
 import com.humanconsulting.humancore_api.domain.entities.*;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
 import com.humanconsulting.humancore_api.web.dtos.request.MensagemInfoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnificadaDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class SalaNotifierAdapter implements SalaNotifier {
     private final SalaRepository salaRepository;
     private final CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase;
+    private final RestTemplate restTemplate;
+
+    @Value("${websocket.service.url}")
+    private String websocketServiceUrl;
 
     public SalaNotifierAdapter(
         SalaRepository salaRepository,
-        CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase
+        CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase,
+        RestTemplate restTemplate
     ) {
         this.salaRepository = salaRepository;
         this.cadastrarMensagemInfoUseCase = cadastrarMensagemInfoUseCase;
+        this.restTemplate = new RestTemplate();
     }
 
     @Override
@@ -150,5 +159,13 @@ public class SalaNotifierAdapter implements SalaNotifier {
             }
         }
         return listaMensagens;
+    }
+
+    public void enviarMensagem(ChatMensagemUnificadaDto mensagem) {
+        try {
+            restTemplate.postForEntity(websocketServiceUrl, mensagem, Void.class);
+        } catch (Exception e) {
+            System.err.println("Erro ao enviar mensagem pro serviço WebSocket: " + e.getMessage());
+        }
     }
 }

@@ -1,12 +1,11 @@
 package com.humanconsulting.humancore_api.web.mappers;
 
-import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarDto;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
-import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
@@ -93,6 +92,7 @@ public class UsuarioMapper {
     }
 
     public static UsuarioSprintResponseDto toUsuarioSprintDto(Usuario usuario) {
+        if (usuario == null) return null;
         return UsuarioSprintResponseDto.builder()
                 .idUsuario(usuario.getIdUsuario())
                 .nome(usuario.getNome())

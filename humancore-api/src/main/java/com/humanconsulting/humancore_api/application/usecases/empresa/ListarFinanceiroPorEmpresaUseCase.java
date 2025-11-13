@@ -5,8 +5,8 @@ import com.humanconsulting.humancore_api.domain.repositories.DashboardEmpresaRep
 import com.humanconsulting.humancore_api.web.dtos.response.investimento.InvestimentoResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.InvestimentoMapper;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListarFinanceiroPorEmpresaUseCase {
     private final DashboardEmpresaRepository dashRepository;

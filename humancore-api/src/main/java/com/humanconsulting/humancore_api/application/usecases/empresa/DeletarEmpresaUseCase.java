@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaE
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
+
 import java.util.Optional;
 
 public class DeletarEmpresaUseCase {

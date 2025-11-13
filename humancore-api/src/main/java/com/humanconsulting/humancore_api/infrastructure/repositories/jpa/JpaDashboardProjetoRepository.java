@@ -2,7 +2,6 @@ package com.humanconsulting.humancore_api.infrastructure.repositories.jpa;
 
 import com.humanconsulting.humancore_api.infrastructure.entities.InvestimentoEntity;
 import com.humanconsulting.humancore_api.infrastructure.entities.ProjetoEntity;
-import com.humanconsulting.humancore_api.domain.entities.Investimento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,19 +24,24 @@ public interface JpaDashboardProjetoRepository extends JpaRepository<ProjetoEnti
     List<Object[]> buscarTarefasPorArea(@Param("idProjeto") Integer idProjeto);
 
     @Query("""
+        SELECT u.nome, COUNT(t)
+        FROM TarefaEntity t
+        JOIN t.responsavel u
+        JOIN t.sprint s
+        JOIN s.projeto p
+        WHERE p.idProjeto = :idProjeto
+        GROUP BY u.nome
+        ORDER BY COUNT(t) DESC
+        LIMIT 5
+        """)
+    List<Object[]> buscarTarefasPorProjetoUsuario(Integer idProjeto);
+
+    @Query("""
         SELECT SUM(p.orcamento)
         FROM ProjetoEntity p
         WHERE p.idProjeto = :idProjeto
         """)
     Double orcamentoTotal(@Param("idProjeto") Integer idProjeto);
-
-//    @Query("""
-//        SELECT ROUND(AVG(t.progresso), 2)
-//        FROM TarefaEntity t
-//        JOIN t.sprint s
-//        WHERE s.projeto.idProjeto = :idProjeto
-//        """)
-//    Double mediaProgresso(@Param("idProjeto") Integer idProjeto);
 
     @Query("""
         SELECT COUNT(s)

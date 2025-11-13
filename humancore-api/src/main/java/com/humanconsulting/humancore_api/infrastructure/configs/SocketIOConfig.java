@@ -1,4 +1,4 @@
-/*
+package com.humanconsulting.humancore_api.infrastructure.configs;/*
 package com.humanconsulting.humancore_api.infrastructure.configs;
 
 import com.corundumstudio.socketio.Configuration;

@@ -8,11 +8,11 @@ import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnif
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatUsuarioDto;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Comparator;
-import java.util.Optional;
 
 public class BuscarChatsDoUsuarioUseCase {
     private final SalaRepository salaRepository;
@@ -36,7 +36,9 @@ public class BuscarChatsDoUsuarioUseCase {
                     .stream()
                     .map(m -> new ChatMensagemUnificadaDto(
                             m.getIdMensagem(),
+                            m.getSala().getIdSala(),
                             m.getUsuario().getIdUsuario(),
+                            m.getUsuario().getNome(),
                             m.getConteudo(),
                             m.getHorario(),
                             false
@@ -46,6 +48,8 @@ public class BuscarChatsDoUsuarioUseCase {
                     .stream()
                     .map(m -> new ChatMensagemUnificadaDto(
                             m.getIdMensagemInfo(),
+                            m.getSala().getIdSala(),
+                            null,
                             null,
                             m.getConteudo(),
                             m.getHorario(),

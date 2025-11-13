@@ -1,19 +1,19 @@
 package com.humanconsulting.humancore_api.infrastructure.notifiers;
 
+import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.entities.Sala;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.notifiers.ProjetoNotifier;
-import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.SalaRepositoryAdapter;
-import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.MensagemInfoRepositoryAdapter;
-import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.MensagemInfoMapper;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
+import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;
+import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.MensagemInfoRepositoryAdapter;
+import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.SalaRepositoryAdapter;
 import com.humanconsulting.humancore_api.web.dtos.request.MensagemInfoRequestDto;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class ProjetoNotifierAdapter implements ProjetoNotifier {

@@ -1,4 +1,4 @@
-/*
+package com.humanconsulting.humancore_api.application.usecases.websocketmensagem;/*
 package com.humanconsulting.humancore_api.novo.application.usecases.websocketmensagem;
 
 import com.corundumstudio.socketio.SocketIOServer;

@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.domain.repositories;
 
 import com.humanconsulting.humancore_api.domain.entities.Mensagem;
 import com.humanconsulting.humancore_api.domain.entities.Sala;
+
 import java.util.List;
 
 public interface MensagemRepository {

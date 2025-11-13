@@ -1,6 +1,5 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.jpa;
 
-import com.humanconsulting.humancore_api.domain.entities.Checkpoint;
 import com.humanconsulting.humancore_api.infrastructure.entities.CheckpointEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

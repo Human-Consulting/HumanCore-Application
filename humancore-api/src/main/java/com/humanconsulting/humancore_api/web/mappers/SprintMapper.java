@@ -8,7 +8,6 @@ import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoRespon
 import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponseLoginDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 
 import java.util.List;
 

@@ -1,9 +1,12 @@
 package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.projeto.*;
+import com.humanconsulting.humancore_api.application.usecases.projeto.mappers.ProjetoResponseMapper;
+import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintPorIdUseCase;
+import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintsPorProjetoUseCase;
+import com.humanconsulting.humancore_api.application.usecases.sprint.CriarBurndownSprintUseCase;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.*;
-import com.humanconsulting.humancore_api.application.usecases.projeto.mappers.ProjetoResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.DashboardProjetoRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.ProjetoRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaDashboardProjetoRepository;
@@ -67,20 +70,18 @@ public class ProjetoConfig {
     }
 
     @Bean
-    public CriarDashboardProjetoUseCase criarDashboardProjetoUseCase(
-            UsuarioRepository usuarioRepository,
-            DashboardProjetoRepository dashboardProjetoRepository,
-            CheckpointRepository checkpointRepository,
-            ListarTarefasPorAreaUseCase listarTarefasPorAreaUseCase,
-            ListarFinanceiroPorProjetoUseCase listarFinanceiroPorProjetoUseCase
-    ) {
-        return new CriarDashboardProjetoUseCase(
-                usuarioRepository,
-                dashboardProjetoRepository,
-                checkpointRepository,
-                listarTarefasPorAreaUseCase,
-                listarFinanceiroPorProjetoUseCase
-        );
+    public CriarDashboardProjetoUseCase criarDashboardProjetoUseCase(ProjetoResponseMapper projetoResponseMapper, BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase) {
+        return new CriarDashboardProjetoUseCase(projetoResponseMapper, buscarProjetoPorIdUseCase);
+    }
+
+    @Bean
+    public CriarBurndownProjetoUseCase criarBurndownProjetoUseCase(CriarBurndownSprintUseCase criarBurndownSprintUseCase, BuscarSprintsPorProjetoUseCase buscarSprintsPorProjetoUseCase) {
+        return new CriarBurndownProjetoUseCase(criarBurndownSprintUseCase, buscarSprintsPorProjetoUseCase);
+    }
+
+    @Bean
+    public CriarBurndownSprintUseCase criarBurndownSprintUseCase(BuscarSprintPorIdUseCase buscarSprintPorIdUseCase) {
+        return new CriarBurndownSprintUseCase(buscarSprintPorIdUseCase);
     }
 
     @Bean
@@ -101,11 +102,21 @@ public class ProjetoConfig {
     @Bean
     public ProjetoResponseMapper projetoResponseMapper(
             TarefaRepository tarefaRepository,
-            CheckpointRepository checkpointRepository
+            CheckpointRepository checkpointRepository,
+            UsuarioRepository usuarioRepository,
+            ListarTarefasPorAreaUseCase listarTarefasPorAreaUseCase,
+            ListarTarefasPorProjetoUsuarioUseCase listarTarefasPorProjetoUsuarioUseCase,
+            DashboardProjetoRepository dashboardProjetoRepository,
+            ListarFinanceiroPorProjetoUseCase listarFinanceiroPorProjetoUseCase
     ) {
         return new ProjetoResponseMapper(
                 tarefaRepository,
-                checkpointRepository
+                checkpointRepository,
+                usuarioRepository,
+                listarTarefasPorAreaUseCase,
+                dashboardProjetoRepository,
+                listarFinanceiroPorProjetoUseCase,
+                listarTarefasPorProjetoUsuarioUseCase
         );
     }
 
@@ -117,6 +128,11 @@ public class ProjetoConfig {
     @Bean
     public ListarTarefasPorAreaUseCase listarTarefasPorAreaProjetoUseCase(DashboardProjetoRepository dashboardProjetoRepository) {
         return new ListarTarefasPorAreaUseCase(dashboardProjetoRepository);
+    }
+
+    @Bean
+    public ListarTarefasPorProjetoUsuarioUseCase listarTarefasPorProjetoUsuarioUseCase(DashboardProjetoRepository dashboardProjetoRepository) {
+        return new ListarTarefasPorProjetoUsuarioUseCase(dashboardProjetoRepository);
     }
 
     @Bean

@@ -2,9 +2,9 @@ package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sala.*;
+import com.humanconsulting.humancore_api.application.usecases.sala.mappers.SalaResponseMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.*;
-import com.humanconsulting.humancore_api.application.usecases.sala.mappers.SalaResponseMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.SalaRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaSalaRepository;
 import org.springframework.context.annotation.Bean;

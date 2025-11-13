@@ -5,9 +5,9 @@ import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeSemPermissaoException;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarSenhaDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AtualizarSenhaUseCase {
     private final UsuarioRepository usuarioRepository;

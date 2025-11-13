@@ -1,9 +1,9 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
+import com.humanconsulting.humancore_api.domain.entities.Investimento;
 import com.humanconsulting.humancore_api.domain.repositories.DashboardEmpresaRepository;
 import com.humanconsulting.humancore_api.infrastructure.mappers.InvestimentoMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaDashboardEmpresaRepository;
-import com.humanconsulting.humancore_api.domain.entities.Investimento;
 
 import java.util.List;
 
@@ -17,6 +17,11 @@ public class DashboardEmpresaRepositoryAdapter implements DashboardEmpresaReposi
     @Override
     public List<Object[]> buscarTarefasPorArea(Integer idEmpresa) {
         return jpaDashboardEmpresaRepository.buscarTarefasPorArea(idEmpresa);
+    }
+
+    @Override
+    public List<Object[]> buscarTarefasPorEmpresaUsuario(Integer idEmpresa) {
+        return jpaDashboardEmpresaRepository.buscarTarefasPorEmpresaUsuario(idEmpresa);
     }
 
     @Override
