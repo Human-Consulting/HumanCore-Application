@@ -5,7 +5,6 @@ import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
-import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.LoginResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;

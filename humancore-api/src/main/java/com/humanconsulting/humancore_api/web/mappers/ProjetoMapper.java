@@ -1,9 +1,6 @@
 package com.humanconsulting.humancore_api.web.mappers;
 
-import com.humanconsulting.humancore_api.domain.entities.Projeto;
-import com.humanconsulting.humancore_api.domain.entities.Usuario;
-import com.humanconsulting.humancore_api.domain.entities.Empresa;
-import com.humanconsulting.humancore_api.domain.entities.Area;
+import com.humanconsulting.humancore_api.domain.entities.*;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.projeto.ProjetoAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseLoginDto;
@@ -54,14 +51,15 @@ public class ProjetoMapper {
                 .build();
     }
 
-    public static DashboardProjetoResponseDto toDashboard(Projeto projeto, String nomeDiretor, Double progresso, List<Area> areas, Double orcamento, Integer projetos, Boolean comImpedimento, List<InvestimentoResponseDto> financeiroResponseDtos) {
+    public static DashboardProjetoResponseDto toDashboard(Projeto projeto, UsuarioSprintResponseDto responsavel, Double progresso, List<Area> areas, List<TarefaUsuario> usuarios, Double orcamento, Integer projetos, Boolean comImpedimento, List<InvestimentoResponseDto> financeiroResponseDtos) {
         return DashboardProjetoResponseDto.builder()
                 .idProjeto(projeto.getIdProjeto())
-                .nomeResponsavel(nomeDiretor)
+                .responsavel(responsavel)
                 .comImpedimento(comImpedimento)
                 .progresso(progresso)
                 .orcamento(orcamento)
                 .areas(areas)
+                .usuarios(usuarios)
                 .financeiroResponseDtos(financeiroResponseDtos)
                 .totalItens(projetos)
                 .build();

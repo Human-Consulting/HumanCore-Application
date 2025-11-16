@@ -51,6 +51,8 @@ public class MensagemMapper {
     public static ChatMensagemUnificadaDto toMensagemUnificadaResponse(MensagemInfo m) {
         return new ChatMensagemUnificadaDto(
                 m.getIdMensagemInfo(),
+                m.getSala().getIdSala(),
+                null,
                 null,
                 m.getConteudo(),
                 m.getHorario(),
@@ -61,7 +63,9 @@ public class MensagemMapper {
     public static ChatMensagemUnificadaDto toMensagemUnificadaResponse(Mensagem m) {
         return new ChatMensagemUnificadaDto(
                 m.getIdMensagem(),
+                m.getSala().getIdSala(),
                 m.getUsuario().getIdUsuario(),
+                m.getUsuario().getNome(),
                 m.getConteudo(),
                 m.getHorario(),
                 false

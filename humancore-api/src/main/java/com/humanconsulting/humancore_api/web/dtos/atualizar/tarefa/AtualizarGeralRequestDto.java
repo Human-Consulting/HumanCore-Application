@@ -19,7 +19,6 @@ public class AtualizarGeralRequestDto {
     private String titulo;
 
     @Schema(description = "Descrição da tarefa", example = "Desenvolver a funcionalidade de login")
-    @NotNull
     private String descricao;
 
     @Schema(description = "Data de início da tarefa", example = "2025-05-01")
@@ -38,7 +37,6 @@ public class AtualizarGeralRequestDto {
     private String comentario;
 
     @Schema(description = "Usuário responsável pela tarefa", example = "3")
-    @NotNull
     private Integer fkResponsavel;
 
     @Schema(description = "ID do usuário que está realizando a requisição (editor)", example = "2")

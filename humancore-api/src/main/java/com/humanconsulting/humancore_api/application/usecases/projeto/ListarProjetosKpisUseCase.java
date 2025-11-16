@@ -4,8 +4,8 @@ import com.humanconsulting.humancore_api.application.usecases.projeto.mappers.Pr
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeSemRetornoException;
 import com.humanconsulting.humancore_api.domain.repositories.ProjetoRepository;
-import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.KpiProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.ProjetoMapper;
 
 import java.util.ArrayList;

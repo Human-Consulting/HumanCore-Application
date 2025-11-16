@@ -85,10 +85,11 @@ public class UsuarioController {
     public ResponseEntity<PageResult<UsuarioResponseDto>> listarPorEmpresa( @PathVariable Integer idEmpresa,
                                                                       @RequestParam(name = "page", defaultValue = "0") int page,
                                                                       @RequestParam(name = "size", defaultValue = "10") int size,
-                                                                            @RequestParam(name = "nome", required = false) String nome) {
+                                                                            @RequestParam(name = "nome", required = false) String nome,
+                                                                            @RequestParam(name = "comConsultores", required = false) Boolean comConsultores) {
         PageResult<UsuarioResponseDto> response = null;
-        if (nome != null && !nome.isEmpty()) response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome);
-        else response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size);
+        if (nome != null && !nome.isEmpty()) response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome, comConsultores);
+        else response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size, comConsultores);
 
         return ResponseEntity.status(200).body(response);
     }

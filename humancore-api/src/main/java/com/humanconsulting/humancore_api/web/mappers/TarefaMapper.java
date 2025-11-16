@@ -1,7 +1,7 @@
 package com.humanconsulting.humancore_api.web.mappers;
 
-import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
@@ -50,7 +50,7 @@ public class TarefaMapper {
                 .progresso(progresso)
                 .comImpedimento(tarefa.getComImpedimento())
                 .comentario(tarefa.getComentario())
-                .responsavel(UsuarioMapper.toUsuarioSprintDto(tarefa.getResponsavel()))
+                .responsavel(tarefa.getResponsavel() != null ? UsuarioMapper.toUsuarioSprintDto(tarefa.getResponsavel()) : null)
                 .checkpoints(checkpoints)
                 .build();
     }

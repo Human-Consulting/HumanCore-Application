@@ -1,8 +1,6 @@
 package com.humanconsulting.humancore_api.web.dtos.response.usuario;
 
-import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginResponseDto;
-import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

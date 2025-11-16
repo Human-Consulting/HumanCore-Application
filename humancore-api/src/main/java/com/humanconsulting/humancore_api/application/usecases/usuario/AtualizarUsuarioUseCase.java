@@ -1,22 +1,16 @@
 package com.humanconsulting.humancore_api.application.usecases.usuario;
 
-import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
+import com.humanconsulting.humancore_api.application.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
-import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeSemPermissaoException;
-import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
-import com.humanconsulting.humancore_api.application.enums.PermissaoEnum;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.usuario.UsuarioAtualizarDto;
-import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.UsuarioMapper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class AtualizarUsuarioUseCase {

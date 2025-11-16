@@ -35,7 +35,6 @@ public class ListarEmpresasMenuRapidoUseCase {
         if (empresas.getContent().isEmpty())
             throw new EntidadeSemRetornoException("Nenhuma empresa registrada");
 
-
         List<EmpresaResponseDto> filtradas = empresas.getContent().stream()
                 .map(empresaResponseMapper::toResponseMenuRapido)
                 .filter(dto -> (impedidos == null || !impedidos || dto.isComImpedimento()))

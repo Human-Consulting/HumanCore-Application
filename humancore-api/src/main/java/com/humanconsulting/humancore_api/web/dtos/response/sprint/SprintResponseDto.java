@@ -1,8 +1,6 @@
 package com.humanconsulting.humancore_api.web.dtos.response.sprint;
 
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
-import com.humanconsulting.humancore_api.domain.entities.Projeto;
-import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

@@ -4,13 +4,13 @@ import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.Us
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeConflitanteException;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
+import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
+import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
+import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
 import com.humanconsulting.humancore_api.infrastructure.exception.RabbitPublishException;
 import com.humanconsulting.humancore_api.infrastructure.exception.RabbitUnavailableException;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmailCadastroMapper;
-import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
-import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
-import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.infrastructure.utils.SenhaGenerator;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.email.EmailCadastroResponseDto;

@@ -24,6 +24,19 @@ public interface JpaDashboardEmpresaRepository extends JpaRepository<ProjetoEnti
     List<Object[]> buscarTarefasPorArea(@Param("idEmpresa") Integer idEmpresa);
 
     @Query("""
+        SELECT u.nome, COUNT(t)
+        FROM TarefaEntity t
+        JOIN t.responsavel u
+        JOIN t.sprint s
+        JOIN s.projeto p
+        WHERE u.empresa.idEmpresa = :idEmpresa
+        GROUP BY u.nome
+        ORDER BY COUNT(t) DESC
+        LIMIT 5
+        """)
+    List<Object[]> buscarTarefasPorEmpresaUsuario(@Param("idEmpresa") Integer idEmpresa);
+
+    @Query("""
         SELECT SUM(p.orcamento)
         FROM ProjetoEntity p
         WHERE p.empresa.idEmpresa = :idEmpresa

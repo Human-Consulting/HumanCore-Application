@@ -8,8 +8,10 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class ChatMensagemUnificadaDto {
-    private Integer id;
+    private Integer idMensagem;
+    private Integer idSala;
     private Integer idUsuario;
+    private String nome;
     private String conteudo;
     private LocalDateTime horario;
     private boolean informativo;

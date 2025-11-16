@@ -1,15 +1,19 @@
 package com.humanconsulting.humancore_api.application.usecases.sala;
 
+import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.entities.Sala;
-import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
-import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
 import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoRepository;
+import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
+import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
+import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatUsuarioDto;
-import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatMensagemUnificadaDto;
 import jakarta.transaction.Transactional;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +44,9 @@ public class ListarSalasPorUsuarioUseCase {
                     .stream()
                     .map(m -> new ChatMensagemUnificadaDto(
                             m.getIdMensagem(),
+                            m.getSala().getIdSala(),
                             m.getUsuario().getIdUsuario(),
+                            m.getUsuario().getNome(),
                             m.getConteudo(),
                             m.getHorario(),
                             false
@@ -50,6 +56,8 @@ public class ListarSalasPorUsuarioUseCase {
                     .stream()
                     .map(m -> new ChatMensagemUnificadaDto(
                             m.getIdMensagemInfo(),
+                            m.getSala().getIdSala(),
+                            null,
                             null,
                             m.getConteudo(),
                             m.getHorario(),
@@ -61,7 +69,20 @@ public class ListarSalasPorUsuarioUseCase {
                     .toList();
 
             Optional<Integer> fkProjeto = sala.getProjeto() == null ? Optional.empty() : Optional.of(sala.getProjeto().getIdProjeto());
-            Optional<Integer> fkEmpresa = sala.getEmpresa() == null ? Optional.empty() : Optional.of(sala.getEmpresa().getIdEmpresa());
+            //Optional<Integer> fkEmpresa = sala.getEmpresa() == null ? Optional.empty() : Optional.of(sala.getEmpresa().getIdEmpresa());
+            Optional<Integer> fkEmpresa =
+                    sala.getEmpresa() != null
+                            ? Optional.of(sala.getEmpresa().getIdEmpresa())
+                            : Optional.ofNullable(sala.getProjeto())
+                            .map(Projeto::getEmpresa)
+                            .map(Empresa::getIdEmpresa);
+
+            Optional<String> nomeEmpresa =
+                    sala.getEmpresa() != null
+                            ? Optional.of(sala.getEmpresa().getNome())
+                            : sala.getProjeto() != null && sala.getProjeto().getEmpresa() != null
+                            ? Optional.of(sala.getProjeto().getEmpresa().getNome())
+                            : Optional.empty();
 
             return new ChatResponseDto(
                     sala.getIdSala(),
@@ -69,6 +90,7 @@ public class ListarSalasPorUsuarioUseCase {
                     sala.getUrlImagem(),
                     fkProjeto,
                     fkEmpresa,
+                    nomeEmpresa,
                     participantes,
                     todasMensagens
             );

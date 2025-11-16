@@ -1,6 +1,7 @@
 package com.humanconsulting.humancore_api.domain.repositories;
 
 import com.humanconsulting.humancore_api.domain.entities.Checkpoint;
+
 import java.util.List;
 
 public interface CheckpointRepository {

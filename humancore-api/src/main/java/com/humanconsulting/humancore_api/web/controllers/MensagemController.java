@@ -1,10 +1,6 @@
 package com.humanconsulting.humancore_api.web.controllers;
 
-import com.humanconsulting.humancore_api.application.usecases.mensagem.AtualizarMensagemUseCase;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.BuscarMensagemPorIdUseCase;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemUseCase;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.DeletarMensagemUseCase;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.ListarMensagensUseCase;
+import com.humanconsulting.humancore_api.application.usecases.mensagem.*;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.mensagem.MensagemAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.MensagemRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
