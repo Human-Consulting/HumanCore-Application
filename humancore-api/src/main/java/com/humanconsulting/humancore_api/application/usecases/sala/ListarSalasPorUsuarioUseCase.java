@@ -1,5 +1,7 @@
 package com.humanconsulting.humancore_api.application.usecases.sala;
 
+import com.humanconsulting.humancore_api.domain.entities.Empresa;
+import com.humanconsulting.humancore_api.domain.entities.Projeto;
 import com.humanconsulting.humancore_api.domain.entities.Sala;
 import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoRepository;
 import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
@@ -67,7 +69,20 @@ public class ListarSalasPorUsuarioUseCase {
                     .toList();
 
             Optional<Integer> fkProjeto = sala.getProjeto() == null ? Optional.empty() : Optional.of(sala.getProjeto().getIdProjeto());
-            Optional<Integer> fkEmpresa = sala.getEmpresa() == null ? Optional.empty() : Optional.of(sala.getEmpresa().getIdEmpresa());
+            //Optional<Integer> fkEmpresa = sala.getEmpresa() == null ? Optional.empty() : Optional.of(sala.getEmpresa().getIdEmpresa());
+            Optional<Integer> fkEmpresa =
+                    sala.getEmpresa() != null
+                            ? Optional.of(sala.getEmpresa().getIdEmpresa())
+                            : Optional.ofNullable(sala.getProjeto())
+                            .map(Projeto::getEmpresa)
+                            .map(Empresa::getIdEmpresa);
+
+            Optional<String> nomeEmpresa =
+                    sala.getEmpresa() != null
+                            ? Optional.of(sala.getEmpresa().getNome())
+                            : sala.getProjeto() != null && sala.getProjeto().getEmpresa() != null
+                            ? Optional.of(sala.getProjeto().getEmpresa().getNome())
+                            : Optional.empty();
 
             return new ChatResponseDto(
                     sala.getIdSala(),
@@ -75,6 +90,7 @@ public class ListarSalasPorUsuarioUseCase {
                     sala.getUrlImagem(),
                     fkProjeto,
                     fkEmpresa,
+                    nomeEmpresa,
                     participantes,
                     todasMensagens
             );

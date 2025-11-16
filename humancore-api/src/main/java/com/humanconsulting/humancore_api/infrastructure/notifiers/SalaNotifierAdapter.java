@@ -37,6 +37,13 @@ public class SalaNotifierAdapter implements SalaNotifier {
         else if (!sala.getUsuarios().contains(tarefaResponsavel)) {
             sala.getUsuarios().add(tarefaResponsavel);
             salaRepository.save(sala);
+
+            MensagemInfoRequestDto msg = MensagemInfoRequestDto.builder()
+                    .conteudo(tarefaResponsavel.getNome() + " entrou no projeto.")
+                    .horario(LocalDateTime.now())
+                    .fkSala(sala.getIdSala())
+                    .build();
+            cadastrarMensagemInfoUseCase.execute(msg);
         }
     }
 

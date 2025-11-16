@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.projeto.*;
 import com.humanconsulting.humancore_api.application.usecases.projeto.mappers.ProjetoResponseMapper;
+import com.humanconsulting.humancore_api.application.usecases.sala.AtualizarSalaUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintPorIdUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprintsPorProjetoUseCase;
 import com.humanconsulting.humancore_api.application.usecases.sprint.CriarBurndownSprintUseCase;
@@ -21,14 +22,18 @@ public class ProjetoConfig {
     public AtualizarProjetoUseCase atualizarProjetoUseCase(
             ProjetoRepository projetoRepository,
             UsuarioRepository usuarioRepository,
+            SalaRepository salaRepository,
             BuscarProjetoPorIdUseCase buscarProjetoPorIdUseCase,
-            ProjetoResponseMapper projetoResponseMapper
+            ProjetoResponseMapper projetoResponseMapper,
+            AtualizarSalaUseCase atualizarSalaUseCase
     ) {
         return new AtualizarProjetoUseCase(
                 projetoRepository,
                 usuarioRepository,
+                salaRepository,
                 buscarProjetoPorIdUseCase,
-                projetoResponseMapper
+                projetoResponseMapper,
+                atualizarSalaUseCase
         );
     }
 

@@ -30,7 +30,7 @@ public class SalaEntity {
     private ProjetoEntity projeto;
 
     @OneToOne
-    @JoinColumn(name = "fkEmpresa", unique = true)
+    @JoinColumn(name = "fkEmpresa")
     private EmpresaEntity empresa;
 
     @ManyToMany

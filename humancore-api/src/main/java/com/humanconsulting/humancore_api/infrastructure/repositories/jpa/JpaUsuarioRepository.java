@@ -21,8 +21,14 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     @Query("SELECT u FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa")
     Page<UsuarioEntity> findByFkEmpresa(@Param("idEmpresa") Integer idEmpresa, Pageable pageable);
 
+    @Query("SELECT u FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa OR u.permissao LIKE '%CONSULTOR%'")
+    Page<UsuarioEntity> findByFkEmpresaOrUsuarioPermissaoLikeConsultor(@Param("idEmpresa") Integer idEmpresa, Pageable pageable);
+
     @Query("SELECT u FROM UsuarioEntity u WHERE u.empresa.idEmpresa = :idEmpresa AND (:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')))")
-    Page<UsuarioEntity> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, Pageable pageable, String nome);
+    Page<UsuarioEntity> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, String nome, Pageable pageable);
+
+    @Query("SELECT u FROM UsuarioEntity u WHERE (u.empresa.idEmpresa = :idEmpresa OR u.permissao LIKE '%CONSULTOR%') AND (:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')))")
+    Page<UsuarioEntity> findByFkEmpresa_IdEmpresaOrUsuarioPermissaoLikeConsultorAndNomeContainingIgnoreCase(Integer idEmpresa, String nome, Pageable pageable);
 
     @Query("SELECT u FROM UsuarioEntity u WHERE u.email = :email AND u.senha = :senha")
     Optional<UsuarioEntity> autenticar(String email, String senha);

@@ -21,7 +21,11 @@ public interface UsuarioRepository {
 
     PageResult<Usuario> findByFkEmpresa(Integer id, int page, int size);
 
+    PageResult<Usuario> findByFkEmpresaOrUsuarioPermissaoLikeConsultor(Integer id, int page, int size);
+
     PageResult<Usuario> findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome);
+
+    PageResult<Usuario> findByFkEmpresa_IdEmpresaOrUsuarioPermissaoLikeConsultorAndNomeContainingIgnoreCase(Integer idEmpresa, int page, int size, String nome);
 
     Integer countTarefasByUsuario(Integer id);
 

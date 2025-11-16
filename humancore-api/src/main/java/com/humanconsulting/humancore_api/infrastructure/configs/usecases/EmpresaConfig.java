@@ -3,6 +3,7 @@ package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 import com.humanconsulting.humancore_api.application.usecases.empresa.*;
 import com.humanconsulting.humancore_api.application.usecases.empresa.mappers.EmpresaResponseMapper;
 import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
+import com.humanconsulting.humancore_api.application.usecases.sala.AtualizarSalaUseCase;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.*;
 import com.humanconsulting.humancore_api.infrastructure.notifiers.SalaNotifierAdapter;
@@ -36,9 +37,11 @@ public class EmpresaConfig {
     public AtualizarEmpresaUseCase atualizarEmpresaUseCase(
             EmpresaRepository empresaRepository,
             UsuarioRepository usuarioRepository,
-            EmpresaResponseMapper empresaResponseMapper
+            SalaRepository salaRepository,
+            EmpresaResponseMapper empresaResponseMapper,
+            AtualizarSalaUseCase atualizarSalaUseCase
     ) {
-        return new AtualizarEmpresaUseCase(empresaRepository, usuarioRepository, empresaResponseMapper);
+        return new AtualizarEmpresaUseCase(empresaRepository, usuarioRepository, salaRepository, empresaResponseMapper, atualizarSalaUseCase);
     }
 
     @Bean

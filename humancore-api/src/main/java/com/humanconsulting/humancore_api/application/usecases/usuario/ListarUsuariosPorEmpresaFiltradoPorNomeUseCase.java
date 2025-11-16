@@ -20,8 +20,10 @@ public class ListarUsuariosPorEmpresaFiltradoPorNomeUseCase {
         this.usuarioResponseMapper = usuarioResponseMapper;
     }
 
-    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size, String nome) {
-        PageResult<Usuario> usuarios = usuarioRepository.findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, page, size, nome);
+    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size, String nome, boolean comConsultores) {
+        PageResult<Usuario> usuarios = null;
+        if (comConsultores) usuarios = usuarioRepository.findByFkEmpresa_IdEmpresaOrUsuarioPermissaoLikeConsultorAndNomeContainingIgnoreCase(idEmpresa, page, size, nome);
+        else usuarios = usuarioRepository.findByFkEmpresa_IdEmpresaAndNomeContainingIgnoreCase(idEmpresa, page, size, nome);
 
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : usuarios.getContent()) {

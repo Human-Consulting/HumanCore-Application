@@ -31,6 +31,7 @@ public class SalaMapper {
         return SalaResponseDto.builder()
                 .idSala(sala.getIdSala())
                 .nome(sala.getNome())
+                .nomeEmpresa(sala.getEmpresa().getNome())
                 .build();
     }
 }
