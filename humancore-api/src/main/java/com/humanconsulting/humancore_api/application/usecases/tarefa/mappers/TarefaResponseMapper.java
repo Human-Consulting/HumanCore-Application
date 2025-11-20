@@ -1,7 +1,6 @@
 package com.humanconsulting.humancore_api.application.usecases.tarefa.mappers;
 
 import com.humanconsulting.humancore_api.domain.entities.Checkpoint;
-import com.humanconsulting.humancore_api.domain.entities.Sprint;
 import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.repositories.CheckpointRepository;
 import com.humanconsulting.humancore_api.domain.utils.ProgressoCalculator;

@@ -1,9 +1,9 @@
 package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.mensagem.*;
-import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
+import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoRepository;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.mappers.MensagemResponseMapper;
+import com.humanconsulting.humancore_api.domain.repositories.MensagemRepository;
 import com.humanconsulting.humancore_api.domain.repositories.SalaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.MensagemInfoRepositoryAdapter;
@@ -44,12 +44,14 @@ public class MensagemConfig {
     public CadastrarMensagemUseCase cadastrarMensagemUseCase(
             MensagemRepository mensagemRepository,
             UsuarioRepository usuarioRepository,
-            SalaRepository salaRepository
+            SalaRepository salaRepository,
+            SalaNotifier salaNotifier
     ) {
         return new CadastrarMensagemUseCase(
                 mensagemRepository,
                 usuarioRepository,
-                salaRepository
+                salaRepository,
+                salaNotifier
         );
     }
 

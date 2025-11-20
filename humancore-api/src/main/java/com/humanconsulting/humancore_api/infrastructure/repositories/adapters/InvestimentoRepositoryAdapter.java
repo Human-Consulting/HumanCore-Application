@@ -1,7 +1,7 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
-import com.humanconsulting.humancore_api.domain.repositories.InvestimentoRepository;
 import com.humanconsulting.humancore_api.domain.entities.Investimento;
+import com.humanconsulting.humancore_api.domain.repositories.InvestimentoRepository;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.InvestimentoEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.InvestimentoMapper;

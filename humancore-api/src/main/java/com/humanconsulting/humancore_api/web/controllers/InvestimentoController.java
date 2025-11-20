@@ -1,11 +1,6 @@
 package com.humanconsulting.humancore_api.web.controllers;
 
-import com.humanconsulting.humancore_api.application.usecases.investimento.CadastrarInvestimentoUseCase;
-import com.humanconsulting.humancore_api.application.usecases.investimento.ListarInvestimentosUseCase;
-import com.humanconsulting.humancore_api.application.usecases.investimento.ListarInvestimentosPorProjetoUseCase;
-import com.humanconsulting.humancore_api.application.usecases.investimento.BuscarInvestimentoPorIdUseCase;
-import com.humanconsulting.humancore_api.application.usecases.investimento.AtualizarInvestimentoUseCase;
-import com.humanconsulting.humancore_api.application.usecases.investimento.DeletarInvestimentoUseCase;
+import com.humanconsulting.humancore_api.application.usecases.investimento.*;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.investimento.AtualizarInvestimentoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.InvestimentoRequestDto;

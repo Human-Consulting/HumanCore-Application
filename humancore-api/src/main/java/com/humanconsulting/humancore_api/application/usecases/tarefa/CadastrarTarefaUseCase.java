@@ -11,14 +11,9 @@ import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
-import com.humanconsulting.humancore_api.infrastructure.mappers.CheckpointMapper;
-import com.humanconsulting.humancore_api.web.dtos.request.CheckpointRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.TarefaMapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CadastrarTarefaUseCase {
     private final TarefaRepository tarefaRepository;

@@ -1,8 +1,8 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
+import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
-import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.infrastructure.entities.EmpresaEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmpresaMapper;

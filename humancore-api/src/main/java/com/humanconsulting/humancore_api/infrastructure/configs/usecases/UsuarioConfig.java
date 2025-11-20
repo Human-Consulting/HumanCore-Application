@@ -1,14 +1,13 @@
 package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
-import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.application.usecases.usuario.*;
+import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
-import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.repositories.EmpresaRepository;
+import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
+import com.humanconsulting.humancore_api.infrastructure.configs.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
 import com.humanconsulting.humancore_api.infrastructure.mappers.EmailCadastroMapper;
-import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
-import com.humanconsulting.humancore_api.infrastructure.configs.GerenciadorTokenJwt;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.UsuarioRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaUsuarioRepository;
 import org.springframework.context.annotation.Bean;

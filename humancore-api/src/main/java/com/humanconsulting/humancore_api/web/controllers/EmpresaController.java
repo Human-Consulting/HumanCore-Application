@@ -5,8 +5,8 @@ import com.humanconsulting.humancore_api.domain.utils.PageResult;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.empresa.EmpresaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.EmpresaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
-import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.DashboardEmpresaResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.empresa.EmpresaResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.empresa.KpiEmpresaResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,7 +26,6 @@ public class EmpresaController {
     @Autowired private ListarEmpresasUseCase listarEmpresasUseCase;
     @Autowired private ListarEmpresasMenuRapidoUseCase listarEmpresasMenuRapidoUseCase;
     @Autowired private ListarEmpresasKpisUseCase listarEmpresasKpisUseCase;
-    @Autowired private BuscarEmpresaPorIdUseCase buscarEmpresaPorIdUseCase;
     @Autowired private CriarDashboardEmpresaUseCase criarDashboardEmpresaUseCase;
     @Autowired private DeletarEmpresaUseCase deletarEmpresaUseCase;
     @Autowired private AtualizarEmpresaUseCase atualizarEmpresaUseCase;
@@ -103,8 +102,7 @@ public class EmpresaController {
     })
     @GetMapping("/{idEmpresa}")
     public ResponseEntity<DashboardEmpresaResponseDto> buscarPorId(@PathVariable Integer idEmpresa) {
-        var empresa = buscarEmpresaPorIdUseCase.execute(idEmpresa);
-        DashboardEmpresaResponseDto dashboard = criarDashboardEmpresaUseCase.execute(empresa);
+        DashboardEmpresaResponseDto dashboard = criarDashboardEmpresaUseCase.execute(idEmpresa);
         return ResponseEntity.status(200).body(dashboard);
     }
 

@@ -20,8 +20,10 @@ public class ListarUsuariosPorEmpresaUseCase {
         this.usuarioResponseMapper = usuarioResponseMapper;
     }
 
-    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size) {
-        PageResult<Usuario> usuarios = usuarioRepository.findByFkEmpresa(idEmpresa, page, size);
+    public PageResult<UsuarioResponseDto> execute(Integer idEmpresa, int page, int size, Boolean comConsultores) {
+        PageResult<Usuario> usuarios = null;
+        if (comConsultores) usuarios = usuarioRepository.findByFkEmpresaOrUsuarioPermissaoLikeConsultor(idEmpresa, page, size);
+        else usuarios = usuarioRepository.findByFkEmpresa(idEmpresa, page, size);
 
         List<UsuarioResponseDto> allResponse = new ArrayList<>();
         for (Usuario usuario : usuarios.getContent()) {

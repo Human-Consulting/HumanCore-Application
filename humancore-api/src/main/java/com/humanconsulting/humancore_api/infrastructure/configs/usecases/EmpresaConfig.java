@@ -1,11 +1,11 @@
 package com.humanconsulting.humancore_api.infrastructure.configs.usecases;
 
 import com.humanconsulting.humancore_api.application.usecases.empresa.*;
-import com.humanconsulting.humancore_api.application.usecases.empresa.mappers.DashboardEmpresaMapper;
-import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
-import com.humanconsulting.humancore_api.domain.repositories.*;
-import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.application.usecases.empresa.mappers.EmpresaResponseMapper;
+import com.humanconsulting.humancore_api.application.usecases.mensagem.CadastrarMensagemInfoUseCase;
+import com.humanconsulting.humancore_api.application.usecases.sala.AtualizarSalaUseCase;
+import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
+import com.humanconsulting.humancore_api.domain.repositories.*;
 import com.humanconsulting.humancore_api.infrastructure.notifiers.SalaNotifierAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.DashboardEmpresaRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.EmpresaRepositoryAdapter;
@@ -14,6 +14,7 @@ import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaEmpr
 import com.humanconsulting.humancore_api.web.mappers.EmpresaMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class EmpresaConfig {
@@ -36,9 +37,11 @@ public class EmpresaConfig {
     public AtualizarEmpresaUseCase atualizarEmpresaUseCase(
             EmpresaRepository empresaRepository,
             UsuarioRepository usuarioRepository,
-            EmpresaResponseMapper empresaResponseMapper
+            SalaRepository salaRepository,
+            EmpresaResponseMapper empresaResponseMapper,
+            AtualizarSalaUseCase atualizarSalaUseCase
     ) {
-        return new AtualizarEmpresaUseCase(empresaRepository, usuarioRepository, empresaResponseMapper);
+        return new AtualizarEmpresaUseCase(empresaRepository, usuarioRepository, salaRepository, empresaResponseMapper, atualizarSalaUseCase);
     }
 
     @Bean
@@ -47,21 +50,10 @@ public class EmpresaConfig {
     }
 
     @Bean
-    public CriarDashboardEmpresaUseCase criarDashboardEmpresaUseCase(
-            UsuarioRepository usuarioRepository,
-            com.humanconsulting.humancore_api.domain.repositories.DashboardEmpresaRepository dashRepository,
-            com.humanconsulting.humancore_api.domain.repositories.CheckpointRepository checkpointRepository,
-            ListarTarefasPorAreaUseCase listarTarefasPorAreaUseCase,
-            ListarFinanceiroPorEmpresaUseCase listarFinanceiroPorEmpresaUseCase,
-            com.humanconsulting.humancore_api.application.usecases.empresa.mappers.DashboardEmpresaMapper dashboardEmpresaMapper
-    ) {
+    public CriarDashboardEmpresaUseCase criarDashboardEmpresaUseCase(EmpresaResponseMapper empresaResponseMapper, BuscarEmpresaPorIdUseCase buscarEmpresaPorIdUseCase) {
         return new CriarDashboardEmpresaUseCase(
-                usuarioRepository,
-                dashRepository,
-                checkpointRepository,
-                listarTarefasPorAreaUseCase,
-                listarFinanceiroPorEmpresaUseCase,
-                dashboardEmpresaMapper
+                empresaResponseMapper,
+                buscarEmpresaPorIdUseCase
         );
     }
 
@@ -74,18 +66,29 @@ public class EmpresaConfig {
     public EmpresaResponseMapper empresaResponseMapper(
             UsuarioRepository usuarioRepository,
             DashboardEmpresaRepository dashRepository,
-            CheckpointRepository checkpointRepository
+            CheckpointRepository checkpointRepository,
+            ListarTarefasPorAreaUseCase listarTarefasPorAreaUseCase,
+            ListarFinanceiroPorEmpresaUseCase listarFinanceiroPorEmpresaUseCase,
+            ListarTarefasPorEmpresaUsuarioUseCase listarTarefasPorEmpresaUsuarioUseCase
     ) {
         return new EmpresaResponseMapper(
                 usuarioRepository,
                 dashRepository,
-                checkpointRepository
+                checkpointRepository,
+                listarTarefasPorAreaUseCase,
+                listarFinanceiroPorEmpresaUseCase,
+                listarTarefasPorEmpresaUsuarioUseCase
         );
     }
 
     @Bean
     public DeletarEmpresaUseCase deletarEmpresaUseCase(EmpresaRepository empresaRepository) {
         return new DeletarEmpresaUseCase(empresaRepository);
+    }
+
+    @Bean
+    public ListarTarefasPorEmpresaUsuarioUseCase listarTarefasPorEmpresaUsuarioUseCase(DashboardEmpresaRepository dashboardEmpresaRepository) {
+        return new ListarTarefasPorEmpresaUsuarioUseCase(dashboardEmpresaRepository);
     }
 
     @Bean
@@ -114,11 +117,6 @@ public class EmpresaConfig {
     }
 
     @Bean
-    public DashboardEmpresaMapper dashboardEmpresaMapper() {
-        return new DashboardEmpresaMapper();
-    }
-
-    @Bean
     public EmpresaRepository empresaRepository(JpaEmpresaRepository jpaEmpresaRepository) {
         return new EmpresaRepositoryAdapter(jpaEmpresaRepository);
     }
@@ -131,9 +129,15 @@ public class EmpresaConfig {
     @Bean
     public SalaNotifier salaNotifier(
             SalaRepository salaRepository,
-            CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase
+            CadastrarMensagemInfoUseCase cadastrarMensagemInfoUseCase,
+            RestTemplate restTemplate
     ) {
-        return new SalaNotifierAdapter(salaRepository, cadastrarMensagemInfoUseCase) {
+        return new SalaNotifierAdapter(salaRepository, cadastrarMensagemInfoUseCase, restTemplate) {
         };
     }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    };
 }

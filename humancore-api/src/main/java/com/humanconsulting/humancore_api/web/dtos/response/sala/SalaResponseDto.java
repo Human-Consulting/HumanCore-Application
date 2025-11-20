@@ -14,4 +14,7 @@ public class SalaResponseDto {
 
     @Schema(description = "Nome da sala", example = "SalaEntity 1")
     private String nome;
+
+    @Schema(description = "Nome da empresa associada", example = "Empresa 1")
+    private String nomeEmpresa;
 }

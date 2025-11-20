@@ -1,7 +1,7 @@
 package com.humanconsulting.humancore_api.web.mappers;
 
-import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Sprint;
+import com.humanconsulting.humancore_api.domain.entities.Tarefa;
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;

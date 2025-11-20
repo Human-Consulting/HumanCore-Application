@@ -1,8 +1,8 @@
 package com.humanconsulting.humancore_api.domain.repositories;
 
-import com.humanconsulting.humancore_api.domain.entities.Sala;
 import com.humanconsulting.humancore_api.domain.entities.Empresa;
 import com.humanconsulting.humancore_api.domain.entities.Projeto;
+import com.humanconsulting.humancore_api.domain.entities.Sala;
 
 import java.util.List;
 import java.util.Optional;

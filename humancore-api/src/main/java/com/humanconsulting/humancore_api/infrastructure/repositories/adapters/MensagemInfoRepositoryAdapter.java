@@ -1,8 +1,8 @@
 package com.humanconsulting.humancore_api.infrastructure.repositories.adapters;
 
-import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoRepository;
 import com.humanconsulting.humancore_api.domain.entities.MensagemInfo;
 import com.humanconsulting.humancore_api.domain.entities.Sala;
+import com.humanconsulting.humancore_api.domain.repositories.MensagemInfoRepository;
 import com.humanconsulting.humancore_api.infrastructure.entities.MensagemInfoEntity;
 import com.humanconsulting.humancore_api.infrastructure.mappers.MensagemInfoMapper;
 import com.humanconsulting.humancore_api.infrastructure.mappers.SalaMapper;

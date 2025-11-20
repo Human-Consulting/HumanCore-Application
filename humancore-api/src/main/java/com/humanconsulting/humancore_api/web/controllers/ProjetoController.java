@@ -7,6 +7,7 @@ import com.humanconsulting.humancore_api.web.dtos.request.ProjetoRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.DashboardProjetoResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.KpiProjetoResponseDto;
+import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoBurndownResponseDto;
 import com.humanconsulting.humancore_api.web.dtos.response.projeto.ProjetoResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,6 +35,7 @@ public class ProjetoController {
     @Autowired private AtualizarProjetoUseCase atualizarProjetoUseCase;
     @Autowired private DeletarProjetoUseCase deletarProjetoUseCase;
     @Autowired private CriarDashboardProjetoUseCase criarDashboardProjetoUseCase;
+    @Autowired private CriarBurndownProjetoUseCase criarBurndownProjetoUseCase;
 
     @Operation(
             summary = "Cadastrar um novo projeto",
@@ -72,11 +74,26 @@ public class ProjetoController {
             @ApiResponse(responseCode = "200", description = "ProjetoEntity encontrado com sucesso"),
             @ApiResponse(responseCode = "404", description = "ProjetoEntity não encontrado")
     })
-    @GetMapping("/{idProjeto}")
-    public ResponseEntity<DashboardProjetoResponseDto> buscarPorId(@PathVariable Integer idProjeto) {
-        var projeto = buscarProjetoPorIdUseCase.execute(idProjeto);
-        DashboardProjetoResponseDto dashboard = criarDashboardProjetoUseCase.execute(projeto);
+    @GetMapping("/dashboard/{idProjeto}")
+    public ResponseEntity<DashboardProjetoResponseDto> criarDashboardPorId(@PathVariable Integer idProjeto) {
+        DashboardProjetoResponseDto dashboard = criarDashboardProjetoUseCase.execute(idProjeto);
         return ResponseEntity.status(200).body(dashboard);
+    }
+
+    @Operation(
+            summary = "Criar burndown do projeto por ID",
+            description = "Esse endpoint retorna as informações para se criar um gráfico de burndown de cada sprint do projeto através do seu ID.",
+            parameters = @Parameter(name = "idProjeto", description = "ID do projeto para buscar as informações."),
+            security = @SecurityRequirement(name = "Bearer")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ProjetoEntity encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "ProjetoEntity não encontrado")
+    })
+    @GetMapping("/burndown/{idProjeto}")
+    public ResponseEntity<ProjetoBurndownResponseDto> criarBurndownPorId(@PathVariable Integer idProjeto) {
+        ProjetoBurndownResponseDto burndownProjeto = criarBurndownProjetoUseCase.execute(idProjeto);
+        return ResponseEntity.status(200).body(burndownProjeto);
     }
 
     @Operation(

@@ -2,6 +2,7 @@ package com.humanconsulting.humancore_api.infrastructure.mappers;
 
 import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.infrastructure.entities.UsuarioEntity;
+
 import java.util.stream.Collectors;
 
 public class UsuarioMapper {

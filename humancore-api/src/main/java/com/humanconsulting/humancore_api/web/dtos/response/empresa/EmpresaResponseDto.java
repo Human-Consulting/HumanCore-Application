@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.web.dtos.response.empresa;
 
+import com.humanconsulting.humancore_api.web.dtos.response.usuario.UsuarioSprintResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -18,8 +19,8 @@ public class EmpresaResponseDto {
     @Schema(description = "CNPJ da EmpresaEntity", example = "12.345.678/0001-90")
     private String cnpj;
 
-    @Schema(description = "Nome do Diretor da EmpresaEntity", example = "Carlos Silva")
-    private String nomeDiretor;
+    @Schema(description = "Diretor da EmpresaEntity", example = "Carlos Silva")
+    private UsuarioSprintResponseDto responsavel;
 
     @Schema(description = "Indica se a empresa possui impedimentos", example = "false")
     private boolean comImpedimento;

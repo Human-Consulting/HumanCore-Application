@@ -8,6 +8,7 @@ public record ChatResponseDto(Integer idSala,
                               String urlImagem,
                               Optional<Integer> fkProjeto,
                               Optional<Integer> fkEmpresa,
+                              Optional<String> nomeEmpresa,
                               List<ChatUsuarioDto> participants,
                               List<ChatMensagemUnificadaDto> mensagens) {
 }

@@ -1,7 +1,6 @@
 package com.humanconsulting.humancore_api.web.controllers;
 
 import com.humanconsulting.humancore_api.application.usecases.sala.*;
-import com.humanconsulting.humancore_api.web.dtos.atualizar.sala.SalaAtualizarRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.SalaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.request.UsuarioPermissaoDto;
 import com.humanconsulting.humancore_api.web.dtos.response.chat.ChatResponseDto;
