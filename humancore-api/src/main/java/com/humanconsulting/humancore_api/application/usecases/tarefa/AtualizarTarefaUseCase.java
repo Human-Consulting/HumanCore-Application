@@ -15,10 +15,12 @@ import com.humanconsulting.humancore_api.domain.utils.ProgressoCalculator;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.TarefaMapper;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 public class AtualizarTarefaUseCase {
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;

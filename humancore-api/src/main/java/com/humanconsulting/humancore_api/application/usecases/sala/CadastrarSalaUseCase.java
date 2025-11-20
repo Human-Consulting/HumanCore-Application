@@ -11,11 +11,13 @@ import com.humanconsulting.humancore_api.web.dtos.request.MensagemInfoRequestDto
 import com.humanconsulting.humancore_api.web.dtos.request.SalaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.sala.SalaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.SalaMapper;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@Transactional
 public class CadastrarSalaUseCase {
     private final SalaRepository salaRepository;
     private final UsuarioRepository usuarioRepository;
