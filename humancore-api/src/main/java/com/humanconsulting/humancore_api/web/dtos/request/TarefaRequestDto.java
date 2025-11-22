@@ -45,4 +45,7 @@ public class TarefaRequestDto {
     @Schema(description = "Permissão do editor", example = "CONSULTOR")
     @NotNull
     private String permissaoEditor;
+
+    @Schema(description = "ID do evento para mapeamento do Google Calendar", example = "evento12345")
+    private String googleCalendarEventId;
 }

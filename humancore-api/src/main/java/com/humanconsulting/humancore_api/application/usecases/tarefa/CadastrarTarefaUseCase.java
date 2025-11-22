@@ -11,14 +11,10 @@ import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
-import com.humanconsulting.humancore_api.infrastructure.mappers.CheckpointMapper;
-import com.humanconsulting.humancore_api.web.dtos.request.CheckpointRequestDto;
+import com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService;
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.TarefaMapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CadastrarTarefaUseCase {
     private final TarefaRepository tarefaRepository;
@@ -47,7 +43,7 @@ public class CadastrarTarefaUseCase {
         this.googleCalendarService = googleCalendarService;
     }
 
-    public TarefaResponseDto execute(TarefaRequestDto tarefaRequestDto) throws IOException {
+    public TarefaResponseDto execute(TarefaRequestDto tarefaRequestDto) throws Exception {
         ValidarPermissao.execute(tarefaRequestDto.getPermissaoEditor(), "ADICIONAR_TAREFA");
         Sprint sprint = sprintRepository.findById(tarefaRequestDto.getFkSprint()).get();
 
@@ -58,18 +54,15 @@ public class CadastrarTarefaUseCase {
             throw new EntidadeConflitanteException("Datas de início e fim conflitantes.");
 
         Usuario usuario = tarefaRequestDto.getFkResponsavel() != null ? usuarioRepository.findById(tarefaRequestDto.getFkResponsavel()).get() : null;
+
+        String googleCalendarEventId = googleCalendarService.criarEvento(tarefaRequestDto, usuario.getEmail());
+        tarefaRequestDto.setGoogleCalendarEventId(googleCalendarEventId);
+
         Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto, sprint, usuario));
 
         if (!tarefaRequestDto.getCheckpoints().isEmpty()) sincronizarCheckpointsDaTarefaUseCase.execute(tarefa.getIdTarefa(), tarefaRequestDto.getCheckpoints());
 
         if (tarefa.getResponsavel() != null) salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa, tarefa.getSprint().getProjeto(), usuario);
-
-        String tituloEvento = "Tarefa: " + tarefa.getTitulo();
-        String descricaoEvento = "Descrição: " + tarefa.getDescricao() + "\n" +
-                "Início: " + tarefa.getDtInicio() + "\n" +
-                "Fim: " + tarefa.getDtFim() + "\n" +
-                "Responsável: " + (tarefa.getResponsavel() != null ? tarefa.getResponsavel().getNome() : "Não atribuído");
-        googleCalendarService.criarEvento(tituloEvento, descricaoEvento);
 
         return tarefaResponseMapper.toResponse(tarefa);
     }

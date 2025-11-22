@@ -32,4 +32,7 @@ public class TarefaLoginResponseDto {
 
     @Schema(description = "Checkpoints da tarefa", example = "[{id: 1, descricao: 'Subtarefa', finalizado: true}]")
     private List<CheckpointResponseDto> checkpoints;
+
+    @Schema(description = "ID do evento para mapeamento do Google Calendar", example = "evento12345")
+    private String googleCalendarEventId;
 }

@@ -23,6 +23,7 @@ public class TarefaMapper {
         tarefa.setComentario(null);
         tarefa.setSprint(sprint);
         tarefa.setResponsavel(responsavel);
+        tarefa.setGoogleCalendarEventId(tarefaRequestDto.getGoogleCalendarEventId());
         return tarefa;
     }
 
@@ -37,6 +38,7 @@ public class TarefaMapper {
         tarefa.setComentario(atualizarTarefaRequestDto.getComentario());
         tarefa.setSprint(sprint);
         tarefa.setResponsavel(usuario);
+        tarefa.setGoogleCalendarEventId(atualizarTarefaRequestDto.getGoogleCalendarEventId());
         return tarefa;
     }
 
@@ -52,6 +54,7 @@ public class TarefaMapper {
                 .comentario(tarefa.getComentario())
                 .responsavel(tarefa.getResponsavel() != null ? UsuarioMapper.toUsuarioSprintDto(tarefa.getResponsavel()) : null)
                 .checkpoints(checkpoints)
+                .googleCalendarEventId(tarefa.getGoogleCalendarEventId())
                 .build();
     }
 
@@ -63,6 +66,7 @@ public class TarefaMapper {
                 .comImpedimento(tarefa.getComImpedimento())
                 .sprint(sprint)
                 .checkpoints(checkpoints)
+                .googleCalendarEventId(tarefa.getGoogleCalendarEventId())
                 .build();
     }
 }

@@ -49,4 +49,7 @@ public class AtualizarGeralRequestDto {
 
     @Schema(description = "Lista de checkpoints", example = "[{descricao: 'desenvolver código'}, {descricao: 'validar com techlead'}]")
     private List<CheckpointRequestDto> checkpoints;
+
+    @Schema(description = "ID do evento para mapeamento do Google Calendar", example = "evento12345")
+    private String googleCalendarEventId;
 }

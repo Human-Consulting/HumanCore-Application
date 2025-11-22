@@ -1,12 +1,18 @@
 package com.humanconsulting.humancore_api.infrastructure.configs.calendar;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.humanconsulting.humancore_api.domain.calendar.CalendarGateway;
+import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 public class GoogleCalendarService implements CalendarGateway {
@@ -18,21 +24,53 @@ public class GoogleCalendarService implements CalendarGateway {
     }
 
     @Override
-    public void criarEvento(String titulo, String descricao) throws IOException {
+    public String criarEvento(TarefaRequestDto tarefaRequestDto, String emailResponsavel) throws Exception {
         var service = googleCalendarConfig.getCalendarService();
 
         Event event = new Event()
-                .setSummary(titulo)
-                .setDescription(descricao);
+                .setSummary(tarefaRequestDto.getTitulo())
+                .setDescription(tarefaRequestDto.getDescricao())
+                .setAttendees(
+                        List.of(new EventAttendee().setEmail(emailResponsavel))
+                );
 
-        Date startDate = new Date(System.currentTimeMillis() + 3600000);
-        Date endDate = new Date(System.currentTimeMillis() + 7200000);
+        LocalDate inicio = tarefaRequestDto.getDtInicio();
+        LocalDate fim = tarefaRequestDto.getDtFim();
 
-        event.setStart(new EventDateTime().setDateTime(new com.google.api.client.util.DateTime(startDate)));
-        event.setEnd(new EventDateTime().setDateTime(new com.google.api.client.util.DateTime(endDate)));
+        LocalDateTime inicioDateTime = inicio.atStartOfDay();
+        LocalDateTime fimDateTime = fim.atStartOfDay().plusDays(1);
+
+        ZonedDateTime inicioZoned = inicioDateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime fimZoned = fimDateTime.atZone(ZoneId.systemDefault());
+
+        EventDateTime start = new EventDateTime()
+                .setDateTime(new DateTime(inicioZoned.toInstant().toEpochMilli()));
+
+        EventDateTime end = new EventDateTime()
+                .setDateTime(new DateTime(fimZoned.toInstant().toEpochMilli()));
+
+        event.setStart(start);
+        event.setEnd(end);
 
         var createdEvent = service.events().insert("primary", event).execute();
 
-        System.out.println("✅ Evento criado: " + createdEvent.getHtmlLink());
+        System.out.println("✅ Evento criado e enviado para o responsável: " + createdEvent.getHtmlLink());
+        return createdEvent.getId();
+    }
+
+    @Override
+    public void atualizarEvento(String eventId, String novoTitulo, String novaDescricao) throws Exception {
+        var service = googleCalendarConfig.getCalendarService();
+
+        Event event = service.events().get("primary", eventId).execute();
+
+        event.setSummary(novoTitulo);
+        event.setDescription(novaDescricao);
+
+        Event updatedEvent = service.events()
+                .update("primary", eventId, event)
+                .execute();
+
+        System.out.println("🔄 Evento atualizado: " + updatedEvent.getHtmlLink());
     }
 }
