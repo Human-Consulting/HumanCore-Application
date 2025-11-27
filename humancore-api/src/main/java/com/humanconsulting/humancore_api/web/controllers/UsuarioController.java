@@ -1,3 +1,4 @@
+
 package com.humanconsulting.humancore_api.web.controllers;
 
 import com.humanconsulting.humancore_api.application.usecases.usuario.*;
@@ -24,213 +25,232 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin("*")
 public class UsuarioController {
-
-    @Autowired private CadastrarUsuarioUseCase cadastrarUsuarioUseCase;
-    @Autowired private ListarUsuariosUseCase listarUsuariosUseCase;
-    @Autowired private ListarUsuariosPorEmpresaUseCase listarUsuariosPorEmpresaUseCase;
-    @Autowired private ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase;
-    @Autowired private ListarUsuariosResponsaveisPorEmpresaUseCase listarUsuariosResponsaveisPorEmpresaUseCase;
-    @Autowired private BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase;
-    @Autowired private BuscarUsuarioPorEmailUseCase buscarUsuarioPorEmailUseCase;
-    @Autowired private AtualizarUsuarioUseCase atualizarUsuarioUseCase;
-    @Autowired private AtualizarCoresPorIdUseCase atualizarCoresPorIdUseCase;
-    @Autowired private AutenticarUsuarioUseCase autenticarUsuarioUseCase;
-    @Autowired private AtualizarSenhaUseCase atualizarSenhaUseCase;
-    @Autowired private DeletarUsuarioUseCase deletarUsuarioUseCase;
-    @Autowired private EnviarCodigoUseCase enviarCodigoUseCase;
-
-    @Operation(
-            summary = "Cadastrar um novo usuário",
-            description = "Esse endpoint cria um novo usuário no sistema.",
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
-    })
-    @PostMapping
-    public ResponseEntity<UsuarioResponseDto> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
-        UsuarioResponseDto response = cadastrarUsuarioUseCase.execute(usuarioRequestDto);
-        return ResponseEntity.status(201).body(response);
-    }
-
-    @Operation(
-            summary = "Listar todos os usuários",
-            description = "Esse endpoint retorna todos os usuários cadastrados no sistema.",
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso")
-    @GetMapping
-    public ResponseEntity<List<UsuarioResponseDto>> listar() {
-        List<UsuarioResponseDto> response = listarUsuariosUseCase.execute();
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Listar usuários por empresa",
-            description = "Esse endpoint retorna todos os usuários associados a uma empresa específica.",
-            parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para buscar os usuários."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
-    })
-    @GetMapping("/buscarPorEmpresa/{idEmpresa}")
-    public ResponseEntity<PageResult<UsuarioResponseDto>> listarPorEmpresa( @PathVariable Integer idEmpresa,
-                                                                      @RequestParam(name = "page", defaultValue = "0") int page,
-                                                                      @RequestParam(name = "size", defaultValue = "10") int size,
-                                                                            @RequestParam(name = "nome", required = false) String nome,
-                                                                            @RequestParam(name = "comConsultores", required = false) Boolean comConsultores) {
-        PageResult<UsuarioResponseDto> response = null;
-        if (nome != null && !nome.isEmpty()) response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome, comConsultores);
-        else response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size, comConsultores);
-
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Listar usuários que não tem permissão FUNC por empresa",
-            description = "Esse endpoint retorna todos os usuários responsaveis associados a uma empresa específica.",
-            parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para buscar os usuários."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
-    })
-    @GetMapping("/buscarResponsaveisPorEmpresa/{idEmpresa}")
-    public ResponseEntity<PageResult<UsuarioResponseDto>> listarResponsaveisPorEmpresa( @PathVariable Integer idEmpresa,
-                                                                            @RequestParam(name = "page", defaultValue = "0") int page,
-                                                                            @RequestParam(name = "size", defaultValue = "10") int size) {
-        PageResult<UsuarioResponseDto> response = listarUsuariosResponsaveisPorEmpresaUseCase.execute(idEmpresa, page, size);
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Deletar um usuário",
-            description = "Esse endpoint deleta um usuário baseado no seu ID.",
-            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser deletado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    })
-    @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idUsuario, @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
-        deletarUsuarioUseCase.execute(idUsuario, usuarioPermissaoDto);
-        return ResponseEntity.status(204).build();
-    }
-
-    @Operation(
-            summary = "Atualizar dados de um usuário",
-            description = "Esse endpoint atualiza os dados de um usuário existente.",
-            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    })
-    @PatchMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarDto usuarioAtualizarDto) {
-        UsuarioResponseDto response = atualizarUsuarioUseCase.execute(idUsuario, usuarioAtualizarDto);
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Atualizar cores do usuário",
-            description = "Esse endpoint atualiza a cor de fundo da aplicação de um usuário existente.",
-            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    })
-    @PatchMapping("/atualizarCores/{idUsuario}")
-    public ResponseEntity<Boolean> atualizarCores(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
-        Boolean response = atualizarCoresPorIdUseCase.execute(idUsuario, usuarioAtualizarCoresDto);
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Atualizar senha de um usuário",
-            description = "Esse endpoint atualiza a senha de um usuário existente.",
-            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    })
-    @PatchMapping("/atualizarSenha/{idUsuario}")
-    public ResponseEntity<UsuarioResponseDto> atualizarSenha(@PathVariable Integer idUsuario, @Valid @RequestBody UsuarioAtualizarSenhaDto usuarioAtualizarSenhaDto) {
-        UsuarioResponseDto response = atualizarSenhaUseCase.execute(idUsuario, usuarioAtualizarSenhaDto);
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Buscar id do usuário por email.",
-            description = "Esse endpoint retorna o id de um usuário específico pelo seu email.",
-            parameters = @Parameter(name = "email", description = "Email do usuário a ser buscado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
-    })
-    @GetMapping("/emailExistente/{email}")
-    public ResponseEntity<Integer> buscarPorEmail(@PathVariable String email) {
-        System.out.println(email);
-        return ResponseEntity.status(200).body(buscarUsuarioPorEmailUseCase.execute(email));
-    }
-
-    @Operation(
-            summary = "Buscar usuário por ID.",
-            description = "Esse endpoint retorna um usuário específico pelo seu ID.",
-            parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser buscado."),
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
-    })
-
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
-        LoginResponseDto response = buscarUsuarioPorIdUseCase.execute(idUsuario);
-        return ResponseEntity.status(200).body(response);
-    }
-
-    @Operation(
-            summary = "Autenticar usuário",
-            description = "Esse endpoint autentica um usuário e retorna um token de acesso.",
-            security = @SecurityRequirement(name = "Bearer")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para autenticação"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    })
-        @PostMapping("/autenticar")
-        public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
-            final Usuario usuario = UsuarioTokenMapper.of(usuarioAutenticar);
-            return ResponseEntity.status(200).body(autenticarUsuarioUseCase.execute(usuario));
+        @GetMapping("/validarTokenReset")
+        public ResponseEntity<?> validarTokenReset(@RequestParam("token") String token) {
+                try {
+                        String email = tokenService.validarTokenERetornarEmail(token);
+                        Integer id = usuarioRepository.findByEmail(email)
+                                        .map(Usuario::getIdUsuario)
+                                        .orElse(null);
+                        if (id == null) {
+                                return ResponseEntity.status(404).body(Map.of("error", "Usuário não encontrado"));
+                        }
+                        return ResponseEntity.ok().body(Map.of("id", id));
+                } catch (Exception e) {
+                        return ResponseEntity.status(400).body(Map.of("error", "Token inválido ou expirado"));
+                }
         }
 
-    @PostMapping("/codigoEsqueciASenha")
-    public ResponseEntity<Void> enviarCodigoEsqueciASenha(@RequestBody UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
-        enviarCodigoUseCase.execute(usuarioEnviarCodigoRequestDto);
-        return ResponseEntity.status(204).build();
-    }
+        @Autowired
+        private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
+        @PatchMapping("/esqueciASenha/{idUsuario}")
+        public ResponseEntity<?> redefinirSenhaComToken(
+                        @PathVariable Integer idUsuario,
+                        @RequestBody Map<String, String> body) {
+                String token = body.get("token");
+                String senhaAtualizada = body.get("senhaAtualizada");
+                try {
+                        // Valida o token
+                        String email = tokenService.validarTokenERetornarEmail(token);
+                        Usuario usuario = usuarioRepository.findById(idUsuario)
+                                        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                        if (!usuario.getEmail().equals(email)) {
+                                return ResponseEntity.status(403)
+                                                .body(Map.of("error", "Token não corresponde ao usuário"));
+                        }
+                        usuario.setSenha(passwordEncoder.encode(senhaAtualizada));
+                        usuarioRepository.save(usuario);
+                        return ResponseEntity.ok(Map.of("message", "Senha redefinida com sucesso!"));
+                } catch (Exception e) {
+                        return ResponseEntity.status(400).body(Map.of("error", "Token inválido ou expirado"));
+                }
+        }
+
+        @Autowired
+        private com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository usuarioRepository;
+        @Autowired
+        private com.humanconsulting.humancore_api.domain.security.TokenResetSenhaService tokenService;
+
+        @Autowired
+        private CadastrarUsuarioUseCase cadastrarUsuarioUseCase;
+        @Autowired
+        private ListarUsuariosUseCase listarUsuariosUseCase;
+        @Autowired
+        private ListarUsuariosPorEmpresaUseCase listarUsuariosPorEmpresaUseCase;
+        @Autowired
+        private ListarUsuariosPorEmpresaFiltradoPorNomeUseCase listarUsuariosPorEmpresaFiltradoPorNomeUseCase;
+        @Autowired
+        private ListarUsuariosResponsaveisPorEmpresaUseCase listarUsuariosResponsaveisPorEmpresaUseCase;
+        @Autowired
+        private BuscarUsuarioPorIdUseCase buscarUsuarioPorIdUseCase;
+        @Autowired
+        private BuscarUsuarioPorEmailUseCase buscarUsuarioPorEmailUseCase;
+        @Autowired
+        private AtualizarUsuarioUseCase atualizarUsuarioUseCase;
+        @Autowired
+        private AtualizarCoresPorIdUseCase atualizarCoresPorIdUseCase;
+        @Autowired
+        private AutenticarUsuarioUseCase autenticarUsuarioUseCase;
+        @Autowired
+        private AtualizarSenhaUseCase atualizarSenhaUseCase;
+        @Autowired
+        private DeletarUsuarioUseCase deletarUsuarioUseCase;
+        @Autowired
+        private EnviarCodigoUseCase enviarCodigoUseCase;
+
+        @Operation(summary = "Cadastrar um novo usuário", description = "Esse endpoint cria um novo usuário no sistema.", security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
+                        @ApiResponse(responseCode = "400", description = "Dados inválidos para o cadastro")
+        })
+        @PostMapping
+        public ResponseEntity<UsuarioResponseDto> cadastrarUsuario(
+                        @Valid @RequestBody UsuarioRequestDto usuarioRequestDto) {
+                UsuarioResponseDto response = cadastrarUsuarioUseCase.execute(usuarioRequestDto);
+                return ResponseEntity.status(201).body(response);
+        }
+
+        @Operation(summary = "Listar todos os usuários", description = "Esse endpoint retorna todos os usuários cadastrados no sistema.", security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso")
+        @GetMapping
+        public ResponseEntity<List<UsuarioResponseDto>> listar() {
+                List<UsuarioResponseDto> response = listarUsuariosUseCase.execute();
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Listar usuários por empresa", description = "Esse endpoint retorna todos os usuários associados a uma empresa específica.", parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para buscar os usuários."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso"),
+                        @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
+        })
+        @GetMapping("/buscarPorEmpresa/{idEmpresa}")
+        public ResponseEntity<PageResult<UsuarioResponseDto>> listarPorEmpresa(@PathVariable Integer idEmpresa,
+                        @RequestParam(name = "page", defaultValue = "0") int page,
+                        @RequestParam(name = "size", defaultValue = "10") int size,
+                        @RequestParam(name = "nome", required = false) String nome,
+                        @RequestParam(name = "comConsultores", required = false) Boolean comConsultores) {
+                PageResult<UsuarioResponseDto> response = null;
+                if (nome != null && !nome.isEmpty())
+                        response = listarUsuariosPorEmpresaFiltradoPorNomeUseCase.execute(idEmpresa, page, size, nome,
+                                        comConsultores);
+                else
+                        response = listarUsuariosPorEmpresaUseCase.execute(idEmpresa, page, size, comConsultores);
+
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Listar usuários que não tem permissão FUNC por empresa", description = "Esse endpoint retorna todos os usuários responsaveis associados a uma empresa específica.", parameters = @Parameter(name = "idEmpresa", description = "ID da empresa para buscar os usuários."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso"),
+                        @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
+        })
+        @GetMapping("/buscarResponsaveisPorEmpresa/{idEmpresa}")
+        public ResponseEntity<PageResult<UsuarioResponseDto>> listarResponsaveisPorEmpresa(
+                        @PathVariable Integer idEmpresa,
+                        @RequestParam(name = "page", defaultValue = "0") int page,
+                        @RequestParam(name = "size", defaultValue = "10") int size) {
+                PageResult<UsuarioResponseDto> response = listarUsuariosResponsaveisPorEmpresaUseCase.execute(idEmpresa,
+                                page, size);
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Deletar um usuário", description = "Esse endpoint deleta um usuário baseado no seu ID.", parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser deletado."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+        })
+        @DeleteMapping("/{idUsuario}")
+        public ResponseEntity<Void> deletar(@PathVariable Integer idUsuario,
+                        @RequestBody UsuarioPermissaoDto usuarioPermissaoDto) {
+                deletarUsuarioUseCase.execute(idUsuario, usuarioPermissaoDto);
+                return ResponseEntity.status(204).build();
+        }
+
+        @Operation(summary = "Atualizar dados de um usuário", description = "Esse endpoint atualiza os dados de um usuário existente.", parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+                        @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+        })
+        @PatchMapping("/{idUsuario}")
+        public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Integer idUsuario,
+                        @Valid @RequestBody UsuarioAtualizarDto usuarioAtualizarDto) {
+                UsuarioResponseDto response = atualizarUsuarioUseCase.execute(idUsuario, usuarioAtualizarDto);
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Atualizar cores do usuário", description = "Esse endpoint atualiza a cor de fundo da aplicação de um usuário existente.", parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+                        @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+        })
+        @PatchMapping("/atualizarCores/{idUsuario}")
+        public ResponseEntity<Boolean> atualizarCores(@PathVariable Integer idUsuario,
+                        @Valid @RequestBody UsuarioAtualizarCoresDto usuarioAtualizarCoresDto) {
+                Boolean response = atualizarCoresPorIdUseCase.execute(idUsuario, usuarioAtualizarCoresDto);
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Atualizar senha de um usuário", description = "Esse endpoint atualiza a senha de um usuário existente.", parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser atualizado."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+                        @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização"),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+        })
+        @PatchMapping("/atualizarSenha/{idUsuario}")
+        public ResponseEntity<UsuarioResponseDto> atualizarSenha(@PathVariable Integer idUsuario,
+                        @Valid @RequestBody UsuarioAtualizarSenhaDto usuarioAtualizarSenhaDto) {
+                UsuarioResponseDto response = atualizarSenhaUseCase.execute(idUsuario, usuarioAtualizarSenhaDto);
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Buscar id do usuário por email.", description = "Esse endpoint retorna o id de um usuário específico pelo seu email.", parameters = @Parameter(name = "email", description = "Email do usuário a ser buscado."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
+        })
+        @GetMapping("/emailExistente/{email}")
+        public ResponseEntity<Integer> buscarPorEmail(@PathVariable String email) {
+                System.out.println(email);
+                return ResponseEntity.status(200).body(buscarUsuarioPorEmailUseCase.execute(email));
+        }
+
+        @Operation(summary = "Buscar usuário por ID.", description = "Esse endpoint retorna um usuário específico pelo seu ID.", parameters = @Parameter(name = "idUsuario", description = "ID do usuário a ser buscado."), security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
+        })
+
+        @GetMapping("/{idUsuario}")
+        public ResponseEntity<LoginResponseDto> buscarPorId(@PathVariable Integer idUsuario) {
+                LoginResponseDto response = buscarUsuarioPorIdUseCase.execute(idUsuario);
+                return ResponseEntity.status(200).body(response);
+        }
+
+        @Operation(summary = "Autenticar usuário", description = "Esse endpoint autentica um usuário e retorna um token de acesso.", security = @SecurityRequirement(name = "Bearer"))
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso"),
+                        @ApiResponse(responseCode = "400", description = "Dados inválidos para autenticação"),
+                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+        })
+        @PostMapping("/autenticar")
+        public ResponseEntity<LoginResponseDto> autenticar(@RequestBody LoginRequestDto usuarioAutenticar) {
+                final Usuario usuario = UsuarioTokenMapper.of(usuarioAutenticar);
+                return ResponseEntity.status(200).body(autenticarUsuarioUseCase.execute(usuario));
+        }
+
+        @PostMapping("/codigoEsqueciASenha")
+        public ResponseEntity<Void> enviarCodigoEsqueciASenha(
+                        @RequestBody UsuarioEnviarCodigoRequestDto usuarioEnviarCodigoRequestDto) {
+                enviarCodigoUseCase.execute(usuarioEnviarCodigoRequestDto);
+                return ResponseEntity.status(204).build();
+        }
 }

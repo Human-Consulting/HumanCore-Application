@@ -46,12 +46,15 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/v3/api-docs/**"),
             new AntPathRequestMatcher("/actuator/*"),
             new AntPathRequestMatcher("/usuarios/autenticar"),
+            new AntPathRequestMatcher("/usuarios/validarTokenReset"),
             new AntPathRequestMatcher("/usuarios/esqueciASenha/*"),
             new AntPathRequestMatcher("/usuarios/codigoEsqueciASenha"),
             new AntPathRequestMatcher("/usuarios/emailExistente/*"),
             new AntPathRequestMatcher("/usuarios", "POST"),
             new AntPathRequestMatcher("/error/**"),
             new AntPathRequestMatcher("/ws-chat/**"),
+            new AntPathRequestMatcher("/auth/reset-senha/solicitar"),
+            new AntPathRequestMatcher("/auth/reset-senha/confirmar"),
     };
 
     // ==================== Beans de Use Case / Segurança ====================
@@ -78,13 +81,13 @@ public class SecurityConfiguracao {
 
     @Bean
     public AutenticacaoProvider autenticacaoProviderBean(LoadUserByUsernameUseCase loadUserByUsernameUseCase,
-                                                         PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder) {
         return new AutenticacaoProvider(loadUserByUsernameUseCase, passwordEncoder);
     }
 
     @Bean
     public AutenticacaoFilter autenticacaoFilterBean(LoadUserByUsernameUseCase loadUserByUsernameUseCase,
-                                                     GerenciadorTokenJwt jwtTokenManager) {
+            GerenciadorTokenJwt jwtTokenManager) {
         return new AutenticacaoFilter(loadUserByUsernameUseCase, jwtTokenManager);
     }
 
@@ -92,8 +95,8 @@ public class SecurityConfiguracao {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
-                                           AutenticacaoFilter jwtAuthenticationFilter,
-                                           AutenticacaoEntryPoint autenticacaoEntryPoint) throws Exception {
+            AutenticacaoFilter jwtAuthenticationFilter,
+            AutenticacaoEntryPoint autenticacaoEntryPoint) throws Exception {
         http
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .cors(Customizer.withDefaults())
@@ -112,7 +115,7 @@ public class SecurityConfiguracao {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                       AutenticacaoProvider autenticacaoProvider) throws Exception {
+            AutenticacaoProvider autenticacaoProvider) throws Exception {
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         builder.authenticationProvider(autenticacaoProvider);
         return builder.build();
