@@ -32,7 +32,7 @@ class AtualizarSenhaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldUpdateSenha_WhenDadosValidos() {
+    void deveAtualizarSenhaComSucesso() {
         Integer idUsuario = 1;
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(idUsuario);
@@ -62,7 +62,7 @@ class AtualizarSenhaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenEditorNotOwner() {
+    void deveLancarExcecaoQuandoUsuarioNaoTemPermissao() {
         UsuarioAtualizarSenhaDto dto = new UsuarioAtualizarSenhaDto();
         dto.setIdEditor(2); // diferente
         dto.setSenhaAtual("old");
@@ -73,7 +73,7 @@ class AtualizarSenhaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenUsuarioNotFound() {
+    void deveLancarExcecaoQuandoUsuarioNaoEncontrado() {
         Integer idUsuario = 1;
         UsuarioAtualizarSenhaDto dto = new UsuarioAtualizarSenhaDto();
         dto.setIdEditor(1);
@@ -87,7 +87,7 @@ class AtualizarSenhaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenSenhaAtualIncorreta() {
+    void deveLancarExcecaoQuandoSenhaAtualIncorreta() {
         Integer idUsuario = 1;
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(idUsuario);
@@ -106,7 +106,7 @@ class AtualizarSenhaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenNovaSenhaIgualAtual() {
+    void deveLancarExcecaoQuandoNovaSenhaIgualAntiga() {
         Integer idUsuario = 1;
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(idUsuario);

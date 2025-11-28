@@ -30,7 +30,7 @@ class AtualizarUsuarioUseCaseTest {
     }
 
     @Test
-    void execute_ShouldUpdateUsuario_WhenEditorHasPermission() {
+    void deveAtualizarUsuarioComSucesso() {
         // Arrange
         Usuario alvo = new Usuario();
         alvo.setIdUsuario(1);
@@ -64,7 +64,7 @@ class AtualizarUsuarioUseCaseTest {
 
 
     @Test
-    void execute_ShouldThrowException_WhenUsuarioNotFound() {
+    void deveLancarExcecaoQuandoUsuarioNaoEncontrado() {
         UsuarioAtualizarDto dto = new UsuarioAtualizarDto();
         dto.setIdEditor(2);
         dto.setPermissaoEditor("ADMIN");
@@ -76,7 +76,7 @@ class AtualizarUsuarioUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenPermissaoInvalida() {
+    void deveLancarExcecaoQuandoPermissaoInvalida() {
         Usuario alvo = new Usuario();
         alvo.setIdUsuario(1);
         alvo.setPermissao("EDITOR");
@@ -97,7 +97,7 @@ class AtualizarUsuarioUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenEditorEditsSelfWithoutPermission() {
+    void deveLancarExcecaoQuandoUsuarioNaoTemPermissaoDeModificarProprio() {
         Usuario alvo = new Usuario();
         alvo.setIdUsuario(1);
         alvo.setPermissao("EDITOR");
@@ -114,7 +114,7 @@ class AtualizarUsuarioUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenEditorTriesToChangeOwnPermissao() {
+    void deveLancarExcecaoQuandoUsuarioTentaMudarAPropriaPermissao() {
         Usuario alvo = new Usuario();
         alvo.setIdUsuario(1);
         alvo.setPermissao("EDITOR");

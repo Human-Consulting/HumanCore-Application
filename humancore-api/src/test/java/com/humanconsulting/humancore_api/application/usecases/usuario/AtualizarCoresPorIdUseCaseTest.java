@@ -24,7 +24,7 @@ class AtualizarCoresPorIdUseCaseTest {
     }
 
     @Test
-    void execute_ShouldUpdateCores_WhenUsuarioExists() {
+    void deveAtualizarCoresComSucesso() {
         // Arrange
         Integer idUsuario = 1;
         Usuario usuario = new Usuario();
@@ -48,7 +48,7 @@ class AtualizarCoresPorIdUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenUsuarioNotFound() {
+    void deveLancarExcecaoQuandoUsuarioNaoEncontrado() {
         // Arrange
         Integer idUsuario = 99;
         UsuarioAtualizarCoresDto dto = new UsuarioAtualizarCoresDto();

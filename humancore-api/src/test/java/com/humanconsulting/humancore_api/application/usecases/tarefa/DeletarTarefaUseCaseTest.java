@@ -26,7 +26,7 @@ class DeletarTarefaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldDeleteTarefa_WhenTarefaExistsAndPermissaoValida() {
+    void deveDeletarTarefaComSucesso() {
         // Arrange
         Integer idTarefa = 1;
         Tarefa tarefa = new Tarefa();
@@ -50,7 +50,7 @@ class DeletarTarefaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenTarefaNotFound() {
+    void deveLancarExcecaoQuandoTarefaNaoExiste() {
         // Arrange
         Integer idTarefa = 99;
         UsuarioPermissaoDto permissaoDto = new UsuarioPermissaoDto();
@@ -71,7 +71,7 @@ class DeletarTarefaUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenPermissaoInvalida() {
+    void deveLancarExcecaoQuandoPermissaoInvalida() {
         // Arrange
         Integer idTarefa = 1;
         Tarefa tarefa = new Tarefa();

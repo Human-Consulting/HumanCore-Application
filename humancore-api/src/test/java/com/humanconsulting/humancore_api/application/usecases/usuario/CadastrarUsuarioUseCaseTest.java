@@ -139,7 +139,7 @@ class CadastrarUsuarioUseCaseTest {
     }
 
     @Test
-    void deveLancarRabbitUnavailableExceptionQuandoRabbitMQIndisponivel() {
+    void deveLancarExcecaoQuandoRabbitMQIndisponivel() {
         UsuarioRequestDto request = new UsuarioRequestDto();
         request.setEmail("novo@teste.com");
         request.setFkEmpresa(1);
@@ -159,7 +159,7 @@ class CadastrarUsuarioUseCaseTest {
     }
 
     @Test
-    void deveLancarRabbitPublishExceptionQuandoFalhaAoEnviarEmail() {
+    void deveLancarExcecaoQuandoFalhaAoEnviarEmail() {
         UsuarioRequestDto request = new UsuarioRequestDto();
         request.setEmail("novo@teste.com");
         request.setFkEmpresa(1);

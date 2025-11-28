@@ -27,7 +27,7 @@ class ListarTarefasUseCaseTest {
     }
 
     @Test
-    void execute_ShouldReturnTarefaResponseDtos_WhenTarefasExistem() {
+    void deveRetornarTarefasComSucesso() {
         // Arrange
         Tarefa tarefa1 = new Tarefa();
         tarefa1.setIdTarefa(10);
@@ -57,7 +57,7 @@ class ListarTarefasUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenNoTarefasExistem() {
+    void deveLancarExcecaoQuandoTarefasNaoExistirem() {
         // Arrange
         when(tarefaRepository.findAll()).thenReturn(List.of());
 

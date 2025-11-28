@@ -27,7 +27,7 @@ class ListarTarefasPorSprintUseCaseTest {
     }
 
     @Test
-    void execute_ShouldReturnTarefaResponseDtos_WhenTarefasExistem() {
+    void deveRetornarDtosComSucesso() {
         // Arrange
         Integer idSprint = 1;
         Tarefa tarefa1 = new Tarefa();
@@ -58,7 +58,7 @@ class ListarTarefasPorSprintUseCaseTest {
     }
 
     @Test
-    void execute_ShouldThrowException_WhenNoTarefasExistem() {
+    void deveLancarExcecaoQuandoTarefasNaoExistirem() {
         // Arrange
         Integer idSprint = 99;
         when(tarefaRepository.findBySprint_IdSprint(idSprint)).thenReturn(List.of());

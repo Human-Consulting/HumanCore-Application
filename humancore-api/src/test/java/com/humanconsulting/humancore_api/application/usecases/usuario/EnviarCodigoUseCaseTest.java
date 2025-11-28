@@ -31,7 +31,7 @@ class EnviarCodigoUseCaseTest {
     }
 
     @Test
-    void deveEnviarCodigoComSucesso() {
+    void DadoUmCódigoQuandoChamadoDeveEnviarCodigoComSucesso() {
         // Arrange
         UsuarioEnviarCodigoRequestDto dto = new UsuarioEnviarCodigoRequestDto();
         dto.setEmail("teste@teste.com");
@@ -44,7 +44,7 @@ class EnviarCodigoUseCaseTest {
     }
 
     @Test
-    void deveLancarRabbitUnavailableExceptionQuandoRabbitMQIndisponivel() {
+    void DadoRabbitMQIndisponivelQuandoChamadoDeveLancarExcecao() {
         // Arrange
         UsuarioEnviarCodigoRequestDto dto = new UsuarioEnviarCodigoRequestDto();
         dto.setEmail("teste@teste.com");
@@ -57,7 +57,7 @@ class EnviarCodigoUseCaseTest {
     }
 
     @Test
-    void deveLancarRabbitPublishExceptionQuandoFalhaAoEnviarEmail() {
+    void DadoUmaFalhaDeEnvioQuandoChamadoDeveLancarExcecao() {
         // Arrange
         UsuarioEnviarCodigoRequestDto dto = new UsuarioEnviarCodigoRequestDto();
         dto.setEmail("teste@teste.com");
