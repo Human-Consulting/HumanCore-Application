@@ -23,15 +23,19 @@ public class SalaMapper {
         sala.setNome(salaRequestDto.getNome());
         sala.setUrlImagem(salaRequestDto.getUrlImagem());
         sala.setUsuarios(usuarios);
+        sala.setEmpresa(empresa);
         sala.setProjeto(projeto);
         return sala;
     }
 
     public static SalaResponseDto toDto(Sala sala) {
+        String nomeEmpresa;
+        if (sala.getEmpresa() == null) nomeEmpresa = null;
+        else nomeEmpresa = sala.getEmpresa().getNome();
         return SalaResponseDto.builder()
                 .idSala(sala.getIdSala())
                 .nome(sala.getNome())
-                .nomeEmpresa(sala.getEmpresa().getNome())
+                .nomeEmpresa(nomeEmpresa)
                 .build();
     }
 }
