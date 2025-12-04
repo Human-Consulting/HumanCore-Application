@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.domain.entities.Usuario;
 import com.humanconsulting.humancore_api.domain.exception.EntidadeNaoEncontradaException;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.web.dtos.response.usuario.LoginResponseDto;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ public class BuscarUsuarioPorIdUseCase {
         this.usuarioResponseMapper = usuarioResponseMapper;
     }
 
+    @Cacheable(value = "usuarios", key = "#id")
     public LoginResponseDto execute(Integer id) {
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         if (optUsuario.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
