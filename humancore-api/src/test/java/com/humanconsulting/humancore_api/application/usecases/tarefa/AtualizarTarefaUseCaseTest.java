@@ -31,6 +31,7 @@ class AtualizarTarefaUseCaseTest {
     private SalaNotifier salaNotifier;
     private TarefaResponseMapper tarefaResponseMapper;
     private SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpoints;
+    private com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService googleCalendarService;
     private AtualizarTarefaUseCase useCase;
 
     @BeforeEach
@@ -41,10 +42,12 @@ class AtualizarTarefaUseCaseTest {
         salaNotifier = mock(SalaNotifier.class);
         tarefaResponseMapper = mock(TarefaResponseMapper.class);
         sincronizarCheckpoints = mock(SincronizarCheckpointsDaTarefaUseCase.class);
+        googleCalendarService = mock(com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService.class);
 
         useCase = new AtualizarTarefaUseCase(
                 tarefaRepository, usuarioRepository, checkpointRepository,
-                salaNotifier, tarefaResponseMapper, sincronizarCheckpoints
+                salaNotifier, tarefaResponseMapper, sincronizarCheckpoints,
+                googleCalendarService
         );
     }
 
@@ -89,13 +92,17 @@ class AtualizarTarefaUseCaseTest {
                     .thenReturn(50.0);
 
             // Act
-            TarefaResponseDto result = useCase.execute(idTarefa, request);
+            try {
+                TarefaResponseDto result = useCase.execute(idTarefa, request);
 
-            // Assert
-            assertNotNull(result);
-            verify(tarefaRepository, times(1)).save(any(Tarefa.class));
-            verify(salaNotifier, times(1)).adicionarUsuarioEmSalaProjeto(any(), any(), eq(responsavel));
-            verify(sincronizarCheckpoints, times(1)).execute(eq(idTarefa), any());
+                // Assert
+                assertNotNull(result);
+                verify(tarefaRepository, times(1)).save(any(Tarefa.class));
+                verify(salaNotifier, times(1)).adicionarUsuarioEmSalaProjeto(any(), any(), eq(responsavel));
+                verify(sincronizarCheckpoints, times(1)).execute(eq(idTarefa), any());
+            } catch (Exception e) {
+                fail("Exception should not be thrown: " + e.getMessage());
+            }
         }
     }
 
