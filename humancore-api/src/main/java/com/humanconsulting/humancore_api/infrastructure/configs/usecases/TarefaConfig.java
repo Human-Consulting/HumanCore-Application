@@ -6,13 +6,14 @@ import com.humanconsulting.humancore_api.application.usecases.sprint.BuscarSprin
 import com.humanconsulting.humancore_api.application.usecases.tarefa.*;
 import com.humanconsulting.humancore_api.application.usecases.tarefa.mappers.TarefaResponseMapper;
 import com.humanconsulting.humancore_api.application.usecases.usuario.mappers.UsuarioResponseMapper;
+import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
+import com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService;
+import com.humanconsulting.humancore_api.infrastructure.mappers.EmailUpdateMapper;
 import com.humanconsulting.humancore_api.domain.notifiers.SalaNotifier;
 import com.humanconsulting.humancore_api.domain.repositories.CheckpointRepository;
-import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
+import com.humanconsulting.humancore_api.domain.repositories.SprintRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
-import com.humanconsulting.humancore_api.infrastructure.configs.RabbitTemplateConfiguration;
-import com.humanconsulting.humancore_api.infrastructure.mappers.EmailUpdateMapper;
 import com.humanconsulting.humancore_api.infrastructure.repositories.adapters.TarefaRepositoryAdapter;
 import com.humanconsulting.humancore_api.infrastructure.repositories.jpa.JpaTarefaRepository;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +51,8 @@ public class TarefaConfig {
             CheckpointRepository checkpointRepository,
             SalaNotifier salaNotifier,
             TarefaResponseMapper tarefaResponseMapper,
-            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa,
+            GoogleCalendarService googleCalendarService
     ) {
         return new AtualizarTarefaUseCase(
                 tarefaRepository,
@@ -58,7 +60,8 @@ public class TarefaConfig {
                 checkpointRepository,
                 salaNotifier,
                 tarefaResponseMapper,
-                sincronizarCheckpointsDaTarefa
+                sincronizarCheckpointsDaTarefa,
+                googleCalendarService
         );
     }
 
@@ -74,7 +77,8 @@ public class TarefaConfig {
             UsuarioRepository usuarioRepository,
             SalaNotifier salaNotifier,
             TarefaResponseMapper tarefaResponseMapper,
-            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefaUseCase,
+            GoogleCalendarService googleCalendarService
     ) {
         return new CadastrarTarefaUseCase(
                 tarefaRepository,
@@ -82,7 +86,8 @@ public class TarefaConfig {
                 usuarioRepository,
                 salaNotifier,
                 tarefaResponseMapper,
-                sincronizarCheckpointsDaTarefaUseCase
+                sincronizarCheckpointsDaTarefaUseCase,
+                googleCalendarService
         );
     }
 

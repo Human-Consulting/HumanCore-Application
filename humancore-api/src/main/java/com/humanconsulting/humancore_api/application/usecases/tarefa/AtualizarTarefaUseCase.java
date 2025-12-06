@@ -12,6 +12,7 @@ import com.humanconsulting.humancore_api.domain.repositories.TarefaRepository;
 import com.humanconsulting.humancore_api.domain.repositories.UsuarioRepository;
 import com.humanconsulting.humancore_api.domain.security.ValidarPermissao;
 import com.humanconsulting.humancore_api.domain.utils.ProgressoCalculator;
+import com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleCalendarService;
 import com.humanconsulting.humancore_api.web.dtos.atualizar.tarefa.AtualizarGeralRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.TarefaMapper;
@@ -28,6 +29,7 @@ public class AtualizarTarefaUseCase {
     private final SalaNotifier salaNotifier;
     private final TarefaResponseMapper tarefaResponseMapper;
     private final SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa;
+    private final GoogleCalendarService googleCalendarService;
 
     public AtualizarTarefaUseCase(
             TarefaRepository tarefaRepository,
@@ -35,7 +37,8 @@ public class AtualizarTarefaUseCase {
             CheckpointRepository checkpointRepository,
             SalaNotifier salaNotifier,
             TarefaResponseMapper tarefaResponseMapper,
-            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa
+            SincronizarCheckpointsDaTarefaUseCase sincronizarCheckpointsDaTarefa,
+            GoogleCalendarService googleCalendarService
     ) {
         this.tarefaRepository = tarefaRepository;
         this.usuarioRepository = usuarioRepository;
@@ -43,9 +46,10 @@ public class AtualizarTarefaUseCase {
         this.salaNotifier = salaNotifier;
         this.tarefaResponseMapper = tarefaResponseMapper;
         this.sincronizarCheckpointsDaTarefa = sincronizarCheckpointsDaTarefa;
+        this.googleCalendarService = googleCalendarService;
     }
 
-    public TarefaResponseDto execute(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) {
+    public TarefaResponseDto execute(Integer idTarefa, AtualizarGeralRequestDto requestUpdate) throws Exception {
         Optional<Tarefa>    tarefa = tarefaRepository.findById(idTarefa);
         if (tarefa.isEmpty()) {
             throw new EntidadeNaoEncontradaException("TarefaEntity não encontrada");
@@ -63,6 +67,9 @@ public class AtualizarTarefaUseCase {
             salaNotifier.adicionarUsuarioEmSalaProjeto(tarefa.orElse(null), tarefa.get().getSprint().getProjeto(), usuario);
         }
         sincronizarCheckpointsDaTarefa.execute(idTarefa, requestUpdate.getCheckpoints());
+
+        googleCalendarService.atualizarEvento(tarefaAtualizada.getGoogleCalendarEventId(), tarefaAtualizada.getTitulo(), tarefaAtualizada.getDescricao());
+
         return tarefaResponseMapper.toResponse(tarefaAtualizada);
     }
 }

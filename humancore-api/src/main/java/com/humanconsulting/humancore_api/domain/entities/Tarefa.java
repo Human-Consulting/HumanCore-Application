@@ -12,10 +12,11 @@ public class Tarefa {
     private String comentario;
     private Sprint sprint;
     private Usuario responsavel;
+    private String googleCalendarEventId;
 
     public Tarefa() {}
 
-    public Tarefa(Integer idTarefa, String titulo, String descricao, LocalDate dtInicio, LocalDate dtFim, Boolean comImpedimento, String comentario, Sprint sprint, Usuario responsavel) {
+    public Tarefa(Integer idTarefa, String titulo, String descricao, LocalDate dtInicio, LocalDate dtFim, Boolean comImpedimento, String comentario, Sprint sprint, Usuario responsavel, String googleCalendarEventId) {
         this.idTarefa = idTarefa;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -25,6 +26,7 @@ public class Tarefa {
         this.comentario = comentario;
         this.sprint = sprint;
         this.responsavel = responsavel;
+        this.googleCalendarEventId = googleCalendarEventId;
     }
 
     public Integer getIdTarefa() { return idTarefa; }
@@ -45,4 +47,6 @@ public class Tarefa {
     public void setSprint(Sprint sprint) { this.sprint = sprint; }
     public Usuario getResponsavel() { return responsavel; }
     public void setResponsavel(Usuario responsavel) { this.responsavel = responsavel; }
+    public String getGoogleCalendarEventId() { return googleCalendarEventId; }
+    public void setGoogleCalendarEventId(String googleCalendarEventId) { this.googleCalendarEventId = googleCalendarEventId; }
 }
