@@ -55,7 +55,7 @@ public class CadastrarTarefaUseCase {
 
         Usuario usuario = tarefaRequestDto.getFkResponsavel() != null ? usuarioRepository.findById(tarefaRequestDto.getFkResponsavel()).get() : null;
 
-        String googleCalendarEventId = googleCalendarService.criarEvento(tarefaRequestDto, usuario.getEmail());
+        String googleCalendarEventId = googleCalendarService.criarEvento(tarefaRequestDto);
         tarefaRequestDto.setGoogleCalendarEventId(googleCalendarEventId);
 
         Tarefa tarefa = tarefaRepository.save(TarefaMapper.toEntity(tarefaRequestDto, sprint, usuario));

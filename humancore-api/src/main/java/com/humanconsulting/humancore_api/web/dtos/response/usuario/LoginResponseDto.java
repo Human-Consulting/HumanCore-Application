@@ -4,6 +4,7 @@ import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaLoginRes
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDto {
+public class LoginResponseDto implements Serializable {
     @Schema(description = "ID do usuário", example = "1")
     private Integer idUsuario;
 

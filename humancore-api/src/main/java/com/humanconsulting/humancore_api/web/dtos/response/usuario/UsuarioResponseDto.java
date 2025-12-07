@@ -3,12 +3,14 @@ package com.humanconsulting.humancore_api.web.dtos.response.usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioResponseDto {
+public class UsuarioResponseDto implements Serializable {
     @Schema(description = "ID do usuário", example = "1")
     private Integer idUsuario;
 

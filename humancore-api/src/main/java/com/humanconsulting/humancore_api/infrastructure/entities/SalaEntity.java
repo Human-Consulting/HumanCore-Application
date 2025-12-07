@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.infrastructure.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class SalaEntity {
     private EmpresaEntity empresa;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "sala_usuario",
             joinColumns = @JoinColumn(name = "idSala"),
@@ -41,9 +43,11 @@ public class SalaEntity {
     )
     private Set<UsuarioEntity> usuarios = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MensagemEntity> mensagens = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MensagemInfoEntity> mensagensInfo = new ArrayList<>();
 }

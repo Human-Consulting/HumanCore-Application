@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.infrastructure.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class ProjetoEntity {
     @JoinColumn(name = "fkEmpresa")
     private EmpresaEntity empresa;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fkResponsavel")
     private UsuarioEntity responsavel;

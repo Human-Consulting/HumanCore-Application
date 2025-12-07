@@ -68,7 +68,7 @@ public class AtualizarTarefaUseCase {
         }
         sincronizarCheckpointsDaTarefa.execute(idTarefa, requestUpdate.getCheckpoints());
 
-        googleCalendarService.atualizarEvento(tarefaAtualizada.getGoogleCalendarEventId(), tarefaAtualizada.getTitulo(), tarefaAtualizada.getDescricao());
+        googleCalendarService.atualizarEvento(tarefaAtualizada.getGoogleCalendarEventId(), tarefaAtualizada);
 
         return tarefaResponseMapper.toResponse(tarefaAtualizada);
     }

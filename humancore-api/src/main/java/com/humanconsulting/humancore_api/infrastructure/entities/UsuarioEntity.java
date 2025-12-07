@@ -32,6 +32,7 @@ public class UsuarioEntity {
 
     private String cores;
 
+    @JsonIgnore
     @JoinColumn(name = "fkEmpresa")
     @ManyToOne
     private EmpresaEntity empresa;

@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.infrastructure.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,7 @@ public class TarefaEntity {
     @JoinColumn(name = "fkSprint")
     private SprintEntity sprint;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fkResponsavel")
     private UsuarioEntity responsavel;

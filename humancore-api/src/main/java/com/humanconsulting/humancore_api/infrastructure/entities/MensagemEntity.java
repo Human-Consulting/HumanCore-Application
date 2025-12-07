@@ -1,5 +1,6 @@
 package com.humanconsulting.humancore_api.infrastructure.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class MensagemEntity {
 
     private LocalDateTime horario;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fkUsuario")
     private UsuarioEntity usuario;
