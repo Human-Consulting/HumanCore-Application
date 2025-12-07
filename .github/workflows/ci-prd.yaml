@@ -23,7 +23,7 @@ jobs:
       MYSQL_HOST: localhost
       MYSQL_PORT: 3308
       MYSQL_DATABASE: humandb
-      RABBITMQ_HOST: 10.0.0.82
+      RABBITMQ_HOST: localhost
       RABBITMQ_PORT: 5672
       SPRING_PROFILES_ACTIVE: test
 
@@ -56,7 +56,7 @@ jobs:
           MYSQL_PASSWORD: jP19042014#
           RABBITMQ_USER: myuser
           RABBITMQ_PASSWORD: MyRabbitPass
-          RABBITMQ_HOST: 10.0.0.82
+          RABBITMQ_HOST: localhost
           RABBITMQ_PORT: 5672
         run: mvn test -e -X
 
