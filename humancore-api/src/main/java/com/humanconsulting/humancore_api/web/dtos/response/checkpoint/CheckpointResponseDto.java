@@ -3,12 +3,16 @@ package com.humanconsulting.humancore_api.web.dtos.response.checkpoint;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CheckpointResponseDto {
+public class CheckpointResponseDto implements Serializable {
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
     @Schema(description = "Identificador único do checkpoint", example = "1")
     private Integer idCheckpoint;
 

@@ -43,4 +43,6 @@ public class TarefaEntity {
 
     @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CheckpointEntity> checkpoints = new ArrayList<>();
+
+    private String googleCalendarEventId;
 }

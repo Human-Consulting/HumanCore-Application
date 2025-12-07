@@ -5,6 +5,7 @@ import com.humanconsulting.humancore_api.web.dtos.response.sprint.SprintResponse
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TarefaLoginResponseDto {
+public class TarefaLoginResponseDto implements Serializable {
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     @Schema(description = "Título da tarefa", example = "Login")
     private String titulo;

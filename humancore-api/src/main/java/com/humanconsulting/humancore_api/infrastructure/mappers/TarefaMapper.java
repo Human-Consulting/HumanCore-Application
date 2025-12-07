@@ -16,6 +16,7 @@ public class TarefaMapper {
         entity.setComentario(domain.getComentario());
         entity.setSprint(SprintMapper.toEntity(domain.getSprint()));
         entity.setResponsavel(UsuarioMapper.toEntity(domain.getResponsavel()));
+        entity.setGoogleCalendarEventId(domain.getGoogleCalendarEventId());
         return entity;
     }
 
@@ -31,6 +32,7 @@ public class TarefaMapper {
         domain.setComentario(entity.getComentario());
         domain.setSprint(SprintMapper.toDomain(entity.getSprint()));
         domain.setResponsavel(UsuarioMapper.toDomain(entity.getResponsavel()));
+        domain.setGoogleCalendarEventId(entity.getGoogleCalendarEventId());
         return domain;
     }
 }

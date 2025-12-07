@@ -27,7 +27,7 @@ public class TarefaMapper {
         return tarefa;
     }
 
-    public static Tarefa toEntity(AtualizarGeralRequestDto atualizarTarefaRequestDto, Integer idTarefa, Sprint sprint, Usuario usuario) {
+    public static Tarefa toEntity(AtualizarGeralRequestDto atualizarTarefaRequestDto, Integer idTarefa, Sprint sprint, Usuario usuario, String googleCalendarEventId) {
         Tarefa tarefa = new Tarefa();
         tarefa.setIdTarefa(idTarefa);
         tarefa.setTitulo(atualizarTarefaRequestDto.getTitulo());
@@ -38,7 +38,7 @@ public class TarefaMapper {
         tarefa.setComentario(atualizarTarefaRequestDto.getComentario());
         tarefa.setSprint(sprint);
         tarefa.setResponsavel(usuario);
-        tarefa.setGoogleCalendarEventId(atualizarTarefaRequestDto.getGoogleCalendarEventId());
+        tarefa.setGoogleCalendarEventId(googleCalendarEventId);
         return tarefa;
     }
 

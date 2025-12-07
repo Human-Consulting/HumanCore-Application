@@ -58,7 +58,7 @@ public class AtualizarTarefaUseCase {
         if (optUsuarioEditor.isEmpty()) throw new EntidadeNaoEncontradaException("Usuário não encontrado.");
         ValidarPermissao.execute(requestUpdate.getPermissaoEditor(), "MODIFICAR_TAREFA");
         Usuario usuario = requestUpdate.getFkResponsavel() != null ? usuarioRepository.findById(requestUpdate.getFkResponsavel()).get() : null;
-        Tarefa tarefaAtualizada = TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.get().getSprint(), usuario);
+        Tarefa tarefaAtualizada = TarefaMapper.toEntity(requestUpdate, idTarefa, tarefa.get().getSprint(), usuario, tarefa.get().getGoogleCalendarEventId());
         List<Checkpoint> checkpoints = checkpointRepository.findAllByTarefa_IdTarefa(tarefa.get().getIdTarefa());
         Double progresso = ProgressoCalculator.execute(checkpoints);
         if (progresso == 100) tarefaAtualizada.setComImpedimento(false);

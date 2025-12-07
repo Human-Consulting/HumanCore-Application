@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDto implements Serializable {
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
     @Schema(description = "ID do usuário", example = "1")
     private Integer idUsuario;
 

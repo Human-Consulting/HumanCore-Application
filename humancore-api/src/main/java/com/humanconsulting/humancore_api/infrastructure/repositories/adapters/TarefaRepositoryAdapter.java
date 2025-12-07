@@ -21,11 +21,11 @@ public class TarefaRepositoryAdapter implements TarefaRepository {
 
     @Override
     public Tarefa save(Tarefa tarefa) {
-        TarefaEntity entity = null;
+        TarefaEntity entity = new TarefaEntity();
         if (tarefa.getIdTarefa() != null) {
             entity = jpaTarefaRepository.findById(tarefa.getIdTarefa())
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("Tarefa não encontrada"));
-        } else entity = new TarefaEntity();
+        }
 
         entity.setTitulo(tarefa.getTitulo());
         entity.setDescricao(tarefa.getDescricao());
@@ -35,6 +35,7 @@ public class TarefaRepositoryAdapter implements TarefaRepository {
         entity.setComImpedimento(tarefa.getComImpedimento());
         entity.setResponsavel(UsuarioMapper.toEntity(tarefa.getResponsavel()));
         entity.setSprint(SprintMapper.toEntity(tarefa.getSprint()));
+        entity.setGoogleCalendarEventId(tarefa.getGoogleCalendarEventId());
 
         TarefaEntity saved = jpaTarefaRepository.save(entity);
         return TarefaMapper.toDomain(saved);

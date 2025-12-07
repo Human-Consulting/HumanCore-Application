@@ -15,7 +15,9 @@ import com.humanconsulting.humancore_api.infrastructure.configs.calendar.GoogleC
 import com.humanconsulting.humancore_api.web.dtos.request.TarefaRequestDto;
 import com.humanconsulting.humancore_api.web.dtos.response.tarefa.TarefaResponseDto;
 import com.humanconsulting.humancore_api.web.mappers.TarefaMapper;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class CadastrarTarefaUseCase {
     private final TarefaRepository tarefaRepository;
     private final SprintRepository sprintRepository;
