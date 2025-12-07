@@ -41,7 +41,7 @@ jobs:
       - name: Subir containers com Docker Compose
         run: |
           echo "Subindo containers MySQL e RabbitMQ..."
-          docker compose up -d
+          docker compose -f compose.test.yaml up -d
           echo "Aguardando serviços ficarem prontos..."
           sleep 30
           docker ps -a

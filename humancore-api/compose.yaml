@@ -1,18 +1,215 @@
 services:
-  rabbitmq:
-    image: 'rabbitmq:3.13-management'
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=secret'
-      - 'RABBITMQ_DEFAULT_USER=myuser'
+  # Frontend (React + Nginx)
+  front1:
+    image: humanconsulting/node-application:latest
+    container_name: front1
+    restart: unless-stopped
+    depends_on:
+      - back1
+      - back2
+    networks:
+      - app_network
     ports:
-      - '5672:5672'
-      - '15672:15672'
-    restart: always
+      - "3001:80"
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:80/ || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
 
-  redis:
+  front2:
+    image: humanconsulting/node-application:latest
+    container_name: front2
+    restart: unless-stopped
+    depends_on:
+      - back1
+      - back2
+    networks:
+      - app_network
+    ports:
+      - "3002:80"
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:80/ || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  # Backends (Spring Boot)
+  back1:
+    image: humanconsulting/humancore-application:latest
+    container_name: back1
+    restart: unless-stopped
+    depends_on:
+      - database
+      - rabbitmq
+      - cache
+    networks:
+      - app_network
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/human
+      SPRING_DATASOURCE_USERNAME: human
+      SPRING_DATASOURCE_PASSWORD: human
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  back2:
+    image: humanconsulting/humancore-application:latest
+    container_name: back2
+    restart: unless-stopped
+    depends_on:
+      - database
+      - rabbitmq
+      - cache
+    networks:
+      - app_network
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/human
+      SPRING_DATASOURCE_USERNAME: human
+      SPRING_DATASOURCE_PASSWORD: human
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  # Database
+  database:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: human
+      MYSQL_DATABASE: human
+      MYSQL_USER: human
+      MYSQL_PASSWORD: human
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+
+  # Microservices
+  mailsender1:
+    image: humanconsulting/mailsender-application:latest
+    container_name: mailsender1
+    restart: unless-stopped
+    networks:
+      - app_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/human
+      SPRING_DATASOURCE_USERNAME: human
+      SPRING_DATASOURCE_PASSWORD: human
+    depends_on:
+      - database
+      - rabbitmq
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  mailsender2:
+    image: humanconsulting/mailsender-application:latest
+    container_name: mailsender2
+    restart: unless-stopped
+    networks:
+      - app_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/human
+      SPRING_DATASOURCE_USERNAME: human
+      SPRING_DATASOURCE_PASSWORD: human
+    depends_on:
+      - database
+      - rabbitmq
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  websocket1:
+    image: humanconsulting/websocket-application:latest
+    container_name: websocket1
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - database
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/human
+      SPRING_DATASOURCE_USERNAME: human
+      SPRING_DATASOURCE_PASSWORD: human
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  websocket2:
+    image: humanconsulting/websocket-application:latest
+    container_name: websocket2
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - database
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/human
+      SPRING_DATASOURCE_USERNAME: human
+      SPRING_DATASOURCE_PASSWORD: human
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: pass
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  cache:
     image: redis:7
     container_name: redis_cache
-    ports:
-      - "6379:6379"
-    command: [ "redis-server", "--appendonly", "yes" ]
-    restart: always
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1"]
+    networks:
+      - app_network
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "cache", "ping"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+networks:
+  app_network:
+    name: app_network
+
+volumes:
+  mysqldata:
+  redisdata:
