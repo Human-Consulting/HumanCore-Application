@@ -61,4 +61,4 @@ jobs:
 
       - name: Derrubar containers
         if: always()
-        run: docker -f humancore-api/compose.test.yaml down -v
+        run: docker compose -f humancore-api/compose.test.yaml down -v
