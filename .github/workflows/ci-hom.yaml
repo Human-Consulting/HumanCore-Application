@@ -55,8 +55,10 @@ jobs:
           RABBITMQ_PASSWORD: MyRabbitPass
           RABBITMQ_HOST: localhost
           RABBITMQ_PORT: 5672
-        run: mvn test -e -X
+        run: |
+          cd humancore-api
+          mvn test -e -X
 
       - name: Derrubar containers
         if: always()
-        run: docker compose down -v
+        run: docker -f humancore-api/compose.test.yaml down -v
