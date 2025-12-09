@@ -57,7 +57,7 @@ public class CadastrarUsuarioUseCase {
                     empresaRepository.findById(novoUsuario.getFkEmpresa())
                             .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"))
             );
-            usuario.setSenha(SenhaGenerator.execute(usuario.getNome(), usuario.getEmpresa().getNome()));
+
             String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
             try {
                 EmailCadastroResponseDto emailCadastroResponseDto = emailCadastroMapper.toEmailCadastroResponseDto(usuario);

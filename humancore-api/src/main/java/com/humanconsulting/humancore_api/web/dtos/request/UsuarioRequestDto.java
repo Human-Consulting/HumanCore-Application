@@ -21,6 +21,10 @@ public class UsuarioRequestDto {
     @Email
     private String email;
 
+    @Schema(description = "Senha do usuário", example = "A1234*")
+    @NotNull
+    private String senha;
+
     @Schema(description = "Cargo do usuário na empresa", example = "Desenvolvedor Backend")
     @NotBlank
     private String cargo;

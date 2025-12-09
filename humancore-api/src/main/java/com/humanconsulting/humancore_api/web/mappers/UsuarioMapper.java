@@ -19,6 +19,7 @@ public class UsuarioMapper {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioRequestDto.getNome());
         usuario.setEmail(usuarioRequestDto.getEmail());
+        usuario.setSenha(usuarioRequestDto.getSenha());
         usuario.setCargo(usuarioRequestDto.getCargo());
         usuario.setArea(usuarioRequestDto.getArea());
         usuario.setPermissao(usuarioRequestDto.getPermissao());
